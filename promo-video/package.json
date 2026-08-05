@@ -1,0 +1,9 @@
+{
+  "name": "banxin-promo-video",
+  "version": "1.0.0",
+  "private": true,
+  "description": "班薪日历竖屏宣传视频生成器",
+  "dependencies": {
+    "ffmpeg-static": "^5.2.0"
+  }
+}

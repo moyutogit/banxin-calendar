@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "feature": "foundation",
+      "status": "available",
+      "help": "当前构建为阶段 0 工程骨架，业务页面仅展示明确占位状态。"
+    }
+  ]
+}

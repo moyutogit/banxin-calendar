@@ -1,0 +1,2718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f8fc" />
+  <title>班薪日历 · App 原型</title>
+  <style>
+    :root {
+      --primary: #5965e8;
+      --primary-strong: #4552d7;
+      --primary-soft: #eef0ff;
+      --ink: #171a2c;
+      --muted: #73788d;
+      --muted-2: #a6aabd;
+      --line: #ebecef;
+      --surface: #ffffff;
+      --canvas: #f6f7fb;
+      --blue: #4d7ff2;
+      --green: #2baa7f;
+      --orange: #f0a43c;
+      --purple: #7a5ce6;
+      --red: #ed5b64;
+      --yellow: #f5c75b;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --shadow: 0 20px 60px rgba(36, 40, 74, .18);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(110, 119, 246, .17), transparent 28%),
+        radial-gradient(circle at 82% 78%, rgba(58, 193, 148, .12), transparent 30%),
+        #eef0f7;
+      display: grid;
+      place-items: center;
+      padding: 34px 24px;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .prototype-layout {
+      width: min(1120px, 100%);
+      display: grid;
+      grid-template-columns: minmax(300px, 1fr) 402px minmax(260px, .85fr);
+      gap: 48px;
+      align-items: center;
+    }
+
+    .intro {
+      align-self: center;
+      padding-left: 8px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary-strong);
+      background: rgba(255, 255, 255, .72);
+      border: 1px solid rgba(89, 101, 232, .14);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      backdrop-filter: blur(12px);
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      background: #35b989;
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px rgba(53, 185, 137, .13);
+    }
+
+    .intro h1 {
+      margin: 22px 0 14px;
+      font-size: clamp(38px, 4.8vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -.055em;
+    }
+
+    .intro h1 span {
+      display: block;
+      color: var(--primary);
+    }
+
+    .intro p {
+      max-width: 420px;
+      margin: 0;
+      color: #646a80;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .intro-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 26px;
+    }
+
+    .intro-tags span {
+      padding: 8px 11px;
+      border: 1px solid rgba(67, 72, 105, .11);
+      border-radius: 10px;
+      color: #5c6279;
+      background: rgba(255, 255, 255, .58);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .device-column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .preview-tools {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8px;
+    }
+
+    .preview-label {
+      color: #7b8093;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .platform-toggle {
+      display: flex;
+      gap: 3px;
+      background: rgba(255, 255, 255, .74);
+      border: 1px solid rgba(47, 52, 84, .08);
+      border-radius: 11px;
+      padding: 3px;
+      box-shadow: 0 8px 24px rgba(49, 54, 86, .08);
+    }
+
+    .platform-toggle button {
+      min-width: 66px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 8px;
+      color: #858a9d;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .platform-toggle button.active {
+      color: var(--ink);
+      background: white;
+      box-shadow: 0 2px 8px rgba(37, 40, 64, .11);
+    }
+
+    .device {
+      position: relative;
+      width: 390px;
+      height: 844px;
+      overflow: hidden;
+      border: 7px solid #181921;
+      border-radius: 52px;
+      background: var(--canvas);
+      box-shadow: var(--shadow), inset 0 0 0 1px rgba(255,255,255,.12);
+      isolation: isolate;
+    }
+
+    .device[data-platform="android"] {
+      border-radius: 34px;
+      border-width: 6px;
+    }
+
+    .island {
+      position: absolute;
+      z-index: 30;
+      top: 10px;
+      left: 50%;
+      width: 116px;
+      height: 32px;
+      transform: translateX(-50%);
+      background: #0c0d11;
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .device[data-platform="android"] .island {
+      top: 10px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .status-bar {
+      position: absolute;
+      z-index: 25;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      color: #171921;
+      font-size: 12px;
+      font-weight: 760;
+      pointer-events: none;
+    }
+
+    .device[data-platform="android"] .status-bar {
+      height: 34px;
+      padding: 0 14px;
+      font-size: 11px;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .signal {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5px;
+      height: 10px;
+    }
+
+    .signal i {
+      display: block;
+      width: 2px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    .signal i:nth-child(1) { height: 3px; }
+    .signal i:nth-child(2) { height: 5px; }
+    .signal i:nth-child(3) { height: 7px; }
+    .signal i:nth-child(4) { height: 9px; }
+
+    .battery {
+      position: relative;
+      width: 18px;
+      height: 9px;
+      border: 1.4px solid currentColor;
+      border-radius: 2.5px;
+      opacity: .9;
+    }
+
+    .battery::before {
+      content: "";
+      position: absolute;
+      inset: 1.5px;
+      right: 3px;
+      background: currentColor;
+      border-radius: 1px;
+    }
+
+    .battery::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: -3px;
+      width: 1.5px;
+      height: 4px;
+      background: currentColor;
+      border-radius: 0 1px 1px 0;
+    }
+
+    .app-viewport {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--canvas);
+    }
+
+    .pages {
+      position: absolute;
+      inset: 0 0 78px;
+      overflow: hidden;
+    }
+
+    .page {
+      position: absolute;
+      inset: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-width: none;
+      padding: 66px 18px 30px;
+      opacity: 0;
+      transform: translateX(10px);
+      pointer-events: none;
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .page::-webkit-scrollbar { display: none; }
+
+    .device[data-platform="android"] .page {
+      padding-top: 46px;
+    }
+
+    .page.active {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .home-page {
+      background:
+        linear-gradient(180deg, #f3f4ff 0, var(--canvas) 235px);
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .greeting {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 560;
+      margin-bottom: 4px;
+    }
+
+    .page-heading h2 {
+      margin: 0;
+      font-size: 25px;
+      line-height: 1.15;
+      letter-spacing: -.035em;
+    }
+
+    .avatar-button, .icon-button {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      color: var(--ink);
+      background: rgba(255, 255, 255, .9);
+      box-shadow: 0 7px 20px rgba(46, 50, 86, .09);
+    }
+
+    .avatar-button {
+      color: white;
+      background: linear-gradient(145deg, #5965e8, #7c65dd);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      padding: 21px;
+      color: white;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at 89% 11%, rgba(255,255,255,.22), transparent 25%),
+        linear-gradient(135deg, #4f5ddd 0%, #6f63e8 100%);
+      box-shadow: 0 18px 35px rgba(77, 87, 210, .28);
+    }
+
+    .work-card::after {
+      content: "";
+      position: absolute;
+      right: -34px;
+      bottom: -55px;
+      width: 150px;
+      height: 150px;
+      border: 23px solid rgba(255,255,255,.07);
+      border-radius: 50%;
+    }
+
+    .work-top, .work-main, .work-foot {
+      position: relative;
+      z-index: 1;
+    }
+
+    .work-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .work-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 9px;
+      border-radius: 9px;
+      color: rgba(255,255,255,.94);
+      background: rgba(255,255,255,.14);
+      font-size: 11px;
+      font-weight: 680;
+      backdrop-filter: blur(8px);
+    }
+
+    .work-status i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #74f0be;
+      box-shadow: 0 0 0 3px rgba(116, 240, 190, .16);
+    }
+
+    .card-more {
+      color: white;
+      background: transparent;
+      font-size: 22px;
+      line-height: 1;
+      opacity: .8;
+    }
+
+    .work-main {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      margin: 25px 0 22px;
+    }
+
+    .shift-name {
+      font-size: 13px;
+      color: rgba(255,255,255,.72);
+      margin-bottom: 5px;
+    }
+
+    .shift-time {
+      font-size: 29px;
+      font-weight: 770;
+      letter-spacing: -.045em;
+    }
+
+    .shift-hours {
+      text-align: right;
+      font-size: 11px;
+      color: rgba(255,255,255,.72);
+    }
+
+    .shift-hours strong {
+      display: block;
+      margin-bottom: 2px;
+      color: white;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .work-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.78);
+      font-size: 11px;
+    }
+
+    .change-shift {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: white;
+      background: transparent;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .punch-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .punch-button {
+      min-height: 62px;
+      border-radius: 18px;
+      color: white;
+      background: #1e2134;
+      box-shadow: 0 12px 24px rgba(31, 34, 54, .17);
+      text-align: left;
+      padding: 0 18px;
+      transition: transform .15s ease, background .2s ease;
+    }
+
+    .punch-button:active { transform: scale(.985); }
+
+    .punch-button.done { background: #2a9d78; }
+
+    .punch-button strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .punch-button span {
+      color: rgba(255,255,255,.65);
+      font-size: 10px;
+    }
+
+    .alarm-mini {
+      width: 96px;
+      min-height: 62px;
+      padding: 9px 12px;
+      border-radius: 18px;
+      color: var(--ink);
+      background: white;
+      box-shadow: 0 10px 25px rgba(44, 48, 78, .08);
+      text-align: left;
+    }
+
+    .alarm-mini small {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      margin-bottom: 4px;
+    }
+
+    .alarm-mini strong {
+      font-size: 18px;
+      letter-spacing: -.03em;
+    }
+
+    .alarm-dot {
+      float: right;
+      width: 7px;
+      height: 7px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      margin: 24px 2px 12px;
+    }
+
+    .section-title h3 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -.02em;
+    }
+
+    .section-title button, .section-title span {
+      color: var(--muted);
+      background: transparent;
+      font-size: 10px;
+    }
+
+    .salary-card {
+      padding: 17px 18px;
+      border-radius: 21px;
+      background: white;
+      box-shadow: 0 9px 26px rgba(44, 48, 78, .07);
+    }
+
+    .salary-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .salary-head span {
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .salary-head em {
+      padding: 4px 7px;
+      color: #3f8d71;
+      background: #e7f7f1;
+      border-radius: 7px;
+      font-size: 9px;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .salary-number {
+      margin: 7px 0 15px;
+      font-size: 28px;
+      font-weight: 780;
+      letter-spacing: -.04em;
+    }
+
+    .salary-number small {
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .salary-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .salary-metrics div {
+      padding: 10px;
+      border-radius: 12px;
+      background: #f7f8fb;
+    }
+
+    .salary-metrics small {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      margin-bottom: 5px;
+    }
+
+    .salary-metrics strong {
+      font-size: 13px;
+    }
+
+    .week-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      padding: 13px 12px;
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 9px 26px rgba(44, 48, 78, .06);
+    }
+
+    .week-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .week-day b {
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      border-radius: 10px;
+      color: var(--ink);
+      background: #f5f6fa;
+      font-size: 11px;
+    }
+
+    .week-day b.work { color: white; background: var(--blue); }
+    .week-day b.night { color: white; background: var(--purple); }
+    .week-day b.rest { color: #81869a; background: #eceef3; }
+    .week-day.today b { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--primary); }
+
+    /* Calendar */
+    .calendar-page, .stats-page, .assistant-page, .profile-page {
+      background: var(--canvas);
+    }
+
+    .simple-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .simple-heading h2 {
+      margin: 0;
+      font-size: 25px;
+      letter-spacing: -.04em;
+    }
+
+    .heading-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .heading-actions .icon-button {
+      width: 38px;
+      height: 38px;
+      box-shadow: none;
+      border: 1px solid var(--line);
+    }
+
+    .month-card {
+      padding: 17px 14px 14px;
+      border-radius: 24px;
+      background: white;
+      box-shadow: 0 10px 30px rgba(44, 48, 78, .07);
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 3px 15px;
+    }
+
+    .month-title strong {
+      display: block;
+      font-size: 17px;
+      letter-spacing: -.02em;
+    }
+
+    .month-title span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .month-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .month-buttons button {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 32px;
+      color: #5c6174;
+      background: #f5f6f9;
+      border-radius: 10px;
+      font-size: 18px;
+    }
+
+    .week-labels, .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+
+    .week-labels {
+      margin-bottom: 7px;
+    }
+
+    .week-labels span {
+      text-align: center;
+      color: var(--muted-2);
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .calendar-grid {
+      grid-auto-rows: 45px;
+    }
+
+    .calendar-day {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      min-width: 0;
+      padding: 2px;
+      border-radius: 12px;
+      color: var(--ink);
+      background: transparent;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+
+    .calendar-day:active { transform: scale(.93); }
+
+    .calendar-day.other-month { opacity: .27; }
+
+    .calendar-day .date-num {
+      font-size: 10px;
+      font-weight: 720;
+      line-height: 1;
+    }
+
+    .calendar-day .shift-mark {
+      display: grid;
+      place-items: center;
+      min-width: 20px;
+      height: 17px;
+      padding: 0 4px;
+      border-radius: 6px;
+      color: white;
+      font-size: 8px;
+      font-weight: 760;
+    }
+
+    .calendar-day[data-shift="work"] .shift-mark { background: var(--blue); }
+    .calendar-day[data-shift="early"] .shift-mark { background: var(--green); }
+    .calendar-day[data-shift="late"] .shift-mark { background: var(--orange); }
+    .calendar-day[data-shift="night"] .shift-mark { background: var(--purple); }
+    .calendar-day[data-shift="rest"] .shift-mark { color: #858a9c; background: #eceef3; }
+    .calendar-day[data-shift="leave"] .shift-mark { color: #785e13; background: #f9dc84; }
+
+    .calendar-day.adjusted::after {
+      content: "班";
+      position: absolute;
+      top: 1px;
+      right: 1px;
+      display: grid;
+      place-items: center;
+      width: 13px;
+      height: 13px;
+      color: #b26b09;
+      background: #ffefcf;
+      border: 1px solid #f2bd66;
+      border-radius: 5px;
+      font-size: 6px;
+      font-weight: 800;
+    }
+
+    .calendar-day.selected {
+      box-shadow: inset 0 0 0 2px var(--primary);
+      background: #f4f4ff;
+    }
+
+    .calendar-day.today .date-num::after {
+      content: "";
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      width: 3px;
+      height: 3px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .calendar-legend {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 13px;
+      color: var(--muted);
+      font-size: 8px;
+    }
+
+    .calendar-legend span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .calendar-legend i {
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+    }
+
+    .day-detail-card {
+      margin-top: 13px;
+      padding: 17px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 9px 26px rgba(44, 48, 78, .06);
+    }
+
+    .day-detail-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+    }
+
+    .day-detail-head small {
+      display: block;
+      color: var(--muted);
+      font-size: 9px;
+      margin-bottom: 4px;
+    }
+
+    .day-detail-head strong { font-size: 15px; }
+
+    .edit-day {
+      padding: 7px 10px;
+      color: var(--primary-strong);
+      background: var(--primary-soft);
+      border-radius: 9px;
+      font-size: 9px;
+      font-weight: 720;
+    }
+
+    .timeline-row {
+      display: grid;
+      grid-template-columns: 23px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      margin-top: 14px;
+    }
+
+    .timeline-icon {
+      display: grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border-radius: 8px;
+      font-size: 10px;
+    }
+
+    .timeline-copy small {
+      display: block;
+      color: var(--muted);
+      font-size: 8px;
+      margin-bottom: 2px;
+    }
+
+    .timeline-copy strong { font-size: 11px; }
+    .timeline-value { color: var(--muted); font-size: 10px; }
+
+    /* Stats */
+    .range-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3px;
+      padding: 3px;
+      border-radius: 12px;
+      background: #eaebf1;
+      margin-bottom: 15px;
+    }
+
+    .range-tabs button {
+      height: 31px;
+      color: var(--muted);
+      background: transparent;
+      border-radius: 9px;
+      font-size: 10px;
+      font-weight: 680;
+    }
+
+    .range-tabs button.active {
+      color: var(--ink);
+      background: white;
+      box-shadow: 0 2px 9px rgba(32, 35, 61, .1);
+    }
+
+    .stats-hero {
+      padding: 19px;
+      border-radius: 24px;
+      color: white;
+      background: #202337;
+      box-shadow: 0 15px 30px rgba(31, 34, 53, .17);
+    }
+
+    .stats-hero-top {
+      display: flex;
+      justify-content: space-between;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+    }
+
+    .stats-hero-top em {
+      padding: 4px 7px;
+      color: #8de2c1;
+      background: rgba(79, 210, 160, .12);
+      border-radius: 6px;
+      font-style: normal;
+      font-size: 8px;
+    }
+
+    .stats-amount {
+      margin: 8px 0 20px;
+      font-size: 31px;
+      font-weight: 780;
+      letter-spacing: -.045em;
+    }
+
+    .stats-amount small { font-size: 14px; }
+
+    .stats-hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,.11);
+    }
+
+    .stats-hero-grid small {
+      display: block;
+      color: rgba(255,255,255,.5);
+      font-size: 8px;
+      margin-bottom: 5px;
+    }
+
+    .stats-hero-grid strong { font-size: 12px; }
+
+    .chart-card {
+      margin-top: 13px;
+      padding: 17px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: 0 9px 26px rgba(44, 48, 78, .06);
+    }
+
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+
+    .chart-head strong { font-size: 14px; }
+    .chart-head span { color: var(--muted); font-size: 9px; }
+
+    .bar-chart {
+      height: 126px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 2px;
+      border-bottom: 1px solid #eceef3;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 40px,
+        #f0f1f5 41px
+      );
+    }
+
+    .bar-item {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .bar-item i {
+      display: block;
+      width: 18px;
+      height: var(--height);
+      min-height: 5px;
+      border-radius: 6px 6px 2px 2px;
+      background: #dfe2fa;
+    }
+
+    .bar-item.active i { background: var(--primary); }
+    .bar-item.overtime i { background: linear-gradient(to top, var(--primary) 72%, var(--orange) 72%); }
+    .bar-item span { color: var(--muted); font-size: 7px; }
+
+    .work-composition {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .donut {
+      position: relative;
+      width: 106px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary) 0 74%, var(--orange) 74% 84%, #e9eaf0 84% 100%);
+    }
+
+    .donut::after {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .donut-label {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      display: grid;
+      place-content: center;
+      text-align: center;
+    }
+
+    .donut-label strong { font-size: 18px; }
+    .donut-label small { color: var(--muted); font-size: 8px; }
+
+    .composition-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .composition-list div {
+      display: grid;
+      grid-template-columns: 8px 1fr auto;
+      gap: 7px;
+      align-items: center;
+      font-size: 9px;
+    }
+
+    .composition-list i {
+      width: 7px;
+      height: 7px;
+      border-radius: 2px;
+    }
+
+    .composition-list span { color: var(--muted); }
+    .composition-list strong { font-size: 10px; }
+
+    /* Profile */
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 3px 2px 20px;
+    }
+
+    .profile-avatar {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      color: white;
+      background: linear-gradient(145deg, #5965e8, #8765d8);
+      border-radius: 19px;
+      font-size: 17px;
+      font-weight: 800;
+      box-shadow: 0 10px 20px rgba(89, 101, 232, .2);
+    }
+
+    .profile-copy strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .profile-copy span { color: var(--muted); font-size: 10px; }
+
+    .rule-banner {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 20px;
+      color: white;
+      background: linear-gradient(130deg, #4856d6, #695ee0);
+      box-shadow: 0 12px 28px rgba(74, 84, 205, .22);
+    }
+
+    .rule-icon {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.14);
+      font-size: 18px;
+    }
+
+    .rule-banner small {
+      display: block;
+      color: rgba(255,255,255,.63);
+      font-size: 8px;
+      margin-bottom: 4px;
+    }
+
+    .rule-banner strong { font-size: 12px; }
+    .rule-banner .chevron { opacity: .7; }
+
+    .settings-group {
+      margin-top: 14px;
+      overflow: hidden;
+      border-radius: 21px;
+      background: white;
+      box-shadow: 0 9px 26px rgba(44, 48, 78, .06);
+    }
+
+    .setting-row {
+      width: 100%;
+      min-height: 57px;
+      display: grid;
+      grid-template-columns: 34px 1fr auto;
+      gap: 11px;
+      align-items: center;
+      padding: 0 15px;
+      color: var(--ink);
+      background: white;
+      text-align: left;
+    }
+
+    .setting-row + .setting-row .setting-copy,
+    .setting-row + .setting-row .setting-tail {
+      border-top: 1px solid #f0f1f4;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
+    .setting-icon {
+      display: grid;
+      place-items: center;
+      width: 31px;
+      height: 31px;
+      border-radius: 10px;
+      font-size: 13px;
+    }
+
+    .setting-icon.purple { color: #6855d8; background: #eeebff; }
+    .setting-icon.orange { color: #bf7819; background: #fff0d8; }
+    .setting-icon.green { color: #168863; background: #e4f6ef; }
+    .setting-icon.blue { color: #3f70d4; background: #e6efff; }
+    .setting-icon.gray { color: #6e7283; background: #eff0f4; }
+
+    .setting-copy strong {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+
+    .setting-copy small { color: var(--muted); font-size: 8px; }
+    .setting-tail { color: var(--muted-2); font-size: 15px; }
+
+    .permission-pill {
+      padding: 4px 7px;
+      color: #228465;
+      background: #e5f6ef;
+      border-radius: 7px;
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    /* AI assistant */
+    .assistant-page {
+      padding-left: 0;
+      padding-right: 0;
+      padding-bottom: 86px;
+      background:
+        radial-gradient(circle at 85% 8%, rgba(122, 92, 230, .14), transparent 24%),
+        linear-gradient(180deg, #f1f2ff 0, var(--canvas) 250px);
+    }
+
+    .assistant-page .simple-heading {
+      padding: 0 18px;
+      margin-bottom: 14px;
+    }
+
+    .ai-online {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: #258968;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .ai-online::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #31b789;
+      box-shadow: 0 0 0 4px rgba(49, 183, 137, .12);
+    }
+
+    .ai-identity {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      margin: 0 18px 14px;
+      padding: 13px;
+      border: 1px solid rgba(89, 101, 232, .1);
+      border-radius: 21px;
+      background: rgba(255, 255, 255, .82);
+      box-shadow: 0 9px 28px rgba(54, 58, 99, .07);
+      backdrop-filter: blur(14px);
+    }
+
+    .ai-avatar {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 58px;
+      height: 58px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #c9c7ff, #7d6be9);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.36), 0 9px 18px rgba(94,82,205,.2);
+    }
+
+    .ai-avatar::before {
+      content: "";
+      position: absolute;
+      top: 13px;
+      width: 29px;
+      height: 36px;
+      border-radius: 48% 48% 44% 44%;
+      background: #ffe1d0;
+      box-shadow: 0 -7px 0 2px #3c355b;
+    }
+
+    .ai-avatar::after {
+      content: "• ᴗ •";
+      position: relative;
+      top: 7px;
+      color: #4a3f55;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .ai-avatar.mini {
+      width: 31px;
+      height: 31px;
+      border-radius: 11px;
+      flex: 0 0 auto;
+    }
+
+    .ai-avatar.mini::before {
+      top: 8px;
+      width: 16px;
+      height: 20px;
+      box-shadow: 0 -4px 0 1px #3c355b;
+    }
+
+    .ai-avatar.mini::after {
+      top: 4px;
+      font-size: 5px;
+      letter-spacing: 0;
+    }
+
+    .ai-name strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .ai-name span {
+      color: var(--muted);
+      font-size: 9px;
+    }
+
+    .persona-chip {
+      padding: 6px 8px;
+      color: var(--primary-strong);
+      background: var(--primary-soft);
+      border-radius: 9px;
+      font-size: 8px;
+      font-weight: 720;
+    }
+
+    .chat-stream {
+      display: grid;
+      gap: 13px;
+      padding: 0 18px;
+    }
+
+    .message-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+
+    .message-row.user {
+      justify-content: flex-end;
+    }
+
+    .bubble {
+      max-width: 276px;
+      padding: 11px 13px;
+      border-radius: 16px 16px 16px 5px;
+      color: #34384c;
+      background: white;
+      box-shadow: 0 7px 18px rgba(44, 48, 78, .06);
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .user .bubble {
+      color: white;
+      background: var(--primary);
+      border-radius: 16px 16px 5px 16px;
+      box-shadow: 0 8px 18px rgba(89,101,232,.18);
+    }
+
+    .bubble strong {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--ink);
+      font-size: 10px;
+    }
+
+    .action-preview {
+      margin: 2px 18px 0 57px;
+      overflow: hidden;
+      border: 1px solid #e7e8f0;
+      border-radius: 17px;
+      background: white;
+      box-shadow: 0 9px 24px rgba(44,48,78,.07);
+    }
+
+    .action-preview-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 12px;
+      background: #f8f8fd;
+      border-bottom: 1px solid #ececf2;
+    }
+
+    .action-preview-head strong { font-size: 10px; }
+    .action-preview-head span {
+      padding: 3px 6px;
+      color: #a16912;
+      background: #fff0d3;
+      border-radius: 6px;
+      font-size: 7px;
+      font-weight: 700;
+    }
+
+    .action-lines {
+      display: grid;
+      gap: 8px;
+      padding: 11px 12px;
+    }
+
+    .action-line {
+      display: grid;
+      grid-template-columns: 7px 1fr auto;
+      gap: 7px;
+      align-items: center;
+      font-size: 9px;
+    }
+
+    .action-line i {
+      width: 6px;
+      height: 6px;
+      border-radius: 2px;
+      background: var(--primary);
+    }
+
+    .action-line span { color: var(--muted); }
+    .action-line b { font-size: 9px; }
+
+    .action-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1.8fr;
+      gap: 7px;
+      padding: 0 12px 12px;
+    }
+
+    .action-buttons button {
+      height: 34px;
+      border-radius: 10px;
+      font-size: 9px;
+      font-weight: 720;
+    }
+
+    .action-cancel { color: var(--muted); background: #f1f2f6; }
+    .action-confirm { color: white; background: var(--primary); }
+
+    .quick-prompts {
+      display: flex;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 2px 18px 8px;
+      scrollbar-width: none;
+    }
+
+    .quick-prompts::-webkit-scrollbar { display: none; }
+
+    .quick-prompts button {
+      flex: 0 0 auto;
+      padding: 8px 10px;
+      border: 1px solid #e5e6ed;
+      border-radius: 11px;
+      color: #5f6478;
+      background: rgba(255,255,255,.86);
+      font-size: 8px;
+    }
+
+    .chat-composer {
+      position: absolute;
+      z-index: 10;
+      left: 12px;
+      right: 12px;
+      bottom: 7px;
+      display: grid;
+      grid-template-columns: 34px 1fr 37px;
+      gap: 7px;
+      align-items: center;
+      padding: 7px;
+      border: 1px solid rgba(222,224,233,.9);
+      border-radius: 19px;
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 10px 30px rgba(37,40,67,.12);
+      backdrop-filter: blur(18px);
+    }
+
+    .composer-add, .composer-send {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      font-size: 16px;
+    }
+
+    .composer-add { color: var(--muted); background: #f1f2f6; }
+    .composer-send { color: white; background: var(--primary); }
+
+    .chat-composer input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: var(--ink);
+      background: transparent;
+      font-size: 10px;
+    }
+
+    .chat-composer input::placeholder { color: #a1a5b4; }
+
+    /* AI settings sheet */
+    .ai-settings-sheet {
+      max-height: 720px;
+      overflow-y: auto;
+      padding-bottom: 24px;
+      scrollbar-width: none;
+    }
+
+    .ai-settings-sheet::-webkit-scrollbar { display: none; }
+
+    .api-status-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: #edf8f4;
+      margin-bottom: 14px;
+    }
+
+    .api-status-card span { color: #297b61; font-size: 9px; font-weight: 700; }
+    .api-status-card button {
+      padding: 6px 8px;
+      color: #236d57;
+      background: white;
+      border-radius: 8px;
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    .form-section-title {
+      margin: 16px 1px 8px;
+      color: var(--muted);
+      font-size: 9px;
+      font-weight: 720;
+    }
+
+    .form-field {
+      display: block;
+      margin-bottom: 9px;
+    }
+
+    .form-field span {
+      display: block;
+      margin: 0 2px 5px;
+      color: #5b6073;
+      font-size: 8px;
+      font-weight: 700;
+    }
+
+    .form-field input, .form-field select {
+      width: 100%;
+      height: 41px;
+      border: 1px solid #e3e5ec;
+      outline: 0;
+      border-radius: 11px;
+      color: var(--ink);
+      background: #f9f9fc;
+      padding: 0 11px;
+      font-size: 9px;
+    }
+
+    .form-field input:focus, .form-field select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(89,101,232,.1);
+    }
+
+    .key-field { position: relative; }
+    .key-field button {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      height: 27px;
+      padding: 0 8px;
+      color: var(--muted);
+      background: #eceef3;
+      border-radius: 7px;
+      font-size: 8px;
+    }
+
+    .secure-note {
+      display: flex;
+      gap: 7px;
+      padding: 9px;
+      color: #73788d;
+      background: #f5f6fa;
+      border-radius: 10px;
+      font-size: 8px;
+      line-height: 1.5;
+    }
+
+    .persona-options, .avatar-options {
+      display: flex;
+      gap: 7px;
+    }
+
+    .persona-option {
+      flex: 1;
+      padding: 8px 4px;
+      border: 1px solid #e5e6ed;
+      border-radius: 10px;
+      color: var(--muted);
+      background: white;
+      font-size: 8px;
+      font-weight: 680;
+    }
+
+    .persona-option.selected {
+      color: var(--primary-strong);
+      border-color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    .avatar-option {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 43px;
+      height: 43px;
+      border: 2px solid transparent;
+      border-radius: 14px;
+      background: #eef0f6;
+      font-size: 21px;
+    }
+
+    .avatar-option.selected { border-color: var(--primary); background: var(--primary-soft); }
+
+    /* Bottom navigation */
+    .bottom-nav {
+      position: absolute;
+      z-index: 20;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 83px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      padding: 8px 9px 16px;
+      border-top: 1px solid rgba(225, 226, 233, .82);
+      background: rgba(255, 255, 255, .94);
+      backdrop-filter: blur(18px);
+    }
+
+    .device[data-platform="android"] .bottom-nav {
+      height: 76px;
+      padding-bottom: 10px;
+    }
+
+    .nav-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #9b9faf;
+      background: transparent;
+      font-size: 8px;
+      font-weight: 680;
+    }
+
+    .nav-icon {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 27px;
+      border-radius: 10px;
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active .nav-icon { background: var(--primary-soft); }
+
+    .nav-item.ai-nav .nav-icon {
+      width: 39px;
+      height: 33px;
+      margin-top: -7px;
+      color: white;
+      background: linear-gradient(145deg, #6570ed, #7a5fdd);
+      box-shadow: 0 7px 16px rgba(89,101,232,.25);
+    }
+
+    .nav-item.ai-nav.active .nav-icon {
+      color: white;
+      background: linear-gradient(145deg, #505cdc, #7055d0);
+    }
+
+    .home-indicator {
+      position: absolute;
+      z-index: 24;
+      bottom: 5px;
+      left: 50%;
+      width: 118px;
+      height: 4px;
+      transform: translateX(-50%);
+      border-radius: 4px;
+      background: #191a20;
+      pointer-events: none;
+    }
+
+    .device[data-platform="android"] .home-indicator {
+      width: 34px;
+      height: 3px;
+      bottom: 4px;
+      opacity: .56;
+    }
+
+    /* Bottom sheet */
+    .sheet-backdrop {
+      position: absolute;
+      z-index: 50;
+      inset: 0;
+      background: rgba(18, 20, 34, .42);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease;
+      backdrop-filter: blur(2px);
+    }
+
+    .bottom-sheet {
+      position: absolute;
+      z-index: 51;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 10px 18px 28px;
+      border-radius: 27px 27px 0 0;
+      background: white;
+      transform: translateY(105%);
+      transition: transform .28s cubic-bezier(.2,.8,.2,1);
+      box-shadow: 0 -12px 40px rgba(25, 28, 48, .16);
+    }
+
+    .sheet-backdrop.open { opacity: 1; pointer-events: auto; }
+    .bottom-sheet.open { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 38px;
+      height: 4px;
+      margin: 0 auto 17px;
+      border-radius: 4px;
+      background: #d9dbe3;
+    }
+
+    .sheet-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .sheet-title strong { font-size: 17px; }
+    .sheet-title button { color: var(--muted); background: transparent; font-size: 12px; }
+
+    .shift-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+    }
+
+    .shift-option {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      padding: 12px 5px;
+      border: 1px solid #eceef3;
+      border-radius: 14px;
+      color: var(--ink);
+      background: white;
+      font-size: 9px;
+      font-weight: 680;
+    }
+
+    .shift-option i {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      height: 25px;
+      color: white;
+      border-radius: 8px;
+      font-size: 9px;
+      font-style: normal;
+    }
+
+    .shift-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .sheet-save {
+      width: 100%;
+      height: 48px;
+      margin-top: 16px;
+      border-radius: 14px;
+      color: white;
+      background: var(--primary);
+      font-size: 12px;
+      font-weight: 750;
+      box-shadow: 0 10px 20px rgba(89,101,232,.22);
+    }
+
+    .toast {
+      position: absolute;
+      z-index: 70;
+      left: 50%;
+      bottom: 98px;
+      max-width: 300px;
+      padding: 10px 14px;
+      color: white;
+      background: rgba(28, 30, 46, .94);
+      border-radius: 11px;
+      font-size: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translate(-50%, 8px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease;
+      box-shadow: 0 8px 25px rgba(18,20,34,.2);
+    }
+
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .notes-panel {
+      align-self: center;
+    }
+
+    .notes-panel h3 {
+      margin: 0 0 15px;
+      font-size: 15px;
+      letter-spacing: -.02em;
+    }
+
+    .note-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .note {
+      padding: 14px;
+      border: 1px solid rgba(65, 70, 105, .09);
+      border-radius: 15px;
+      background: rgba(255,255,255,.58);
+      backdrop-filter: blur(12px);
+    }
+
+    .note-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+      color: #393e56;
+      font-size: 11px;
+      font-weight: 750;
+    }
+
+    .note-head i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 0 4px rgba(89,101,232,.1);
+    }
+
+    .note p {
+      margin: 0;
+      color: #74798d;
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    .hint {
+      margin-top: 15px;
+      color: #8b90a1;
+      font-size: 10px;
+      line-height: 1.65;
+    }
+
+    @media (max-width: 980px) {
+      .prototype-layout {
+        grid-template-columns: 1fr 402px;
+        width: min(820px, 100%);
+      }
+      .notes-panel { display: none; }
+      .intro { padding-left: 0; }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        display: block;
+        padding: 0;
+        background: var(--canvas);
+      }
+      .prototype-layout {
+        display: block;
+        width: 100%;
+      }
+      .intro, .preview-tools { display: none; }
+      .device-column { display: block; }
+      .device {
+        width: 100%;
+        height: 100dvh;
+        min-height: 650px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .device[data-platform="android"] { border: 0; border-radius: 0; }
+      .status-bar {
+        padding-top: env(safe-area-inset-top, 0px);
+        height: calc(46px + env(safe-area-inset-top, 0px));
+      }
+      .island { display: none; }
+      .page {
+        padding-top: calc(56px + env(safe-area-inset-top, 0px));
+      }
+      .bottom-nav {
+        height: calc(76px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+      }
+      .pages { bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+      .home-indicator { bottom: max(5px, env(safe-area-inset-bottom, 0px)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype-layout">
+    <section class="intro" aria-label="原型介绍">
+      <div class="eyebrow">INTERACTIVE PROTOTYPE</div>
+      <h1>班次清楚，<span>工资有数。</span></h1>
+      <p>面向单双休、大小周和轮班用户的个人工作日历。AI 助理可用对话调整排班，并总结闹钟、出勤工时与工资。</p>
+      <div class="intro-tags">
+        <span>Android / iOS</span>
+        <span>月历排班</span>
+        <span>智能闹钟</span>
+        <span>工资统计</span>
+        <span>AI 助理</span>
+      </div>
+    </section>
+
+    <section class="device-column" aria-label="手机原型预览">
+      <div class="preview-tools">
+        <span class="preview-label">可点击预览</span>
+        <div class="platform-toggle" role="group" aria-label="切换平台样式">
+          <button class="active" data-platform-target="ios" type="button">iOS</button>
+          <button data-platform-target="android" type="button">Android</button>
+        </div>
+      </div>
+
+      <div class="device" id="device" data-platform="ios">
+        <div class="island"></div>
+        <div class="status-bar" aria-hidden="true">
+          <span id="statusTime">09:41</span>
+          <div class="status-icons">
+            <div class="signal"><i></i><i></i><i></i><i></i></div>
+            <span style="font-size:9px">5G</span>
+            <div class="battery"></div>
+          </div>
+        </div>
+
+        <div class="app-viewport">
+          <div class="pages">
+            <section class="page home-page active" data-page="home" aria-label="首页">
+              <header class="page-heading">
+                <div>
+                  <div class="greeting">8月5日 · 星期三</div>
+                  <h2>早上好，今天上班</h2>
+                </div>
+                <button class="avatar-button" type="button" data-go="profile" aria-label="打开个人设置">禾</button>
+              </header>
+
+              <article class="work-card">
+                <div class="work-top">
+                  <span class="work-status"><i></i> 今日 · 正常工作日</span>
+                  <button class="card-more" type="button" aria-label="更多">···</button>
+                </div>
+                <div class="work-main">
+                  <div>
+                    <div class="shift-name">白班</div>
+                    <div class="shift-time">09:00–18:00</div>
+                  </div>
+                  <div class="shift-hours"><strong>8h</strong>计划工时</div>
+                </div>
+                <div class="work-foot">
+                  <span>休息 60 分钟 · 正常计薪</span>
+                  <button class="change-shift" type="button" data-open-sheet>修改班次 <span>›</span></button>
+                </div>
+              </article>
+
+              <div class="punch-row">
+                <button class="punch-button" id="punchButton" type="button">
+                  <strong>上班打卡</strong>
+                  <span>记录实际出勤时间</span>
+                </button>
+                <button class="alarm-mini" type="button" data-toast="闹钟已开启：明天 07:10">
+                  <small>下个闹钟 <i class="alarm-dot"></i></small>
+                  <strong>07:10</strong>
+                </button>
+              </div>
+
+              <div class="section-title">
+                <h3>本月收入</h3>
+                <button type="button" data-go="stats">查看明细 ›</button>
+              </div>
+              <article class="salary-card">
+                <div class="salary-head"><span>预计到手</span><em>预估中</em></div>
+                <div class="salary-number"><small>¥</small> 6,842.50</div>
+                <div class="salary-metrics">
+                  <div><small>已出勤</small><strong>4 天</strong></div>
+                  <div><small>实际工时</small><strong>34.5 h</strong></div>
+                  <div><small>加班</small><strong>2.5 h</strong></div>
+                </div>
+              </article>
+
+              <div class="section-title">
+                <h3>未来 7 天</h3>
+                <button type="button" data-go="calendar">打开日历 ›</button>
+              </div>
+              <div class="week-strip">
+                <div class="week-day today"><span>三</span><b class="work">5</b></div>
+                <div class="week-day"><span>四</span><b class="work">6</b></div>
+                <div class="week-day"><span>五</span><b class="work">7</b></div>
+                <div class="week-day"><span>六</span><b class="work">8</b></div>
+                <div class="week-day"><span>日</span><b class="rest">9</b></div>
+                <div class="week-day"><span>一</span><b class="work">10</b></div>
+                <div class="week-day"><span>二</span><b class="night">11</b></div>
+              </div>
+            </section>
+
+            <section class="page calendar-page" data-page="calendar" aria-label="排班日历">
+              <header class="simple-heading">
+                <h2>排班日历</h2>
+                <div class="heading-actions">
+                  <button class="icon-button" type="button" data-toast="已回到今天" aria-label="回到今天">今</button>
+                  <button class="icon-button" type="button" data-open-sheet aria-label="添加排班">＋</button>
+                </div>
+              </header>
+
+              <article class="month-card">
+                <div class="month-nav">
+                  <div class="month-title">
+                    <strong id="monthTitle">2026年 8月</strong>
+                    <span>大小周 · 本周单休</span>
+                  </div>
+                  <div class="month-buttons">
+                    <button id="prevMonth" type="button" aria-label="上个月">‹</button>
+                    <button id="nextMonth" type="button" aria-label="下个月">›</button>
+                  </div>
+                </div>
+                <div class="week-labels" aria-hidden="true">
+                  <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+                </div>
+                <div class="calendar-grid" id="calendarGrid"></div>
+                <div class="calendar-legend">
+                  <span><i style="background:var(--blue)"></i>白班</span>
+                  <span><i style="background:var(--purple)"></i>夜班</span>
+                  <span><i style="background:#dfe1e8"></i>休息</span>
+                  <span><i style="background:var(--yellow)"></i>请假</span>
+                  <span><i style="background:var(--orange)"></i>调休上班</span>
+                </div>
+              </article>
+
+              <article class="day-detail-card">
+                <div class="day-detail-head">
+                  <div><small id="selectedDateLabel">8月5日 · 星期三</small><strong id="selectedShiftLabel">白班 09:00–18:00</strong></div>
+                  <button class="edit-day" type="button" data-open-sheet>修改</button>
+                </div>
+                <div class="timeline-row">
+                  <span class="timeline-icon">时</span>
+                  <div class="timeline-copy"><small>计划工时</small><strong id="selectedHours">8 小时</strong></div>
+                  <span class="timeline-value">休息 1h</span>
+                </div>
+                <div class="timeline-row">
+                  <span class="timeline-icon">铃</span>
+                  <div class="timeline-copy"><small>联动闹钟</small><strong id="selectedAlarm">07:10 起床 · 08:20 出门</strong></div>
+                  <span class="timeline-value" id="alarmState">已开启</span>
+                </div>
+              </article>
+            </section>
+
+            <section class="page stats-page" data-page="stats" aria-label="统计">
+              <header class="simple-heading">
+                <h2>出勤统计</h2>
+                <div class="heading-actions">
+                  <button class="icon-button" type="button" data-toast="报表导出功能将在下一步接入" aria-label="导出">↗</button>
+                </div>
+              </header>
+
+              <div class="range-tabs" role="tablist" aria-label="统计时间范围">
+                <button type="button">本周</button>
+                <button class="active" type="button">本月</button>
+                <button type="button">上月</button>
+                <button type="button">自定义</button>
+              </div>
+
+              <article class="stats-hero">
+                <div class="stats-hero-top"><span>2026年8月 · 预计工资</span><em>进行中</em></div>
+                <div class="stats-amount"><small>¥</small> 6,842.50</div>
+                <div class="stats-hero-grid">
+                  <div><small>基本工资</small><strong>¥6,250</strong></div>
+                  <div><small>加班工资</small><strong>¥492.5</strong></div>
+                  <div><small>补贴</small><strong>¥100</strong></div>
+                </div>
+              </article>
+
+              <article class="chart-card">
+                <div class="chart-head"><strong>每日工时</strong><span>单位：小时</span></div>
+                <div class="bar-chart" aria-label="每日工时柱状图">
+                  <div class="bar-item" style="--height:70%"><i></i><span>1</span></div>
+                  <div class="bar-item" style="--height:5%"><i></i><span>2</span></div>
+                  <div class="bar-item" style="--height:5%"><i></i><span>3</span></div>
+                  <div class="bar-item overtime" style="--height:88%"><i></i><span>4</span></div>
+                  <div class="bar-item active" style="--height:72%"><i></i><span>5</span></div>
+                  <div class="bar-item" style="--height:76%"><i></i><span>6</span></div>
+                  <div class="bar-item" style="--height:73%"><i></i><span>7</span></div>
+                  <div class="bar-item overtime" style="--height:85%"><i></i><span>8</span></div>
+                  <div class="bar-item" style="--height:5%"><i></i><span>9</span></div>
+                  <div class="bar-item" style="--height:72%"><i></i><span>10</span></div>
+                </div>
+              </article>
+
+              <article class="chart-card">
+                <div class="chart-head"><strong>工时构成</strong><span>共 34.5 小时</span></div>
+                <div class="work-composition">
+                  <div class="donut"><div class="donut-label"><strong>34.5h</strong><small>实际工时</small></div></div>
+                  <div class="composition-list">
+                    <div><i style="background:var(--primary)"></i><span>正常工时</span><strong>32h</strong></div>
+                    <div><i style="background:var(--orange)"></i><span>加班工时</span><strong>2.5h</strong></div>
+                    <div><i style="background:#e9eaf0"></i><span>请假</span><strong>0h</strong></div>
+                  </div>
+                </div>
+              </article>
+            </section>
+
+            <section class="page assistant-page" data-page="assistant" aria-label="AI 助理">
+              <header class="simple-heading">
+                <div>
+                  <div class="ai-online">助理在线</div>
+                  <h2>小禾 AI</h2>
+                </div>
+                <div class="heading-actions">
+                  <button class="icon-button" type="button" data-toast="已创建新对话" aria-label="新对话">＋</button>
+                  <button class="icon-button" type="button" data-open-ai-settings aria-label="AI 助理设置">⚙</button>
+                </div>
+              </header>
+
+              <article class="ai-identity">
+                <div class="ai-avatar" aria-label="AI 虚拟人小禾"></div>
+                <div class="ai-name"><strong>小禾</strong><span>懂你的排班、工时和工资</span></div>
+                <span class="persona-chip">温柔陪伴型</span>
+              </article>
+
+              <div class="quick-prompts" aria-label="快捷问题">
+                <button type="button" data-ai-prompt="总结一下本月出勤">总结本月出勤</button>
+                <button type="button" data-ai-prompt="帮我设置大小周">帮我设置大小周</button>
+                <button type="button" data-ai-prompt="下周工资能有多少">预估下周工资</button>
+                <button type="button" data-ai-prompt="检查我的闹钟">检查我的闹钟</button>
+              </div>
+
+              <div class="chat-stream" id="chatStream">
+                <div class="message-row">
+                  <div class="ai-avatar mini" aria-hidden="true"></div>
+                  <div class="bubble">早上好！我已经看过你本月的排班。你可以直接告诉我如何调整工作日、休息日，也可以让我总结工时和工资。</div>
+                </div>
+                <div class="message-row user">
+                  <div class="bubble">帮我把 8 月设置成大小周，这周六上班，下周六休息。</div>
+                </div>
+                <div class="message-row">
+                  <div class="ai-avatar mini" aria-hidden="true"></div>
+                  <div class="bubble"><strong>我理解了。</strong>将以 8 月 3 日这周作为单休周，两周循环。为了避免误改，我先生成了变更预览，请确认后再执行。</div>
+                </div>
+              </div>
+
+              <article class="action-preview" id="actionPreview">
+                <div class="action-preview-head"><strong>排班变更预览</strong><span>等待确认</span></div>
+                <div class="action-lines">
+                  <div class="action-line"><i></i><span>排班规则</span><b>大小周循环</b></div>
+                  <div class="action-line"><i style="background:var(--orange)"></i><span>本周六 · 8月8日</span><b>白班</b></div>
+                  <div class="action-line"><i style="background:#c5c8d3"></i><span>下周六 · 8月15日</span><b>休息</b></div>
+                  <div class="action-line"><i style="background:var(--green)"></i><span>联动更新</span><b>日历与闹钟</b></div>
+                </div>
+                <div class="action-buttons">
+                  <button class="action-cancel" id="aiCancelAction" type="button">暂不修改</button>
+                  <button class="action-confirm" id="aiConfirmAction" type="button">确认应用</button>
+                </div>
+              </article>
+
+              <div class="chat-composer">
+                <button class="composer-add" type="button" data-toast="可添加排班截图或工资条">＋</button>
+                <input id="chatInput" type="text" placeholder="问排班、工时、工资，或直接让我设置…" autocomplete="off" />
+                <button class="composer-send" id="chatSend" type="button" aria-label="发送">↑</button>
+              </div>
+            </section>
+
+            <section class="page profile-page" data-page="profile" aria-label="我的设置">
+              <header class="simple-heading"><h2>我的</h2></header>
+              <div class="profile-top">
+                <div class="profile-avatar">禾</div>
+                <div class="profile-copy"><strong>小禾</strong><span>本月已认真工作 4 天</span></div>
+              </div>
+
+              <button class="rule-banner" type="button" data-toast="当前规则：大小周，本周单休">
+                <span class="rule-icon">历</span>
+                <span><small>当前排班规则</small><strong>大小周 · 本周单休</strong></span>
+                <span class="chevron">›</span>
+              </button>
+
+              <div class="section-title"><h3>工作设置</h3></div>
+              <div class="settings-group">
+                <button class="setting-row" type="button" data-open-sheet>
+                  <span class="setting-icon purple">班</span>
+                  <span class="setting-copy"><strong>排班与班次</strong><small>大小周、白班、夜班</small></span>
+                  <span class="setting-tail">›</span>
+                </button>
+                <button class="setting-row" type="button" data-toast="闹钟权限正常，未来 30 天已同步">
+                  <span class="setting-icon orange">铃</span>
+                  <span class="setting-copy"><strong>智能闹钟</strong><small>随排班自动启停</small></span>
+                  <span class="setting-tail"><em class="permission-pill">正常</em></span>
+                </button>
+                <button class="setting-row" type="button" data-go="stats">
+                  <span class="setting-icon green">¥</span>
+                  <span class="setting-copy"><strong>工资规则</strong><small>月薪 · 加班按小时计算</small></span>
+                  <span class="setting-tail">›</span>
+                </button>
+                <button class="setting-row" type="button" data-toast="2026 年节假日数据已是最新版本">
+                  <span class="setting-icon blue">假</span>
+                  <span class="setting-copy"><strong>节假日与调休</strong><small>中国大陆 · 已更新</small></span>
+                  <span class="setting-tail">›</span>
+                </button>
+              </div>
+
+              <div class="section-title"><h3>数据与偏好</h3></div>
+              <div class="settings-group">
+                <button class="setting-row" type="button" data-open-ai-settings>
+                  <span class="setting-icon purple">AI</span>
+                  <span class="setting-copy"><strong>AI 助理设置</strong><small>模型接口、密钥、性格与形象</small></span>
+                  <span class="setting-tail">›</span>
+                </button>
+                <button class="setting-row" type="button" data-toast="数据默认仅保存在本机">
+                  <span class="setting-icon gray">存</span>
+                  <span class="setting-copy"><strong>备份与导出</strong><small>本地备份、CSV 导出</small></span>
+                  <span class="setting-tail">›</span>
+                </button>
+                <button class="setting-row" type="button" data-toast="当前使用系统外观">
+                  <span class="setting-icon gray">Aa</span>
+                  <span class="setting-copy"><strong>显示与语言</strong><small>简体中文 · 跟随系统</small></span>
+                  <span class="setting-tail">›</span>
+                </button>
+              </div>
+            </section>
+          </div>
+
+          <nav class="bottom-nav" aria-label="主导航">
+            <button class="nav-item active" type="button" data-target="home">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.5V21h14V9.5"></path><path d="M9 21v-6h6v6"></path></svg></span>
+              <span>首页</span>
+            </button>
+            <button class="nav-item" type="button" data-target="calendar">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"></rect><path d="M8 3v4M16 3v4M3 10h18"></path></svg></span>
+              <span>日历</span>
+            </button>
+            <button class="nav-item ai-nav" type="button" data-target="assistant">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M8 4h8a4 4 0 0 1 4 4v5a4 4 0 0 1-4 4h-4l-4.5 3v-3A4 4 0 0 1 4 13V8a4 4 0 0 1 4-4Z"></path><path d="M8 10h.01M12 10h.01M16 10h.01"></path></svg></span>
+              <span>AI 助理</span>
+            </button>
+            <button class="nav-item" type="button" data-target="stats">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"></path></svg></span>
+              <span>统计</span>
+            </button>
+            <button class="nav-item" type="button" data-target="profile">
+              <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"></circle><path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path></svg></span>
+              <span>我的</span>
+            </button>
+          </nav>
+
+          <div class="sheet-backdrop" id="sheetBackdrop"></div>
+          <section class="bottom-sheet" id="shiftSheet" aria-label="修改班次">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title"><strong>修改班次</strong><button id="sheetClose" type="button">取消</button></div>
+            <div class="shift-options">
+              <button class="shift-option selected" type="button" data-sheet-shift="白班"><i style="background:var(--blue)">白</i>09:00–18:00</button>
+              <button class="shift-option" type="button" data-sheet-shift="早班"><i style="background:var(--green)">早</i>07:00–16:00</button>
+              <button class="shift-option" type="button" data-sheet-shift="晚班"><i style="background:var(--orange)">晚</i>14:00–23:00</button>
+              <button class="shift-option" type="button" data-sheet-shift="夜班"><i style="background:var(--purple)">夜</i>20:00–次日08:00</button>
+              <button class="shift-option" type="button" data-sheet-shift="休息"><i style="color:#777;background:#eceef3">休</i>全天休息</button>
+              <button class="shift-option" type="button" data-sheet-shift="请假"><i style="color:#785e13;background:#f9dc84">请</i>整日请假</button>
+            </div>
+            <button class="sheet-save" id="sheetSave" type="button">保存并同步闹钟</button>
+          </section>
+
+          <section class="bottom-sheet ai-settings-sheet" id="aiSettingsSheet" aria-label="AI 助理设置">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title"><strong>AI 助理设置</strong><button id="aiSettingsClose" type="button">取消</button></div>
+
+            <div class="api-status-card">
+              <span>● 接口配置完整，可正常使用</span>
+              <button id="testApi" type="button">测试连接</button>
+            </div>
+
+            <div class="form-section-title">大模型接口</div>
+            <label class="form-field">
+              <span>接口类型</span>
+              <select id="apiType">
+                <option>OpenAI 兼容接口</option>
+                <option>自定义 REST API</option>
+              </select>
+            </label>
+            <label class="form-field">
+              <span>API 地址</span>
+              <input id="apiUrl" type="url" value="https://api.example.com/v1" spellcheck="false" />
+            </label>
+            <label class="form-field key-field">
+              <span>API 密钥</span>
+              <input id="apiKey" type="password" value="sk-demo-key-123456789" autocomplete="new-password" />
+              <button id="toggleKey" type="button">显示</button>
+            </label>
+            <label class="form-field">
+              <span>模型名称</span>
+              <input id="modelName" type="text" value="your-model-name" spellcheck="false" />
+            </label>
+            <div class="secure-note"><span>🔒</span><span>密钥仅保存在系统安全存储中，不写入日志或云端备份。正式版仅允许 HTTPS 接口。</span></div>
+
+            <div class="form-section-title">助理性格</div>
+            <div class="persona-options">
+              <button class="persona-option selected" type="button">温柔陪伴</button>
+              <button class="persona-option" type="button">简洁专业</button>
+              <button class="persona-option" type="button">活泼有趣</button>
+              <button class="persona-option" type="button">自定义</button>
+            </div>
+
+            <div class="form-section-title">虚拟人形象</div>
+            <div class="avatar-options">
+              <button class="avatar-option selected" type="button" aria-label="形象一">👩🏻</button>
+              <button class="avatar-option" type="button" aria-label="形象二">🧑🏻</button>
+              <button class="avatar-option" type="button" aria-label="形象三">🤖</button>
+              <button class="avatar-option" type="button" aria-label="形象四">🐼</button>
+            </div>
+
+            <div class="form-section-title">数据权限</div>
+            <div class="secure-note"><span>✓</span><span>可读取排班与统计；任何修改操作都必须先展示变更预览并由你确认。</span></div>
+            <button class="sheet-save" id="aiSettingsSave" type="button">保存 AI 助理设置</button>
+          </section>
+
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+          <div class="home-indicator"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="notes-panel" aria-label="设计说明">
+      <h3>本版样式重点</h3>
+      <div class="note-list">
+        <article class="note"><div class="note-head"><i></i>一眼看懂今天</div><p>首页优先展示今日班次、打卡动作和下个闹钟，减少用户在多个页面之间切换。</p></article>
+        <article class="note"><div class="note-head"><i></i>颜色不是唯一信息</div><p>月历同时使用班次色、文字简称和调休角标，兼顾色弱用户与小屏可读性。</p></article>
+        <article class="note"><div class="note-head"><i></i>统计结果可核对</div><p>工资和工时先给总览，再拆分基本工资、加班、补贴和每日工时。</p></article>
+        <article class="note"><div class="note-head"><i></i>双平台安全区</div><p>原型预留 iOS 底部手势区与 Android 状态栏差异，核心按钮满足移动端触控尺寸。</p></article>
+        <article class="note"><div class="note-head"><i></i>AI 操作先确认</div><p>助理只生成结构化变更预览，用户确认后才应用排班、闹钟等设置，并保留撤销能力。</p></article>
+      </div>
+      <p class="hint">提示：可点击底部“AI 助理”、快捷问题、确认应用和设置按钮查看完整交互。</p>
+    </aside>
+  </main>
+
+  <script>
+    (() => {
+      const device = document.getElementById('device');
+      const navItems = [...document.querySelectorAll('.nav-item')];
+      const pages = [...document.querySelectorAll('.page')];
+      const toast = document.getElementById('toast');
+      const sheet = document.getElementById('shiftSheet');
+      const aiSettingsSheet = document.getElementById('aiSettingsSheet');
+      const backdrop = document.getElementById('sheetBackdrop');
+      const monthTitle = document.getElementById('monthTitle');
+      const calendarGrid = document.getElementById('calendarGrid');
+      const selectedDateLabel = document.getElementById('selectedDateLabel');
+      const selectedShiftLabel = document.getElementById('selectedShiftLabel');
+      const selectedHours = document.getElementById('selectedHours');
+      const selectedAlarm = document.getElementById('selectedAlarm');
+      const alarmState = document.getElementById('alarmState');
+      let toastTimer;
+      let visibleYear = 2026;
+      let visibleMonth = 7;
+      let selectedDate = new Date(2026, 7, 5);
+      let selectedSheetShift = '白班';
+
+      const shiftMap = {
+        work: { name: '白班', mark: '白', time: '09:00–18:00', hours: '8 小时', alarm: '07:10 起床 · 08:20 出门' },
+        early: { name: '早班', mark: '早', time: '07:00–16:00', hours: '8 小时', alarm: '05:30 起床 · 06:20 出门' },
+        late: { name: '晚班', mark: '晚', time: '14:00–23:00', hours: '8 小时', alarm: '11:30 起床 · 13:15 出门' },
+        night: { name: '夜班', mark: '夜', time: '20:00–次日08:00', hours: '11 小时', alarm: '17:30 起床 · 19:10 出门' },
+        rest: { name: '休息', mark: '休', time: '全天休息', hours: '0 小时', alarm: '无排班闹钟' },
+        leave: { name: '请假', mark: '请', time: '整日请假', hours: '0 小时', alarm: '排班闹钟已暂停' }
+      };
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+      }
+
+      function goTo(pageName) {
+        pages.forEach(page => page.classList.toggle('active', page.dataset.page === pageName));
+        navItems.forEach(item => item.classList.toggle('active', item.dataset.target === pageName));
+        const activePage = pages.find(page => page.dataset.page === pageName);
+        if (activePage) activePage.scrollTop = 0;
+      }
+
+      navItems.forEach(item => item.addEventListener('click', () => goTo(item.dataset.target)));
+      document.querySelectorAll('[data-go]').forEach(button => {
+        button.addEventListener('click', () => goTo(button.dataset.go));
+      });
+
+      document.querySelectorAll('[data-toast]').forEach(button => {
+        button.addEventListener('click', () => showToast(button.dataset.toast));
+      });
+
+      document.querySelectorAll('[data-platform-target]').forEach(button => {
+        button.addEventListener('click', () => {
+          const platform = button.dataset.platformTarget;
+          device.dataset.platform = platform;
+          document.querySelectorAll('[data-platform-target]').forEach(b => b.classList.toggle('active', b === button));
+          showToast(platform === 'ios' ? '已切换为 iOS 安全区样式' : '已切换为 Android 安全区样式');
+        });
+      });
+
+      function openSheet() {
+        aiSettingsSheet.classList.remove('open');
+        sheet.classList.add('open');
+        backdrop.classList.add('open');
+      }
+
+      function closeSheet() {
+        sheet.classList.remove('open');
+        aiSettingsSheet.classList.remove('open');
+        backdrop.classList.remove('open');
+      }
+
+      function openAiSettings() {
+        sheet.classList.remove('open');
+        aiSettingsSheet.classList.add('open');
+        backdrop.classList.add('open');
+      }
+
+      document.querySelectorAll('[data-open-sheet]').forEach(button => button.addEventListener('click', openSheet));
+      document.querySelectorAll('[data-open-ai-settings]').forEach(button => button.addEventListener('click', openAiSettings));
+      document.getElementById('sheetClose').addEventListener('click', closeSheet);
+      document.getElementById('aiSettingsClose').addEventListener('click', closeSheet);
+      backdrop.addEventListener('click', closeSheet);
+
+      document.querySelectorAll('[data-sheet-shift]').forEach(option => {
+        option.addEventListener('click', () => {
+          selectedSheetShift = option.dataset.sheetShift;
+          document.querySelectorAll('[data-sheet-shift]').forEach(item => item.classList.toggle('selected', item === option));
+        });
+      });
+
+      document.getElementById('sheetSave').addEventListener('click', () => {
+        closeSheet();
+        showToast(`已改为${selectedSheetShift}，关联闹钟已同步`);
+      });
+
+      document.getElementById('testApi').addEventListener('click', () => {
+        showToast('连接成功，模型已返回响应');
+      });
+
+      document.getElementById('toggleKey').addEventListener('click', event => {
+        const keyInput = document.getElementById('apiKey');
+        const visible = keyInput.type === 'text';
+        keyInput.type = visible ? 'password' : 'text';
+        event.currentTarget.textContent = visible ? '显示' : '隐藏';
+      });
+
+      document.getElementById('aiSettingsSave').addEventListener('click', () => {
+        closeSheet();
+        showToast('AI 助理设置已安全保存');
+      });
+
+      document.querySelectorAll('.persona-option').forEach(option => {
+        option.addEventListener('click', () => {
+          document.querySelectorAll('.persona-option').forEach(item => item.classList.toggle('selected', item === option));
+        });
+      });
+
+      document.querySelectorAll('.avatar-option').forEach(option => {
+        option.addEventListener('click', () => {
+          document.querySelectorAll('.avatar-option').forEach(item => item.classList.toggle('selected', item === option));
+        });
+      });
+
+      const chatStream = document.getElementById('chatStream');
+      const chatInput = document.getElementById('chatInput');
+
+      function addChatMessage(text, user = false) {
+        const row = document.createElement('div');
+        row.className = `message-row${user ? ' user' : ''}`;
+        if (!user) {
+          const avatar = document.createElement('div');
+          avatar.className = 'ai-avatar mini';
+          avatar.setAttribute('aria-hidden', 'true');
+          row.appendChild(avatar);
+        }
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.textContent = text;
+        row.appendChild(bubble);
+        chatStream.appendChild(row);
+        const assistantPage = document.querySelector('[data-page="assistant"]');
+        assistantPage.scrollTo({ top: assistantPage.scrollHeight, behavior: 'smooth' });
+      }
+
+      function assistantReply(prompt) {
+        if (/统计|总结|工时|工资/.test(prompt)) {
+          return '本月目前已出勤 4 天、实际工时 34.5 小时，其中加班 2.5 小时，预计工资 ¥6,842.50。周六加班是本月额外收入的主要来源。';
+        }
+        if (/休|班|排班|工作日/.test(prompt)) {
+          return '可以。我会先读取当前排班并生成变更预览，只有你确认后才会修改日历、闹钟和统计口径。';
+        }
+        if (/闹钟|提醒/.test(prompt)) {
+          return '未来 7 天共有 6 个排班闹钟，休息日均已暂停。最近一次是明天 07:10，我也可以帮你调整。';
+        }
+        return '我明白了。我可以结合你的排班、出勤和工资数据回答；涉及软件设置时，会先展示变更内容供你确认。';
+      }
+
+      function sendChat() {
+        const prompt = chatInput.value.trim();
+        if (!prompt) return;
+        addChatMessage(prompt, true);
+        chatInput.value = '';
+        window.setTimeout(() => addChatMessage(assistantReply(prompt)), 260);
+      }
+
+      document.getElementById('chatSend').addEventListener('click', sendChat);
+      chatInput.addEventListener('keydown', event => {
+        if (event.key === 'Enter') sendChat();
+      });
+
+      document.querySelectorAll('[data-ai-prompt]').forEach(button => {
+        button.addEventListener('click', () => {
+          chatInput.value = button.dataset.aiPrompt;
+          sendChat();
+        });
+      });
+
+      document.getElementById('aiConfirmAction').addEventListener('click', () => {
+        document.getElementById('actionPreview').style.display = 'none';
+        addChatMessage('设置已完成：大小周规则已生效，日历与未来闹钟已同步。你可以随时让我撤销这次修改。');
+        showToast('大小周排班已应用，可撤销');
+      });
+
+      document.getElementById('aiCancelAction').addEventListener('click', () => {
+        document.getElementById('actionPreview').style.display = 'none';
+        addChatMessage('好的，没有修改任何设置。');
+      });
+
+      const punchButton = document.getElementById('punchButton');
+      punchButton.addEventListener('click', () => {
+        const done = punchButton.classList.toggle('done');
+        punchButton.querySelector('strong').textContent = done ? '已打卡 · 09:02' : '上班打卡';
+        punchButton.querySelector('span').textContent = done ? '下班时再次点击记录' : '记录实际出勤时间';
+        showToast(done ? '上班打卡成功，时间 09:02' : '演示状态已重置');
+      });
+
+      document.querySelectorAll('.range-tabs button').forEach(button => {
+        button.addEventListener('click', () => {
+          document.querySelectorAll('.range-tabs button').forEach(item => item.classList.toggle('active', item === button));
+          showToast(`已切换到${button.textContent}统计`);
+        });
+      });
+
+      function mondayIndex(date) {
+        return (date.getDay() + 6) % 7;
+      }
+
+      function shiftForDate(date) {
+        const y = date.getFullYear();
+        const m = date.getMonth();
+        const d = date.getDate();
+        const day = date.getDay();
+
+        if (y === 2026 && m === 7 && d === 11) return 'night';
+        if (y === 2026 && m === 7 && d === 12) return 'night';
+        if (y === 2026 && m === 7 && d === 14) return 'leave';
+        if (day === 0) return 'rest';
+        if (day === 6) {
+          const anchor = new Date(2026, 7, 3);
+          const diffWeeks = Math.floor((date - anchor) / 604800000);
+          return Math.abs(diffWeeks) % 2 === 0 ? 'work' : 'rest';
+        }
+        if (day === 1 && d % 9 === 0) return 'early';
+        return 'work';
+      }
+
+      function isAdjusted(date, shift) {
+        return date.getDay() === 6 && shift !== 'rest';
+      }
+
+      function sameDate(a, b) {
+        return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+      }
+
+      function updateSelectedDetail(date, shift) {
+        const info = shiftMap[shift];
+        const weekday = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'][date.getDay()];
+        selectedDateLabel.textContent = `${date.getMonth() + 1}月${date.getDate()}日 · ${weekday}`;
+        selectedShiftLabel.textContent = `${info.name} ${info.time}`;
+        selectedHours.textContent = info.hours;
+        selectedAlarm.textContent = info.alarm;
+        alarmState.textContent = (shift === 'rest' || shift === 'leave') ? '已暂停' : '已开启';
+      }
+
+      function renderCalendar() {
+        calendarGrid.innerHTML = '';
+        monthTitle.textContent = `${visibleYear}年 ${visibleMonth + 1}月`;
+        const first = new Date(visibleYear, visibleMonth, 1);
+        const startOffset = mondayIndex(first);
+        const start = new Date(visibleYear, visibleMonth, 1 - startOffset);
+
+        for (let i = 0; i < 42; i++) {
+          const date = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
+          const shift = shiftForDate(date);
+          const info = shiftMap[shift];
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'calendar-day';
+          button.dataset.shift = shift;
+          if (date.getMonth() !== visibleMonth) button.classList.add('other-month');
+          if (isAdjusted(date, shift)) button.classList.add('adjusted');
+          if (sameDate(date, selectedDate)) button.classList.add('selected');
+          if (sameDate(date, new Date(2026, 7, 5))) button.classList.add('today');
+          button.setAttribute('aria-label', `${date.getMonth()+1}月${date.getDate()}日，${info.name}`);
+          button.innerHTML = `<span class="date-num">${date.getDate()}</span><span class="shift-mark">${info.mark}</span>`;
+          button.addEventListener('click', () => {
+            selectedDate = date;
+            updateSelectedDetail(date, shift);
+            renderCalendar();
+          });
+          calendarGrid.appendChild(button);
+        }
+      }
+
+      document.getElementById('prevMonth').addEventListener('click', () => {
+        visibleMonth -= 1;
+        if (visibleMonth < 0) { visibleMonth = 11; visibleYear -= 1; }
+        selectedDate = new Date(visibleYear, visibleMonth, 1);
+        updateSelectedDetail(selectedDate, shiftForDate(selectedDate));
+        renderCalendar();
+      });
+
+      document.getElementById('nextMonth').addEventListener('click', () => {
+        visibleMonth += 1;
+        if (visibleMonth > 11) { visibleMonth = 0; visibleYear += 1; }
+        selectedDate = new Date(visibleYear, visibleMonth, 1);
+        updateSelectedDetail(selectedDate, shiftForDate(selectedDate));
+        renderCalendar();
+      });
+
+      renderCalendar();
+      updateSelectedDetail(selectedDate, shiftForDate(selectedDate));
+    })();
+  </script>
+</body>
+</html>

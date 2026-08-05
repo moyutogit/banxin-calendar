@@ -1,0 +1,17 @@
+{
+  "@@locale": "en",
+  "appTitle": "Shift & Pay Calendar",
+  "tabHome": "Home",
+  "tabCalendar": "Calendar",
+  "tabAssistant": "Assistant",
+  "tabStatistics": "Statistics",
+  "tabSettings": "Profile",
+  "homeHeadline": "Start today with a clear schedule",
+  "homeDescription": "Phase 0 wires navigation, theming, state management, and local data foundations.",
+  "calendarDescription": "Calendar and overrides will use the deterministic scheduling engine in Phase 1.",
+  "assistantDescription": "AI is optional; core features continue to work without a model provider.",
+  "statisticsDescription": "Statistics consume deterministic domain results instead of recalculating in widgets.",
+  "settingsDescription": "Schedule, alarm, wage, holiday, privacy, and backup settings.",
+  "foundationReady": "Project foundation ready",
+  "notConfigured": "Not configured"
+}

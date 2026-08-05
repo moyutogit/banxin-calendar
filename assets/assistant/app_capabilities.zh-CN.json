@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "app_version": "0.1.0",
+  "implemented": [
+    "基础五入口导航",
+    "浅色与深色 Material 3 主题",
+    "本地 SQLite 初始化与迁移",
+    "系统安全存储凭据封装"
+  ],
+  "not_yet_implemented": [
+    "排班与日历业务",
+    "闹钟平台桥接",
+    "出勤、工资与统计",
+    "AI 对话和业务工具"
+  ]
+}
