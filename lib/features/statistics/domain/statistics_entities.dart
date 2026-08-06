@@ -3,6 +3,8 @@ import 'package:banxin_calendar/features/schedule/domain/schedule_entities.dart'
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:banxin_calendar/features/wage/domain/wage_entities.dart';
 
+enum StatisticsAttributionMode { workDate, naturalDay }
+
 final class DailyStatistics {
   const DailyStatistics({
     required this.date,

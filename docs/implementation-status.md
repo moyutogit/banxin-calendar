@@ -1,34 +1,19 @@
 # 开发阶段状态
 
-## 阶段 1：排班闭环（进行中）
+截至 V0.1.0，开发设计文档阶段 0—5 的代码与自动化验收已完成：
 
-- 已建立 `schedule/domain`、`application`、`data`、`presentation` 四层实现；
-  Presentation 不直接访问 Drift，Data 通过 Domain Repository 返回领域对象。
-- 已实现 `LocalDate`、`DateRange`、强类型班次/规则 ID、班次快照、周规则、
-  1～31 天自定义周期、大小周规则和确定性解析器。
-- 已固定 `用户覆盖 > 公司安排 > 官方节假日 > 排班规则 > 默认规则` 优先级，
-  并覆盖跨年、闰日、负 offset、规则优先级及未来 24 个月稳定性测试。
-- Drift/SQLite 已升级到 Schema v3，增加班次、规则、覆盖、节假日、可重建
-  日历缓存和变更日志；包含 v1/v2 前向迁移、外键和软删除唯一约束测试。
-- 排班 Data Repository 已实现启用/软删除过滤、日期范围查询和班次快照读取；
-  损坏的持久化规则载荷会明确失败，不静默降级。
-- 日历已提供真实空状态并接入 `/schedule/rules` 路由，支持模式说明已国际化。
+- 阶段 0：Material 3、GoRouter、Riverpod、Drift 迁移、安全存储、脱敏日志和双端 CI。
+- 阶段 1：确定性排班、班次/规则 CRUD、节假日、月历/详情、单日与批量覆盖。
+- 阶段 2：Android AlarmManager、iOS 本地通知、滚动 30 天同步、重启恢复和幂等重试。
+- 阶段 3：打卡补录、多段/跨夜工时、自然日视图、时/日/月薪、统计、结算和 CSV。
+- 阶段 4：可配置 Provider、流式对话、权限范围、功能知识、受控查询工具，以及排班/
+  闹钟提案—确认—执行—撤销闭环。
+- 阶段 5：一致性备份、临时迁移和原子恢复、7 份保留、自动备份、分项清除、首次引导、
+  深色/200% 字体、依赖许可证检查、权限和隐私清单。
 
-未完成：规则/班次编辑事务、缓存失效与重建、节假日下载、完整月历与日期详情、
-单日/批量覆盖及变更撤销。上述能力完成前不把 F-SCH/F-HOL/F-CAL 标记为完成。
+未处理异常只记录本地随机诊断 ID、错误类型和来源，不保存异常正文或堆栈路径；用户可
+在备份与隐私页主动导出最多 50 条的脱敏诊断包。Release 不接入第三方崩溃上报。
 
-## 阶段 0：工程骨架
-
-- Flutter 3.44.8 / Dart 3.12.2，Android Kotlin、iOS Swift。
-- Material 3 主题、中文本地化、GoRouter 五入口导航、Riverpod 注入。
-- Drift/SQLite 阶段 0 基线为 Schema v2；现已由阶段 1 增量前向迁移到 v3。
-- API 凭据通过 Keychain/Keystore 插件封装，数据库只允许保存随机引用。
-- 结构化日志先经过字段和内联凭据脱敏。
-- Windows 本地代码生成、格式、静态检查和 10 个单元/Widget 测试通过。
-- Android debug APK 已在 API 36 / JDK 17 / NDK 28.2 工具链构建通过。
-- iOS deployment target 15.0 和 macOS/Xcode 16.4 CI 已配置；Windows 无法
-  执行 Xcode 构建，需由 macOS CI 完成该项验收。
-- 设备集成测试已创建；本机没有已连接 Android/iOS 设备，因此未执行真机 smoke。
-
-偏差与未决项：正式产品名、Logo、节假日数据源等沿用设计文档第 24 节，
-不阻塞阶段 0。
+当前 SQLite schema 为 v6，API Key 和敏感请求头从未进入业务数据库或普通备份。
+Windows 本地完成静态分析、全量测试和 Android 构建；iOS 由 macOS/Xcode 16.4 CI
+执行无签名编译。原生闹钟最终可靠性仍需发布方使用真实 Android/iOS 设备验收。

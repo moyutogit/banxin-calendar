@@ -40,6 +40,8 @@ final class ToolGateway {
     'get_alarm_summary',
     'propose_schedule_change',
     'apply_schedule_change',
+    'propose_alarm_change',
+    'apply_alarm_change',
     'undo_ai_action',
   };
 
@@ -70,6 +72,8 @@ final class ToolGateway {
       'get_alarm_summary' => _getAlarms(persona.scopes),
       'propose_schedule_change' => _propose(conversationId, arguments),
       'apply_schedule_change' => _apply(arguments),
+      'propose_alarm_change' => _proposeAlarm(conversationId, arguments),
+      'apply_alarm_change' => _apply(arguments),
       'undo_ai_action' => _undo(arguments),
       _ => throw UnsupportedError('Unsupported assistant tool.'),
     };
@@ -155,6 +159,16 @@ final class ToolGateway {
       'actionId': proposal.action.id,
       'confirmationToken': proposal.confirmationToken,
       'summary': proposal.summary,
+      'preview': <String, Object?>{
+        'before': jsonDecode(proposal.action.beforeSnapshotJson),
+        'after': jsonDecode(proposal.action.validatedPayloadJson),
+        'alarmImpact':
+            (jsonDecode(proposal.action.validatedPayloadJson)
+                    as Map<String, Object?>)['sync_alarms'] ==
+                true
+            ? 'schedule alarms will be rebuilt after confirmation'
+            : 'schedule alarms will not be changed',
+      },
       'expiresAt': proposal.action.expiresAtUtc.toIso8601String(),
     };
   }
@@ -165,7 +179,7 @@ final class ToolGateway {
     if (actionId is! String || token is! String) {
       throw const AssistantActionException('explicit_confirmation_required');
     }
-    final action = await _actions.confirmScheduleChange(
+    final action = await _actions.confirmAction(
       actionId: actionId,
       confirmationToken: token,
     );
@@ -181,10 +195,31 @@ final class ToolGateway {
     if (actionId is! String) {
       throw const AssistantActionException('action_id_required');
     }
-    final action = await _actions.undoScheduleChange(actionId);
+    final action = await _actions.undoAction(actionId);
     return <String, Object?>{
       'undone': action.status == AiActionStatus.undone,
       'actionId': action.id,
+    };
+  }
+
+  Future<Map<String, Object?>> _proposeAlarm(
+    String conversationId,
+    Map<String, Object?> arguments,
+  ) async {
+    final proposal = await _actions.proposeAlarmChange(
+      conversationId: conversationId,
+      arguments: arguments,
+    );
+    return <String, Object?>{
+      'requiresConfirmation': true,
+      'actionId': proposal.action.id,
+      'confirmationToken': proposal.confirmationToken,
+      'summary': proposal.summary,
+      'preview': <String, Object?>{
+        'before': jsonDecode(proposal.action.beforeSnapshotJson),
+        'after': jsonDecode(proposal.action.validatedPayloadJson),
+      },
+      'expiresAt': proposal.action.expiresAtUtc.toIso8601String(),
     };
   }
 

@@ -2,10 +2,13 @@ import 'package:banxin_calendar/app/shell/app_shell.dart';
 import 'package:banxin_calendar/features/alarm/presentation/alarm_settings_page.dart';
 import 'package:banxin_calendar/features/assistant/presentation/assistant_page.dart';
 import 'package:banxin_calendar/features/assistant/presentation/assistant_settings_page.dart';
+import 'package:banxin_calendar/features/backup/presentation/backup_settings_page.dart';
 import 'package:banxin_calendar/features/calendar/presentation/calendar_page.dart';
 import 'package:banxin_calendar/features/calendar/presentation/day_details_page.dart';
 import 'package:banxin_calendar/features/holiday/presentation/holiday_settings_page.dart';
 import 'package:banxin_calendar/features/home/presentation/home_page.dart';
+import 'package:banxin_calendar/features/onboarding/presentation/onboarding_page.dart';
+import 'package:banxin_calendar/features/onboarding/presentation/startup_page.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:banxin_calendar/features/schedule/presentation/schedule_rules_page.dart';
@@ -20,8 +23,10 @@ import 'package:go_router/go_router.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/startup',
     routes: <RouteBase>[
+      GoRoute(path: '/startup', builder: (_, _) => const StartupPage()),
+      GoRoute(path: '/onboarding', builder: (_, _) => const OnboardingPage()),
       StatefulShellRoute.indexedStack(
         builder:
             (
@@ -103,6 +108,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings/assistant',
         builder: (_, _) => const AssistantSettingsPage(),
+      ),
+      GoRoute(
+        path: '/settings/backup',
+        builder: (_, _) => const BackupSettingsPage(),
       ),
     ],
   );

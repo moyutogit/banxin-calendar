@@ -348,7 +348,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
     try {
       await ref
           .read(assistantActionGatewayProvider)
-          .confirmScheduleChange(actionId: actionId, confirmationToken: token);
+          .confirmAction(actionId: actionId, confirmationToken: token);
       if (mounted) {
         setState(() {
           _undoActionId = actionId;
@@ -365,7 +365,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
   Future<void> _undo() async {
     final actionId = _undoActionId;
     if (actionId == null) return;
-    await ref.read(assistantActionGatewayProvider).undoScheduleChange(actionId);
+    await ref.read(assistantActionGatewayProvider).undoAction(actionId);
     if (mounted) {
       setState(() {
         _undoActionId = null;

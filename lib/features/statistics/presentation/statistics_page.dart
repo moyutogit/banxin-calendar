@@ -19,6 +19,7 @@ class StatisticsPage extends ConsumerStatefulWidget {
 class _StatisticsPageState extends ConsumerState<StatisticsPage> {
   late DateRange _range;
   late Future<StatisticsReport> _report;
+  var _attributionMode = StatisticsAttributionMode.workDate;
 
   @override
   void initState() {
@@ -28,7 +29,9 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
   }
 
   void _reload() {
-    _report = ref.read(statisticsServiceProvider).build(_range);
+    _report = ref
+        .read(statisticsServiceProvider)
+        .build(_range, attributionMode: _attributionMode);
   }
 
   @override
@@ -63,6 +66,30 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
                     'last' => _lastMonth(),
                     _ => _thisMonth(),
                   };
+                  _reload();
+                });
+              },
+            ),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+            child: SegmentedButton<StatisticsAttributionMode>(
+              segments: <ButtonSegment<StatisticsAttributionMode>>[
+                ButtonSegment(
+                  value: StatisticsAttributionMode.workDate,
+                  label: Text(strings.statisticsByWorkDate),
+                ),
+                ButtonSegment(
+                  value: StatisticsAttributionMode.naturalDay,
+                  label: Text(strings.statisticsByNaturalDay),
+                ),
+              ],
+              selected: <StatisticsAttributionMode>{_attributionMode},
+              onSelectionChanged: (value) {
+                setState(() {
+                  _attributionMode = value.single;
                   _reload();
                 });
               },
@@ -268,10 +295,6 @@ class _PayrollCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final strings = AppLocalizations.of(context);
     final payroll = report.payroll!;
-    final overtimeTotal = payroll.overtimePayMinor.values.fold<int>(
-      0,
-      (sum, amount) => sum + amount,
-    );
     final confirmed = report.savedPeriod?.confirmedMinor;
     return Card(
       child: Padding(
@@ -289,7 +312,25 @@ class _PayrollCard extends ConsumerWidget {
               payroll.normalHoursPayMinor,
               payroll.currency,
             ),
-            _moneyLine(strings.overtimePay, overtimeTotal, payroll.currency),
+            _moneyLine(
+              strings.workdayOvertimePay,
+              payroll.overtimePayMinor[OvertimeType.workday] ?? 0,
+              payroll.currency,
+            ),
+            _moneyLine(
+              strings.restDayOvertimePay,
+              payroll.overtimePayMinor[OvertimeType.restDay] ?? 0,
+              payroll.currency,
+            ),
+            _moneyLine(
+              strings.holidayOvertimePay,
+              payroll.overtimePayMinor[OvertimeType.publicHoliday] ?? 0,
+              payroll.currency,
+            ),
+            for (final line in payroll.allowances)
+              _moneyLine(line.label, line.amountMinor, payroll.currency),
+            for (final line in payroll.deductions)
+              _moneyLine(line.label, -line.amountMinor, payroll.currency),
             const Divider(),
             _moneyLine(
               strings.estimatedTotal,

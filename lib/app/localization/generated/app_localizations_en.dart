@@ -160,6 +160,67 @@ class AppLocalizationsEn extends AppLocalizations {
       'The request was refused by the safety policy';
 
   @override
+  String onboardingProgress(int current, int total) {
+    return 'Set up $current/$total';
+  }
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to Shift & Pay Calendar';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'Use one clear schedule to coordinate calendars, alarms, attendance, and wage estimates. The AI assistant is optional and never blocks offline core features.';
+
+  @override
+  String get onboardingPrivacyTitle => 'Local by default';
+
+  @override
+  String get onboardingPrivacyBody =>
+      'Schedules, punches, wages, and conversations stay on this device. API keys only enter Keychain/Keystore, and AI receives only the minimum authorized summaries.';
+
+  @override
+  String get onboardingScheduleTitle => 'Configure your schedule first';
+
+  @override
+  String get onboardingScheduleBody =>
+      'Choose a five-day, six-day, alternating-week, or 1–31 day custom cycle, set the shift, and verify the next 14 days. A saved schedule is required.';
+
+  @override
+  String get onboardingScheduleRequired =>
+      'Save at least one schedule rule after checking its 14-day preview.';
+
+  @override
+  String get onboardingHolidayTitle => 'Holidays and adjustments';
+
+  @override
+  String get onboardingHolidayBody =>
+      'You can update Mainland China official holiday data. Cached data remains available offline, and official updates never overwrite manual changes. This step is optional.';
+
+  @override
+  String get onboardingWageTitle => 'Wage rules (optional)';
+
+  @override
+  String get onboardingWageBody =>
+      'Hourly, daily, monthly, and three overtime categories are supported. If skipped, Home shows a setup action instead of inventing an amount.';
+
+  @override
+  String get onboardingAlarmTitle => 'Smart alarms (optional)';
+
+  @override
+  String get onboardingAlarmBody =>
+      'Notification or exact-alarm permission is requested only after you actively open and enable alarms. Home retains a non-blocking setup reminder if skipped.';
+
+  @override
+  String get onboardingDoneTitle => 'Setup complete';
+
+  @override
+  String get onboardingDoneBody =>
+      'Home can now show today\'s shift, punches, upcoming schedule, and reminder status. Every setting remains editable later.';
+
+  @override
+  String get onboardingStartUsing => 'Start using the app';
+
+  @override
   String get homeTodayShift => 'Today\'s shift';
 
   @override
@@ -294,6 +355,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get statisticsLastMonth => 'Last month';
 
   @override
+  String get statisticsByWorkDate => 'By shift start date';
+
+  @override
+  String get statisticsByNaturalDay => 'Split by calendar day';
+
+  @override
   String get expectedAttendance => 'Expected attendance';
 
   @override
@@ -328,6 +395,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get overtimePay => 'Overtime pay';
+
+  @override
+  String get workdayOvertimePay => 'Workday overtime pay';
+
+  @override
+  String get restDayOvertimePay => 'Rest-day overtime pay';
+
+  @override
+  String get holidayOvertimePay => 'Public-holiday overtime pay';
+
+  @override
+  String get fixedAllowance => 'Fixed allowance';
+
+  @override
+  String get fixedDeduction => 'Fixed deduction';
 
   @override
   String get estimatedTotal => 'Estimated total';
@@ -427,6 +509,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get alarmSaveDidNotBlock =>
       'The template was saved, but alarm sync failed. Check permission and retry.';
+
+  @override
+  String get alarmDeleteTitle => 'Delete alarm template?';
+
+  @override
+  String alarmDeleteDescription(String name) {
+    return 'Deleting “$name” cancels its linked future schedule alarms.';
+  }
 
   @override
   String get appTitle => 'Shift & Pay Calendar';
@@ -769,6 +859,130 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsBackup => 'Backup and export';
+
+  @override
+  String get backupSettingsTitle => 'Backup, restore, and privacy';
+
+  @override
+  String get localBackupTitle => 'Secure local backups';
+
+  @override
+  String get localBackupDescription =>
+      'Backups use a consistent SQLite snapshot with version, date range, and SHA-256 verification. API keys and sensitive headers are excluded.';
+
+  @override
+  String get automaticBackup => 'Automatic local backup';
+
+  @override
+  String get automaticBackupDescription =>
+      'Creates at most one backup on the first launch each day and retains at least the latest seven.';
+
+  @override
+  String get createBackupNow => 'Create backup now';
+
+  @override
+  String get backupCreated => 'Local backup created and verified';
+
+  @override
+  String get recentBackups => 'Recent backups';
+
+  @override
+  String get noBackups => 'No local backups yet';
+
+  @override
+  String backupSchema(int version) {
+    return 'Database v$version';
+  }
+
+  @override
+  String get backupCredentialsExcluded => 'Secure credentials excluded';
+
+  @override
+  String get backupEmptyRange => 'No business date range';
+
+  @override
+  String get restoreBackupTitle => 'Restore this backup?';
+
+  @override
+  String restoreBackupRisk(String createdAt, String dataRange) {
+    return 'Backup time: $createdAt\nData range: $dataRange\n\nRestoring overwrites current business data. The app first backs up current data, verifies the file, migrates a temporary database, and replaces data in one transaction. API keys are not restored.';
+  }
+
+  @override
+  String get restoreBackupAction => 'Restore';
+
+  @override
+  String get restoreBackupSucceeded =>
+      'Backup restored; caches and alarms rebuilt';
+
+  @override
+  String get restoreBackupAlarmWarning =>
+      'Data restored, but alarms were not completely rebuilt. Retry in alarm settings.';
+
+  @override
+  String get privacyDataTitle => 'Privacy and data deletion';
+
+  @override
+  String get privacyDataDescription =>
+      'Data categories can be cleared independently. A safety backup is created first except for secure model credentials, and every action requires two confirmations.';
+
+  @override
+  String get clearConversations => 'Clear conversations';
+
+  @override
+  String get clearConversationsDescription =>
+      'Deletes messages and conversation content while retaining independent AI action audit records.';
+
+  @override
+  String get clearAssistantActions => 'Clear AI action history';
+
+  @override
+  String get clearAssistantActionsDescription =>
+      'Deletes proposal, confirmation, execution, and undo records without changing current business data.';
+
+  @override
+  String get clearAssistantConfiguration =>
+      'Clear model configuration and credentials';
+
+  @override
+  String get clearAssistantConfigurationDescription =>
+      'Permanently deletes provider and persona settings and keys in Keychain/Keystore. Ordinary backups cannot restore keys.';
+
+  @override
+  String get clearWorkforce => 'Clear wage and attendance data';
+
+  @override
+  String get clearWorkforceDescription =>
+      'Deletes attendance, leave, wage rules, and settlement snapshots while retaining schedules.';
+
+  @override
+  String get clearAllData => 'Clear all app data';
+
+  @override
+  String get clearAllDataDescription =>
+      'Deletes all local business and AI data and secure credentials. Local backup files remain.';
+
+  @override
+  String get clearDataContinue => 'Continue';
+
+  @override
+  String get clearDataSecondConfirm => 'Confirm deletion again';
+
+  @override
+  String get clearDataSecondConfirmBody =>
+      'This is the second confirmation. The selected data will be deleted immediately.';
+
+  @override
+  String get clearDataConfirm => 'Confirm deletion';
+
+  @override
+  String get clearDataSucceeded => 'Selected data cleared';
+
+  @override
+  String get exportDiagnostics => 'Export redacted diagnostics';
+
+  @override
+  String get diagnosticsExported => 'Redacted diagnostic bundle saved';
 
   @override
   String get shiftTemplatesTitle => 'Shift templates';

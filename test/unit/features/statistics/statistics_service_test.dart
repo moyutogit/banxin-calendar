@@ -12,6 +12,7 @@ import 'package:banxin_calendar/features/schedule/data/drift_schedule_repository
 import 'package:banxin_calendar/features/schedule/domain/schedule_resolver.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:banxin_calendar/features/statistics/application/statistics_service.dart';
+import 'package:banxin_calendar/features/statistics/domain/statistics_entities.dart';
 import 'package:banxin_calendar/features/wage/data/drift_wage_repository.dart';
 import 'package:banxin_calendar/features/wage/domain/wage_entities.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -69,8 +70,8 @@ void main() {
         AttendanceSegment(
           id: 'night-record',
           workDate: date,
-          clockInUtc: DateTime.utc(2026, 8, 10, 20),
-          clockOutUtc: DateTime.utc(2026, 8, 11, 8),
+          clockInUtc: DateTime(2026, 8, 10, 20).toUtc(),
+          clockOutUtc: DateTime(2026, 8, 11, 8).toUtc(),
           unpaidBreakMinutes: 60,
           source: AttendanceSource.manual,
           status: AttendanceRecordStatus.complete,
@@ -82,6 +83,10 @@ void main() {
       await wageRepository.saveRule(_hourlyRule(id: 'wage-v1', rate: 3000));
 
       final report = await service.build(range);
+      final naturalDayReport = await service.build(
+        DateRange(start: date, end: date.addDays(1)),
+        attributionMode: StatisticsAttributionMode.naturalDay,
+      );
       final csv = utf8.decode(service.csvBytes(report));
       final settled = await service.settle(range, confirmedMinor: 38000);
 
@@ -89,6 +94,15 @@ void main() {
       expect(report.normalMinutes, 480);
       expect(report.overtimeMinutes, 180);
       expect(report.payroll!.estimatedTotalMinor, 37500);
+      expect(
+        naturalDayReport.days.map((day) => day.hours.rawActualMinutes),
+        <int>[180, 480],
+      );
+      expect(naturalDayReport.rawActualMinutes, report.rawActualMinutes);
+      expect(
+        naturalDayReport.payroll!.estimatedTotalMinor,
+        report.payroll!.estimatedTotalMinor,
+      );
       expect(csv, contains('660,660,480,180'));
       expect(csv, contains(',CNY,37500'));
       expect(settled.calculatedMinor, report.payroll!.estimatedTotalMinor);
@@ -99,6 +113,17 @@ void main() {
       expect(recalculated.payroll!.estimatedTotalMinor, 37500);
       expect(recalculated.savedPeriod!.calculatedMinor, 37500);
       expect(recalculated.savedPeriod!.status, PayrollPeriodStatus.settled);
+
+      final stopwatch = Stopwatch()..start();
+      final yearly = await service.build(
+        DateRange(
+          start: LocalDate.parse('2026-01-01'),
+          end: LocalDate.parse('2026-12-31'),
+        ),
+      );
+      stopwatch.stop();
+      expect(yearly.days, hasLength(365));
+      expect(stopwatch.elapsed, lessThan(const Duration(seconds: 1)));
     },
   );
 }

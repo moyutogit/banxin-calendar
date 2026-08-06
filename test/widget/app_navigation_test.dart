@@ -11,12 +11,39 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets('fresh install starts the required seven-step onboarding', (
+    tester,
+  ) async {
+    final database = AppDatabase.inMemory();
+    addTearDown(database.close);
+    await database.ensureReady();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[appDatabaseProvider.overrideWithValue(database)],
+        child: const BanxinCalendarApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('欢迎使用班薪日历'), findsOneWidget);
+    await tester.tap(find.text('继续'));
+    await tester.pumpAndSettle();
+    expect(find.text('数据默认只在本机'), findsOneWidget);
+    await tester.tap(find.text('继续'));
+    await tester.pumpAndSettle();
+    expect(find.text('先配置排班'), findsOneWidget);
+    await tester.tap(find.text('继续'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('请先保存至少一条排班规则'), findsOneWidget);
+  });
+
   testWidgets('renders and navigates all five primary destinations', (
     tester,
   ) async {
     final database = AppDatabase.inMemory();
     addTearDown(database.close);
     await database.ensureReady();
+    await _markOnboardingComplete(database);
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[appDatabaseProvider.overrideWithValue(database)],
@@ -57,6 +84,7 @@ void main() {
     final database = AppDatabase.inMemory();
     addTearDown(database.close);
     await database.ensureReady();
+    await _markOnboardingComplete(database);
     await tester.pumpWidget(
       MediaQuery(
         data: MediaQueryData(textScaler: TextScaler.linear(2)),
@@ -84,6 +112,7 @@ void main() {
     final database = AppDatabase.inMemory();
     addTearDown(database.close);
     await database.ensureReady();
+    await _markOnboardingComplete(database);
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[appDatabaseProvider.overrideWithValue(database)],
@@ -122,6 +151,7 @@ void main() {
     final database = AppDatabase.inMemory();
     addTearDown(database.close);
     await database.ensureReady();
+    await _markOnboardingComplete(database);
     await _seedSchedule(database);
 
     await tester.pumpWidget(
@@ -149,6 +179,7 @@ void main() {
     final database = AppDatabase.inMemory();
     addTearDown(database.close);
     await database.ensureReady();
+    await _markOnboardingComplete(database);
     await tester.pumpWidget(
       ProviderScope(
         overrides: <Override>[appDatabaseProvider.overrideWithValue(database)],
@@ -168,6 +199,13 @@ void main() {
     expect(masked, findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+}
+
+Future<void> _markOnboardingComplete(AppDatabase database) {
+  return database.customStatement('''
+    INSERT INTO database_metadata (key, value, created_at, updated_at)
+    VALUES ('onboarding_completed', 'true', 1, 1)
+  ''');
 }
 
 Future<void> _seedSchedule(AppDatabase database) async {

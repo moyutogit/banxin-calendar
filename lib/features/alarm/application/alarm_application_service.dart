@@ -89,6 +89,11 @@ final class AlarmApplicationService {
     return _syncService.requestCapability();
   }
 
+  Future<AlarmSyncResult> deleteTemplate(String id) async {
+    await _repository.deleteTemplate(id);
+    return syncRollingWindow();
+  }
+
   Future<AlarmSyncResult> syncRollingWindow() {
     final localNow = _clock.nowUtc().toLocal();
     final today = LocalDate(localNow.year, localNow.month, localNow.day);

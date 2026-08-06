@@ -21,6 +21,8 @@ final class WageRule {
     required this.confirmedOnly,
     required this.effectiveRange,
     this.normalMonthlyMinutes = 10440,
+    this.allowances = const <MoneyLine>[],
+    this.deductions = const <MoneyLine>[],
   }) {
     if (currency.length != 3) {
       throw ArgumentError.value(currency, 'currency');
@@ -47,6 +49,8 @@ final class WageRule {
   final bool confirmedOnly;
   final DateRange effectiveRange;
   final int normalMonthlyMinutes;
+  final List<MoneyLine> allowances;
+  final List<MoneyLine> deductions;
 }
 
 final class PayrollDayInput {

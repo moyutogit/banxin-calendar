@@ -45,6 +45,13 @@ final assistantActionGatewayProvider = Provider<AssistantActionGateway>(
     ref.watch(scheduleRepositoryProvider),
     ref.watch(scheduleApplicationServiceProvider),
     ref.watch(secureValueStoreProvider),
+    syncAlarms: () async {
+      final result = await ref
+          .read(alarmApplicationServiceProvider)
+          .syncRollingWindow();
+      return result.failed == 0;
+    },
+    alarmRepository: ref.watch(alarmRepositoryProvider),
   ),
 );
 

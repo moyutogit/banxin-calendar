@@ -66,6 +66,8 @@ final class DartIoLlmProvider implements LlmProvider {
         throw LlmProviderException(_statusForHttp(response.statusCode));
       }
       if (config.streamEnabled) {
+        final calls = <int, _StreamingToolCall>{};
+        var completed = false;
         await for (final line
             in response
                 .transform(utf8.decoder)
@@ -73,8 +75,14 @@ final class DartIoLlmProvider implements LlmProvider {
           if (!line.startsWith('data:')) continue;
           final data = line.substring(5).trim();
           if (data == '[DONE]') {
+            for (final call
+                in calls.entries.toList()
+                  ..sort((left, right) => left.key.compareTo(right.key))) {
+              yield call.value.toEvent();
+            }
             yield const LlmCompleted();
-            continue;
+            completed = true;
+            break;
           }
           final decoded = jsonDecode(data) as Map<String, Object?>;
           final choices = decoded['choices'] as List<Object?>?;
@@ -83,6 +91,22 @@ final class DartIoLlmProvider implements LlmProvider {
           final delta = choice['delta'] as Map<String, Object?>?;
           final text = delta?['content'] as String?;
           if (text != null && text.isNotEmpty) yield LlmTextDelta(text);
+          final fragments =
+              delta?['tool_calls'] as List<Object?>? ?? const <Object?>[];
+          for (final raw in fragments) {
+            final fragment = raw! as Map<String, Object?>;
+            final index = fragment['index'] as int? ?? 0;
+            final call = calls.putIfAbsent(index, _StreamingToolCall.new);
+            call.add(fragment);
+          }
+        }
+        if (!completed) {
+          for (final call
+              in calls.entries.toList()
+                ..sort((left, right) => left.key.compareTo(right.key))) {
+            yield call.value.toEvent();
+          }
+          yield const LlmCompleted();
         }
       } else {
         final body = await response.transform(utf8.decoder).join();
@@ -186,4 +210,26 @@ final class DartIoLlmProvider implements LlmProvider {
     429 => AiConnectionStatus.rateLimited,
     _ => AiConnectionStatus.networkFailure,
   };
+}
+
+final class _StreamingToolCall {
+  String? id;
+  String? name;
+  final arguments = StringBuffer();
+
+  void add(Map<String, Object?> fragment) {
+    id ??= fragment['id'] as String?;
+    final function = fragment['function'] as Map<String, Object?>?;
+    name ??= function?['name'] as String?;
+    final argumentFragment = function?['arguments'] as String?;
+    if (argumentFragment != null) arguments.write(argumentFragment);
+  }
+
+  LlmToolCall toEvent() {
+    final decoded = jsonDecode(arguments.toString());
+    if (id == null || name == null || decoded is! Map<String, Object?>) {
+      throw const FormatException('Invalid streamed tool call.');
+    }
+    return LlmToolCall(id: id!, name: name!, arguments: decoded);
+  }
 }

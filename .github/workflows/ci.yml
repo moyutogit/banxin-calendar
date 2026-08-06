@@ -23,9 +23,10 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
       - run: flutter pub get
+      - run: dart run tool/check_dependency_licenses.dart
       - run: flutter gen-l10n
       - run: dart run build_runner build
-      - run: dart format --output=none --set-exit-if-changed lib test integration_test
+      - run: dart format --output=none --set-exit-if-changed lib test integration_test tool
       - run: flutter analyze
       - run: flutter test
       - run: flutter build apk --debug
@@ -45,6 +46,7 @@ jobs:
       - run: flutter pub get
       - run: flutter gen-l10n
       - run: dart run build_runner build
+      - run: plutil -lint ios/Runner/PrivacyInfo.xcprivacy
       - run: flutter build ios --debug --no-codesign
 
   dependency-review:

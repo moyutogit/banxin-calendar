@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "tools": [
     {
       "name": "get_app_capabilities",
@@ -72,6 +72,50 @@
     {
       "name": "apply_schedule_change",
       "description": "Apply a previously proposed action only with the one-time confirmation token supplied by the local confirmation UI.",
+      "parameters": {
+        "type": "object",
+        "required": ["action_id", "confirmation_token"],
+        "properties": {
+          "action_id": {"type": "string"},
+          "confirmation_token": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "propose_alarm_change",
+      "description": "Validate and preview creating, updating, enabling, disabling, or deleting an app-managed alarm template. Never applies it without explicit local confirmation.",
+      "parameters": {
+        "type": "object",
+        "required": ["operation"],
+        "properties": {
+          "operation": {"type": "string", "enum": ["create", "update", "set_enabled", "delete"]},
+          "template_id": {"type": ["string", "null"]},
+          "enabled": {"type": "boolean"},
+          "template": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "mode": {"type": "string", "enum": ["fixedTime", "relativeToShiftStart"]},
+              "fixed_minute": {"type": ["integer", "null"], "minimum": 0, "maximum": 1439},
+              "offset_minutes": {"type": ["integer", "null"], "minimum": -1440, "maximum": 1440},
+              "sound_id": {"type": ["string", "null"]},
+              "vibrate": {"type": "boolean"},
+              "volume_ramp": {"type": "boolean"},
+              "snooze_minutes": {"type": "integer", "minimum": 1, "maximum": 60},
+              "max_snooze_count": {"type": "integer", "minimum": 0, "maximum": 10},
+              "enabled": {"type": "boolean"},
+              "shift_ids": {"type": "array", "items": {"type": "string"}, "maxItems": 5}
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "apply_alarm_change",
+      "description": "Apply a previously proposed alarm change only with the one-time confirmation token supplied by the local confirmation UI.",
       "parameters": {
         "type": "object",
         "required": ["action_id", "confirmation_token"],

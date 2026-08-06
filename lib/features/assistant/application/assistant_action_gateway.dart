@@ -5,6 +5,8 @@ import 'dart:typed_data';
 import 'package:banxin_calendar/core/ids/stable_id_generator.dart';
 import 'package:banxin_calendar/core/secure_storage/secure_value_store.dart';
 import 'package:banxin_calendar/core/time/app_clock.dart';
+import 'package:banxin_calendar/features/alarm/domain/alarm_entities.dart';
+import 'package:banxin_calendar/features/alarm/domain/alarm_repository.dart';
 import 'package:banxin_calendar/features/assistant/domain/assistant_action_unit_of_work.dart';
 import 'package:banxin_calendar/features/assistant/domain/assistant_entities.dart';
 import 'package:banxin_calendar/features/assistant/domain/assistant_repository.dart';
@@ -33,6 +35,8 @@ final class AssistantActionGateway {
     this._clock = const SystemAppClock(),
     StableIdGenerator? idGenerator,
     Random? secureRandom,
+    this.syncAlarms,
+    this.alarmRepository,
   }) : _idGenerator = idGenerator ?? UuidV4Generator(),
        _secureRandom = secureRandom ?? Random.secure();
 
@@ -46,6 +50,8 @@ final class AssistantActionGateway {
   final AppClock _clock;
   final StableIdGenerator _idGenerator;
   final Random _secureRandom;
+  final Future<bool> Function()? syncAlarms;
+  final AlarmRepository? alarmRepository;
 
   Future<AiActionProposal> proposeScheduleChange({
     required String conversationId,
@@ -194,6 +200,9 @@ final class AssistantActionGateway {
           return succeeded;
         },
       );
+      if (payload.syncAlarms) {
+        succeeded = await _synchronizeAlarms(succeeded);
+      }
       return succeeded;
     } catch (error) {
       await _assistantRepository.saveAction(
@@ -254,7 +263,386 @@ final class AssistantActionGateway {
       undoneAtUtc: _clock.nowUtc(),
     );
     await _assistantRepository.saveAction(undone);
-    return undone;
+    return _synchronizeAlarms(undone);
+  }
+
+  Future<AiAction> confirmAction({
+    required String actionId,
+    required String confirmationToken,
+  }) async {
+    final action = await _requiredAction(actionId);
+    return switch (action.actionType) {
+      'schedule_change' => confirmScheduleChange(
+        actionId: actionId,
+        confirmationToken: confirmationToken,
+      ),
+      'alarm_change' => confirmAlarmChange(
+        actionId: actionId,
+        confirmationToken: confirmationToken,
+      ),
+      _ => throw const AssistantActionException('unsupported_action_type'),
+    };
+  }
+
+  Future<AiAction> undoAction(String actionId) async {
+    final action = await _requiredAction(actionId);
+    return switch (action.actionType) {
+      'schedule_change' => undoScheduleChange(actionId),
+      'alarm_change' => undoAlarmChange(actionId),
+      _ => throw const AssistantActionException('unsupported_action_type'),
+    };
+  }
+
+  Future<AiActionProposal> proposeAlarmChange({
+    required String conversationId,
+    required Map<String, Object?> arguments,
+  }) async {
+    final repository = _requireAlarmRepository();
+    final templates = await repository.loadTemplates();
+    final operation = arguments['operation'];
+    if (operation is! String ||
+        !const <String>{
+          'create',
+          'update',
+          'set_enabled',
+          'delete',
+        }.contains(operation)) {
+      throw const AssistantActionException('invalid_alarm_operation');
+    }
+    final requestedId = arguments['template_id'];
+    if (requestedId != null && requestedId is! String) {
+      throw const AssistantActionException('invalid_alarm_template_id');
+    }
+    final templateId = operation == 'create'
+        ? (requestedId as String? ?? _idGenerator.generate())
+        : requestedId as String?;
+    final before = templateId == null
+        ? null
+        : templates.where((template) => template.id == templateId).firstOrNull;
+    if (operation != 'create' && before == null) {
+      throw const AssistantActionException('alarm_template_not_found');
+    }
+    if (operation == 'create' && before != null) {
+      throw const AssistantActionException('alarm_template_already_exists');
+    }
+
+    final AlarmTemplate? after;
+    if (operation == 'delete') {
+      after = null;
+    } else if (operation == 'set_enabled') {
+      final enabled = arguments['enabled'];
+      if (enabled is! bool) {
+        throw const AssistantActionException('invalid_alarm_enabled');
+      }
+      after = _copyAlarm(before!, enabled: enabled);
+    } else {
+      final raw = arguments['template'];
+      if (raw is! Map<String, Object?>) {
+        throw const AssistantActionException('invalid_alarm_template');
+      }
+      after = _decodeAlarmTemplate(raw, id: templateId!);
+      final knownShiftIds = (await _scheduleService.loadRulesView()).shifts
+          .map((stored) => stored.shift.id)
+          .toSet();
+      if (!knownShiftIds.containsAll(after.shiftIds)) {
+        throw const AssistantActionException('invalid_shift');
+      }
+    }
+
+    final token = _randomToken();
+    final now = _clock.nowUtc();
+    final action = AiAction(
+      id: _idGenerator.generate(),
+      conversationId: conversationId,
+      actionType: 'alarm_change',
+      toolName: 'propose_alarm_change',
+      proposedPayloadJson: jsonEncode(arguments),
+      validatedPayloadJson: jsonEncode(<String, Object?>{
+        'operation': operation,
+        'template_id': templateId,
+        'after_template': after == null ? null : _encodeAlarmTemplate(after),
+      }),
+      beforeSnapshotJson: jsonEncode(<String, Object?>{
+        'template': before == null ? null : _encodeAlarmTemplate(before),
+      }),
+      afterSnapshotJson: null,
+      status: AiActionStatus.proposed,
+      confirmationTokenHash: await _tokenHash(token),
+      idempotencyKey: _idGenerator.generate(),
+      inputVersion: _alarmInputVersion(templates),
+      expiresAtUtc: now.add(const Duration(minutes: 10)),
+      createdAtUtc: now,
+    );
+    await _assistantRepository.saveAction(action);
+    return AiActionProposal(
+      action: action,
+      confirmationToken: token,
+      summary: _alarmProposalSummary(operation, before, after),
+    );
+  }
+
+  Future<AiAction> confirmAlarmChange({
+    required String actionId,
+    required String confirmationToken,
+  }) async {
+    final repository = _requireAlarmRepository();
+    final action = await _requiredAction(actionId);
+    if (action.actionType != 'alarm_change') {
+      throw const AssistantActionException('unsupported_action_type');
+    }
+    final templates = await repository.loadTemplates();
+    await _validateConfirmation(
+      action,
+      confirmationToken,
+      currentInputVersion: _alarmInputVersion(templates),
+    );
+    final payload =
+        jsonDecode(action.validatedPayloadJson) as Map<String, Object?>;
+    final templateId = payload['template_id']! as String;
+    final rawAfter = payload['after_template'];
+    final after = rawAfter == null
+        ? null
+        : _decodeAlarmTemplate(
+            rawAfter as Map<String, Object?>,
+            id: templateId,
+          );
+    final now = _clock.nowUtc();
+    final executing = _copy(
+      action,
+      status: AiActionStatus.executing,
+      confirmedAtUtc: now,
+    );
+    try {
+      late AiAction succeeded;
+      await _unitOfWork.execute(
+        executing: executing,
+        operation: () async {
+          if (after == null) {
+            await repository.deleteTemplate(templateId);
+          } else {
+            await repository.saveTemplate(after);
+          }
+          final current = await repository.loadTemplates();
+          succeeded = _copy(
+            executing,
+            status: AiActionStatus.succeeded,
+            afterSnapshotJson: jsonEncode(<String, Object?>{
+              'inputVersion': _alarmInputVersion(current),
+              'template': after == null ? null : _encodeAlarmTemplate(after),
+            }),
+            executedAtUtc: _clock.nowUtc(),
+          );
+          return succeeded;
+        },
+      );
+      return _synchronizeAlarms(succeeded);
+    } catch (error) {
+      await _assistantRepository.saveAction(
+        _copy(
+          action,
+          status: AiActionStatus.failed,
+          errorCode: error.runtimeType.toString(),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  Future<AiAction> undoAlarmChange(String actionId) async {
+    final repository = _requireAlarmRepository();
+    final action = await _requiredAction(actionId);
+    if (action.actionType != 'alarm_change' ||
+        action.status != AiActionStatus.succeeded ||
+        action.afterSnapshotJson == null) {
+      throw const AssistantActionException('action_not_undoable');
+    }
+    final after = jsonDecode(action.afterSnapshotJson!) as Map<String, Object?>;
+    final currentVersion = _alarmInputVersion(await repository.loadTemplates());
+    if (currentVersion != after['inputVersion']) {
+      throw const AssistantActionException('undo_conflict');
+    }
+    final payload =
+        jsonDecode(action.validatedPayloadJson) as Map<String, Object?>;
+    final templateId = payload['template_id']! as String;
+    final before =
+        jsonDecode(action.beforeSnapshotJson) as Map<String, Object?>;
+    final rawTemplate = before['template'];
+    final original = rawTemplate == null
+        ? null
+        : _decodeAlarmTemplate(
+            rawTemplate as Map<String, Object?>,
+            id: templateId,
+          );
+    final executing = _copy(action, status: AiActionStatus.executing);
+    late AiAction undone;
+    await _unitOfWork.execute(
+      executing: executing,
+      operation: () async {
+        if (original == null) {
+          await repository.deleteTemplate(templateId);
+        } else {
+          await repository.saveTemplate(original);
+        }
+        undone = _copy(
+          action,
+          status: AiActionStatus.undone,
+          undoneAtUtc: _clock.nowUtc(),
+        );
+        return undone;
+      },
+    );
+    return _synchronizeAlarms(undone);
+  }
+
+  Future<void> _validateConfirmation(
+    AiAction action,
+    String token, {
+    required String currentInputVersion,
+  }) async {
+    if (action.status != AiActionStatus.proposed) {
+      throw const AssistantActionException('confirmation_used_or_invalid');
+    }
+    final now = _clock.nowUtc();
+    if (!now.isBefore(action.expiresAtUtc)) {
+      await _assistantRepository.saveAction(
+        _copy(action, status: AiActionStatus.expired, errorCode: 'expired'),
+      );
+      throw const AssistantActionException('confirmation_expired');
+    }
+    if (!_constantTimeEquals(
+      action.confirmationTokenHash,
+      await _tokenHash(token),
+    )) {
+      throw const AssistantActionException('confirmation_invalid');
+    }
+    if (action.inputVersion != currentInputVersion) {
+      await _assistantRepository.saveAction(
+        _copy(
+          action,
+          status: AiActionStatus.invalidated,
+          errorCode: 'input_version_changed',
+        ),
+      );
+      throw const AssistantActionException('input_version_changed');
+    }
+  }
+
+  AlarmRepository _requireAlarmRepository() {
+    final repository = alarmRepository;
+    if (repository == null) {
+      throw const AssistantActionException('alarm_gateway_unavailable');
+    }
+    return repository;
+  }
+
+  AlarmTemplate _decodeAlarmTemplate(
+    Map<String, Object?> json, {
+    required String id,
+  }) {
+    T require<T>(String key) {
+      final value = json[key];
+      if (value is! T) {
+        throw AssistantActionException('invalid_alarm_$key');
+      }
+      return value;
+    }
+
+    final mode = AlarmTemplateMode.values.byName(require<String>('mode'));
+    final rawShiftIds = require<List<Object?>>('shift_ids');
+    return AlarmTemplate(
+      id: id,
+      name: require<String>('name'),
+      mode: mode,
+      fixedMinute: json['fixed_minute'] as int?,
+      offsetMinutes: json['offset_minutes'] as int?,
+      soundId: json['sound_id'] as String?,
+      vibrate: require<bool>('vibrate'),
+      volumeRamp: require<bool>('volume_ramp'),
+      snoozeMinutes: require<int>('snooze_minutes'),
+      maxSnoozeCount: require<int>('max_snooze_count'),
+      enabled: require<bool>('enabled'),
+      shiftIds: rawShiftIds.map((value) {
+        if (value is! String) {
+          throw const AssistantActionException('invalid_shift');
+        }
+        return ShiftId(value);
+      }).toSet(),
+    );
+  }
+
+  Map<String, Object?> _encodeAlarmTemplate(AlarmTemplate template) =>
+      <String, Object?>{
+        'id': template.id,
+        'name': template.name,
+        'mode': template.mode.name,
+        'fixed_minute': template.fixedMinute,
+        'offset_minutes': template.offsetMinutes,
+        'sound_id': template.soundId,
+        'vibrate': template.vibrate,
+        'volume_ramp': template.volumeRamp,
+        'snooze_minutes': template.snoozeMinutes,
+        'max_snooze_count': template.maxSnoozeCount,
+        'enabled': template.enabled,
+        'shift_ids': template.shiftIds.map((id) => id.value).toList()..sort(),
+      };
+
+  AlarmTemplate _copyAlarm(AlarmTemplate source, {required bool enabled}) =>
+      AlarmTemplate(
+        id: source.id,
+        name: source.name,
+        mode: source.mode,
+        fixedMinute: source.fixedMinute,
+        offsetMinutes: source.offsetMinutes,
+        soundId: source.soundId,
+        vibrate: source.vibrate,
+        volumeRamp: source.volumeRamp,
+        snoozeMinutes: source.snoozeMinutes,
+        maxSnoozeCount: source.maxSnoozeCount,
+        enabled: enabled,
+        shiftIds: source.shiftIds,
+      );
+
+  String _alarmInputVersion(List<AlarmTemplate> templates) {
+    final encoded = templates.map(_encodeAlarmTemplate).toList()
+      ..sort(
+        (left, right) =>
+            (left['id']! as String).compareTo(right['id']! as String),
+      );
+    return sha256.convert(utf8.encode(jsonEncode(encoded))).toString();
+  }
+
+  String _alarmProposalSummary(
+    String operation,
+    AlarmTemplate? before,
+    AlarmTemplate? after,
+  ) {
+    final name = after?.name ?? before?.name ?? 'alarm';
+    final previous = before == null
+        ? 'none'
+        : '${before.enabled ? 'enabled' : 'disabled'} ${before.mode.name}';
+    final next = after == null
+        ? 'deleted'
+        : '${after.enabled ? 'enabled' : 'disabled'} ${after.mode.name}';
+    return '$operation “$name”: $previous → $next; future schedule alarms will be rebuilt.';
+  }
+
+  Future<AiAction> _synchronizeAlarms(AiAction action) async {
+    final sync = syncAlarms;
+    if (sync == null) return action;
+    var succeeded = false;
+    try {
+      succeeded = await sync();
+    } on Object {
+      succeeded = false;
+    }
+    if (succeeded) return action;
+    final withWarning = _copy(
+      action,
+      status: action.status,
+      errorCode: 'alarm_sync_failed_retry_available',
+    );
+    await _assistantRepository.saveAction(withWarning);
+    return withWarning;
   }
 
   ScheduleChangePayload _validateSchedulePayload(

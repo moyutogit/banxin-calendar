@@ -156,6 +156,64 @@ class AppLocalizationsZh extends AppLocalizations {
   String get assistantSafetyRefusal => '该请求已按安全规则拒绝';
 
   @override
+  String onboardingProgress(int current, int total) {
+    return '开始设置 $current/$total';
+  }
+
+  @override
+  String get onboardingWelcomeTitle => '欢迎使用班薪日历';
+
+  @override
+  String get onboardingWelcomeBody =>
+      '用一份明确的排班联动日历、闹钟、出勤和工资预估；AI 助理是可选增强，不影响离线核心功能。';
+
+  @override
+  String get onboardingPrivacyTitle => '数据默认只在本机';
+
+  @override
+  String get onboardingPrivacyBody =>
+      '排班、打卡、工资和对话保存在本地。API 密钥只进入系统 Keychain/Keystore；只有获得相应数据权限时，AI 才能读取最小范围摘要。';
+
+  @override
+  String get onboardingScheduleTitle => '先配置排班';
+
+  @override
+  String get onboardingScheduleBody =>
+      '选择双休、单休、大小周或 1—31 天自定义周期，设置班次后核对未来 14 天预览。排班是完成引导的必要步骤。';
+
+  @override
+  String get onboardingScheduleRequired => '请先保存至少一条排班规则，并核对 14 天预览。';
+
+  @override
+  String get onboardingHolidayTitle => '节假日与调休';
+
+  @override
+  String get onboardingHolidayBody =>
+      '可更新中国大陆官方节假日数据。离线时继续使用本地缓存，官方更新不会覆盖你的手工改单。此步可稍后完成。';
+
+  @override
+  String get onboardingWageTitle => '工资规则（可跳过）';
+
+  @override
+  String get onboardingWageBody => '支持时薪、日薪、月薪和三类加班。跳过后首页只显示设置入口，不会虚构金额。';
+
+  @override
+  String get onboardingAlarmTitle => '智能闹钟（可跳过）';
+
+  @override
+  String get onboardingAlarmBody =>
+      '只有你主动进入并启用闹钟时才申请通知或精确闹钟权限。跳过后首页会保留非阻塞设置提示。';
+
+  @override
+  String get onboardingDoneTitle => '设置完成';
+
+  @override
+  String get onboardingDoneBody => '现在可以从首页查看今日班次、打卡、未来安排和提醒状态；所有设置之后都可修改。';
+
+  @override
+  String get onboardingStartUsing => '开始使用';
+
+  @override
   String get homeTodayShift => '今日班次';
 
   @override
@@ -288,6 +346,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get statisticsLastMonth => '上月';
 
   @override
+  String get statisticsByWorkDate => '按班次开始日';
+
+  @override
+  String get statisticsByNaturalDay => '按自然日拆分';
+
+  @override
   String get expectedAttendance => '应出勤';
 
   @override
@@ -322,6 +386,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get overtimePay => '加班工资';
+
+  @override
+  String get workdayOvertimePay => '工作日加班工资';
+
+  @override
+  String get restDayOvertimePay => '休息日加班工资';
+
+  @override
+  String get holidayOvertimePay => '法定节假日加班工资';
+
+  @override
+  String get fixedAllowance => '固定补贴（元）';
+
+  @override
+  String get fixedDeduction => '固定扣款（元）';
 
   @override
   String get estimatedTotal => '预估合计';
@@ -416,6 +495,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get alarmSaveDidNotBlock => '模板已保存，但闹钟同步失败，请检查权限后重试。';
+
+  @override
+  String get alarmDeleteTitle => '删除闹钟模板？';
+
+  @override
+  String alarmDeleteDescription(String name) {
+    return '删除“$name”后，关联的未来排班闹钟会被取消。';
+  }
 
   @override
   String get appTitle => '班薪日历';
@@ -754,6 +841,121 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsBackup => '备份与导出';
+
+  @override
+  String get backupSettingsTitle => '备份、恢复与隐私';
+
+  @override
+  String get localBackupTitle => '本地安全备份';
+
+  @override
+  String get localBackupDescription =>
+      '备份使用 SQLite 一致性快照并附带版本、日期范围和 SHA-256 校验；API 密钥与敏感请求头不会写入备份。';
+
+  @override
+  String get automaticBackup => '自动本地备份';
+
+  @override
+  String get automaticBackupDescription => '每天首次启动时最多创建一份，并至少保留最近 7 份。';
+
+  @override
+  String get createBackupNow => '立即创建备份';
+
+  @override
+  String get backupCreated => '本地备份已创建并校验';
+
+  @override
+  String get recentBackups => '最近备份';
+
+  @override
+  String get noBackups => '尚无本地备份';
+
+  @override
+  String backupSchema(int version) {
+    return '数据库 v$version';
+  }
+
+  @override
+  String get backupCredentialsExcluded => '安全凭据已排除';
+
+  @override
+  String get backupEmptyRange => '暂无业务日期范围';
+
+  @override
+  String get restoreBackupTitle => '恢复这份备份？';
+
+  @override
+  String restoreBackupRisk(String createdAt, String dataRange) {
+    return '备份时间：$createdAt\n数据范围：$dataRange\n\n恢复会覆盖当前业务数据。系统会先备份当前数据，再校验文件、迁移临时数据库并在单个事务中替换；API 密钥不会从备份恢复。';
+  }
+
+  @override
+  String get restoreBackupAction => '恢复';
+
+  @override
+  String get restoreBackupSucceeded => '备份已恢复，缓存与闹钟已重建';
+
+  @override
+  String get restoreBackupAlarmWarning => '数据已恢复；闹钟重建未完全成功，请到闹钟设置重试';
+
+  @override
+  String get privacyDataTitle => '隐私与数据删除';
+
+  @override
+  String get privacyDataDescription =>
+      '各类数据可独立清除。除模型安全凭据外，清除前会创建本地安全备份；每项操作都需要两次确认。';
+
+  @override
+  String get clearConversations => '清除对话';
+
+  @override
+  String get clearConversationsDescription => '删除消息和对话内容，保留独立的 AI 操作审计记录。';
+
+  @override
+  String get clearAssistantActions => '清除 AI 操作历史';
+
+  @override
+  String get clearAssistantActionsDescription => '删除提案、确认、执行与撤销记录，不修改当前业务数据。';
+
+  @override
+  String get clearAssistantConfiguration => '清除模型配置与凭据';
+
+  @override
+  String get clearAssistantConfigurationDescription =>
+      '永久删除接口配置、性格设置以及 Keychain/Keystore 中的密钥，普通备份无法恢复密钥。';
+
+  @override
+  String get clearWorkforce => '清除工资与考勤';
+
+  @override
+  String get clearWorkforceDescription => '删除考勤、请假、工资规则和结算快照，保留排班。';
+
+  @override
+  String get clearAllData => '清除全部 App 数据';
+
+  @override
+  String get clearAllDataDescription => '删除全部本地业务数据、AI 数据和安全凭据；本地备份文件仍保留。';
+
+  @override
+  String get clearDataContinue => '继续';
+
+  @override
+  String get clearDataSecondConfirm => '再次确认清除';
+
+  @override
+  String get clearDataSecondConfirmBody => '这是第二次确认。执行后当前页面中的相应数据会立即删除。';
+
+  @override
+  String get clearDataConfirm => '确认清除';
+
+  @override
+  String get clearDataSucceeded => '所选数据已清除';
+
+  @override
+  String get exportDiagnostics => '导出脱敏诊断包';
+
+  @override
+  String get diagnosticsExported => '脱敏诊断包已保存';
 
   @override
   String get shiftTemplatesTitle => '班次模板';

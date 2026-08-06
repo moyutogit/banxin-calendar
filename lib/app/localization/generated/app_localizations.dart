@@ -392,6 +392,108 @@ abstract class AppLocalizations {
   /// **'该请求已按安全规则拒绝'**
   String get assistantSafetyRefusal;
 
+  /// No description provided for @onboardingProgress.
+  ///
+  /// In zh, this message translates to:
+  /// **'开始设置 {current}/{total}'**
+  String onboardingProgress(int current, int total);
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'欢迎使用班薪日历'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'用一份明确的排班联动日历、闹钟、出勤和工资预估；AI 助理是可选增强，不影响离线核心功能。'**
+  String get onboardingWelcomeBody;
+
+  /// No description provided for @onboardingPrivacyTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'数据默认只在本机'**
+  String get onboardingPrivacyTitle;
+
+  /// No description provided for @onboardingPrivacyBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'排班、打卡、工资和对话保存在本地。API 密钥只进入系统 Keychain/Keystore；只有获得相应数据权限时，AI 才能读取最小范围摘要。'**
+  String get onboardingPrivacyBody;
+
+  /// No description provided for @onboardingScheduleTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'先配置排班'**
+  String get onboardingScheduleTitle;
+
+  /// No description provided for @onboardingScheduleBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'选择双休、单休、大小周或 1—31 天自定义周期，设置班次后核对未来 14 天预览。排班是完成引导的必要步骤。'**
+  String get onboardingScheduleBody;
+
+  /// No description provided for @onboardingScheduleRequired.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先保存至少一条排班规则，并核对 14 天预览。'**
+  String get onboardingScheduleRequired;
+
+  /// No description provided for @onboardingHolidayTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'节假日与调休'**
+  String get onboardingHolidayTitle;
+
+  /// No description provided for @onboardingHolidayBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'可更新中国大陆官方节假日数据。离线时继续使用本地缓存，官方更新不会覆盖你的手工改单。此步可稍后完成。'**
+  String get onboardingHolidayBody;
+
+  /// No description provided for @onboardingWageTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'工资规则（可跳过）'**
+  String get onboardingWageTitle;
+
+  /// No description provided for @onboardingWageBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'支持时薪、日薪、月薪和三类加班。跳过后首页只显示设置入口，不会虚构金额。'**
+  String get onboardingWageBody;
+
+  /// No description provided for @onboardingAlarmTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'智能闹钟（可跳过）'**
+  String get onboardingAlarmTitle;
+
+  /// No description provided for @onboardingAlarmBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'只有你主动进入并启用闹钟时才申请通知或精确闹钟权限。跳过后首页会保留非阻塞设置提示。'**
+  String get onboardingAlarmBody;
+
+  /// No description provided for @onboardingDoneTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'设置完成'**
+  String get onboardingDoneTitle;
+
+  /// No description provided for @onboardingDoneBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'现在可以从首页查看今日班次、打卡、未来安排和提醒状态；所有设置之后都可修改。'**
+  String get onboardingDoneBody;
+
+  /// No description provided for @onboardingStartUsing.
+  ///
+  /// In zh, this message translates to:
+  /// **'开始使用'**
+  String get onboardingStartUsing;
+
   /// No description provided for @homeTodayShift.
   ///
   /// In zh, this message translates to:
@@ -656,6 +758,18 @@ abstract class AppLocalizations {
   /// **'上月'**
   String get statisticsLastMonth;
 
+  /// No description provided for @statisticsByWorkDate.
+  ///
+  /// In zh, this message translates to:
+  /// **'按班次开始日'**
+  String get statisticsByWorkDate;
+
+  /// No description provided for @statisticsByNaturalDay.
+  ///
+  /// In zh, this message translates to:
+  /// **'按自然日拆分'**
+  String get statisticsByNaturalDay;
+
   /// No description provided for @expectedAttendance.
   ///
   /// In zh, this message translates to:
@@ -727,6 +841,36 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'加班工资'**
   String get overtimePay;
+
+  /// No description provided for @workdayOvertimePay.
+  ///
+  /// In zh, this message translates to:
+  /// **'工作日加班工资'**
+  String get workdayOvertimePay;
+
+  /// No description provided for @restDayOvertimePay.
+  ///
+  /// In zh, this message translates to:
+  /// **'休息日加班工资'**
+  String get restDayOvertimePay;
+
+  /// No description provided for @holidayOvertimePay.
+  ///
+  /// In zh, this message translates to:
+  /// **'法定节假日加班工资'**
+  String get holidayOvertimePay;
+
+  /// No description provided for @fixedAllowance.
+  ///
+  /// In zh, this message translates to:
+  /// **'固定补贴（元）'**
+  String get fixedAllowance;
+
+  /// No description provided for @fixedDeduction.
+  ///
+  /// In zh, this message translates to:
+  /// **'固定扣款（元）'**
+  String get fixedDeduction;
 
   /// No description provided for @estimatedTotal.
   ///
@@ -913,6 +1057,18 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'模板已保存，但闹钟同步失败，请检查权限后重试。'**
   String get alarmSaveDidNotBlock;
+
+  /// No description provided for @alarmDeleteTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除闹钟模板？'**
+  String get alarmDeleteTitle;
+
+  /// No description provided for @alarmDeleteDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除“{name}”后，关联的未来排班闹钟会被取消。'**
+  String alarmDeleteDescription(String name);
 
   /// No description provided for @appTitle.
   ///
@@ -1585,6 +1741,222 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'备份与导出'**
   String get settingsBackup;
+
+  /// No description provided for @backupSettingsTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'备份、恢复与隐私'**
+  String get backupSettingsTitle;
+
+  /// No description provided for @localBackupTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地安全备份'**
+  String get localBackupTitle;
+
+  /// No description provided for @localBackupDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'备份使用 SQLite 一致性快照并附带版本、日期范围和 SHA-256 校验；API 密钥与敏感请求头不会写入备份。'**
+  String get localBackupDescription;
+
+  /// No description provided for @automaticBackup.
+  ///
+  /// In zh, this message translates to:
+  /// **'自动本地备份'**
+  String get automaticBackup;
+
+  /// No description provided for @automaticBackupDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'每天首次启动时最多创建一份，并至少保留最近 7 份。'**
+  String get automaticBackupDescription;
+
+  /// No description provided for @createBackupNow.
+  ///
+  /// In zh, this message translates to:
+  /// **'立即创建备份'**
+  String get createBackupNow;
+
+  /// No description provided for @backupCreated.
+  ///
+  /// In zh, this message translates to:
+  /// **'本地备份已创建并校验'**
+  String get backupCreated;
+
+  /// No description provided for @recentBackups.
+  ///
+  /// In zh, this message translates to:
+  /// **'最近备份'**
+  String get recentBackups;
+
+  /// No description provided for @noBackups.
+  ///
+  /// In zh, this message translates to:
+  /// **'尚无本地备份'**
+  String get noBackups;
+
+  /// No description provided for @backupSchema.
+  ///
+  /// In zh, this message translates to:
+  /// **'数据库 v{version}'**
+  String backupSchema(int version);
+
+  /// No description provided for @backupCredentialsExcluded.
+  ///
+  /// In zh, this message translates to:
+  /// **'安全凭据已排除'**
+  String get backupCredentialsExcluded;
+
+  /// No description provided for @backupEmptyRange.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂无业务日期范围'**
+  String get backupEmptyRange;
+
+  /// No description provided for @restoreBackupTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'恢复这份备份？'**
+  String get restoreBackupTitle;
+
+  /// No description provided for @restoreBackupRisk.
+  ///
+  /// In zh, this message translates to:
+  /// **'备份时间：{createdAt}\n数据范围：{dataRange}\n\n恢复会覆盖当前业务数据。系统会先备份当前数据，再校验文件、迁移临时数据库并在单个事务中替换；API 密钥不会从备份恢复。'**
+  String restoreBackupRisk(String createdAt, String dataRange);
+
+  /// No description provided for @restoreBackupAction.
+  ///
+  /// In zh, this message translates to:
+  /// **'恢复'**
+  String get restoreBackupAction;
+
+  /// No description provided for @restoreBackupSucceeded.
+  ///
+  /// In zh, this message translates to:
+  /// **'备份已恢复，缓存与闹钟已重建'**
+  String get restoreBackupSucceeded;
+
+  /// No description provided for @restoreBackupAlarmWarning.
+  ///
+  /// In zh, this message translates to:
+  /// **'数据已恢复；闹钟重建未完全成功，请到闹钟设置重试'**
+  String get restoreBackupAlarmWarning;
+
+  /// No description provided for @privacyDataTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'隐私与数据删除'**
+  String get privacyDataTitle;
+
+  /// No description provided for @privacyDataDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'各类数据可独立清除。除模型安全凭据外，清除前会创建本地安全备份；每项操作都需要两次确认。'**
+  String get privacyDataDescription;
+
+  /// No description provided for @clearConversations.
+  ///
+  /// In zh, this message translates to:
+  /// **'清除对话'**
+  String get clearConversations;
+
+  /// No description provided for @clearConversationsDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除消息和对话内容，保留独立的 AI 操作审计记录。'**
+  String get clearConversationsDescription;
+
+  /// No description provided for @clearAssistantActions.
+  ///
+  /// In zh, this message translates to:
+  /// **'清除 AI 操作历史'**
+  String get clearAssistantActions;
+
+  /// No description provided for @clearAssistantActionsDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除提案、确认、执行与撤销记录，不修改当前业务数据。'**
+  String get clearAssistantActionsDescription;
+
+  /// No description provided for @clearAssistantConfiguration.
+  ///
+  /// In zh, this message translates to:
+  /// **'清除模型配置与凭据'**
+  String get clearAssistantConfiguration;
+
+  /// No description provided for @clearAssistantConfigurationDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'永久删除接口配置、性格设置以及 Keychain/Keystore 中的密钥，普通备份无法恢复密钥。'**
+  String get clearAssistantConfigurationDescription;
+
+  /// No description provided for @clearWorkforce.
+  ///
+  /// In zh, this message translates to:
+  /// **'清除工资与考勤'**
+  String get clearWorkforce;
+
+  /// No description provided for @clearWorkforceDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除考勤、请假、工资规则和结算快照，保留排班。'**
+  String get clearWorkforceDescription;
+
+  /// No description provided for @clearAllData.
+  ///
+  /// In zh, this message translates to:
+  /// **'清除全部 App 数据'**
+  String get clearAllData;
+
+  /// No description provided for @clearAllDataDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除全部本地业务数据、AI 数据和安全凭据；本地备份文件仍保留。'**
+  String get clearAllDataDescription;
+
+  /// No description provided for @clearDataContinue.
+  ///
+  /// In zh, this message translates to:
+  /// **'继续'**
+  String get clearDataContinue;
+
+  /// No description provided for @clearDataSecondConfirm.
+  ///
+  /// In zh, this message translates to:
+  /// **'再次确认清除'**
+  String get clearDataSecondConfirm;
+
+  /// No description provided for @clearDataSecondConfirmBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'这是第二次确认。执行后当前页面中的相应数据会立即删除。'**
+  String get clearDataSecondConfirmBody;
+
+  /// No description provided for @clearDataConfirm.
+  ///
+  /// In zh, this message translates to:
+  /// **'确认清除'**
+  String get clearDataConfirm;
+
+  /// No description provided for @clearDataSucceeded.
+  ///
+  /// In zh, this message translates to:
+  /// **'所选数据已清除'**
+  String get clearDataSucceeded;
+
+  /// No description provided for @exportDiagnostics.
+  ///
+  /// In zh, this message translates to:
+  /// **'导出脱敏诊断包'**
+  String get exportDiagnostics;
+
+  /// No description provided for @diagnosticsExported.
+  ///
+  /// In zh, this message translates to:
+  /// **'脱敏诊断包已保存'**
+  String get diagnosticsExported;
 
   /// No description provided for @shiftTemplatesTitle.
   ///

@@ -6,6 +6,7 @@ import 'package:banxin_calendar/features/wage/domain/wage_repository.dart';
 
 final class WageRuleDraft {
   const WageRuleDraft({
+    this.id,
     required this.mode,
     required this.currency,
     required this.baseRateMinor,
@@ -17,7 +18,11 @@ final class WageRuleDraft {
     required this.roundingIncrementMinutes,
     required this.confirmedOnly,
     required this.effectiveStart,
+    this.allowances = const <MoneyLine>[],
+    this.deductions = const <MoneyLine>[],
   });
+
+  final String? id;
 
   final WageMode mode;
   final String currency;
@@ -30,6 +35,8 @@ final class WageRuleDraft {
   final int roundingIncrementMinutes;
   final bool confirmedOnly;
   final LocalDate effectiveStart;
+  final List<MoneyLine> allowances;
+  final List<MoneyLine> deductions;
 }
 
 final class WageApplicationService {
@@ -48,7 +55,7 @@ final class WageApplicationService {
 
   Future<void> save(WageRuleDraft draft) => _repository.saveRule(
     WageRule(
-      id: _idGenerator.generate(),
+      id: draft.id ?? _idGenerator.generate(),
       mode: draft.mode,
       currency: draft.currency.toUpperCase(),
       baseRateMinor: draft.baseRateMinor,
@@ -65,6 +72,8 @@ final class WageApplicationService {
         start: draft.effectiveStart,
         end: LocalDate(9999, 12, 31),
       ),
+      allowances: draft.allowances,
+      deductions: draft.deductions,
     ),
   );
 }

@@ -8,6 +8,8 @@ abstract interface class AlarmRepository {
 
   Future<void> setTemplateEnabled(String id, {required bool enabled});
 
+  Future<void> deleteTemplate(String id);
+
   Future<List<AlarmInstance>> loadInstances(DateRange range);
 
   Future<List<AlarmInstance>> loadUpcomingInstances(DateTime nowUtc);

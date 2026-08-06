@@ -6,6 +6,7 @@ import 'package:banxin_calendar/core/ids/stable_id_generator.dart';
 import 'package:banxin_calendar/core/secure_storage/secure_credential_service.dart';
 import 'package:banxin_calendar/core/secure_storage/secure_value_store.dart';
 import 'package:banxin_calendar/core/time/app_clock.dart';
+import 'package:banxin_calendar/features/alarm/data/drift_alarm_repository.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_action_gateway.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_settings_service.dart';
 import 'package:banxin_calendar/features/assistant/data/drift_assistant_action_unit_of_work.dart';
@@ -100,7 +101,9 @@ void main() {
     late ScheduleApplicationService scheduleService;
     late DriftAssistantRepository assistantRepository;
     late AssistantActionGateway gateway;
+    late DriftAlarmRepository alarmRepository;
     late String conversationId;
+    late int alarmSyncCount;
 
     setUp(() async {
       database = AppDatabase.inMemory();
@@ -119,6 +122,12 @@ void main() {
         database,
         clock: const _FixedClock(),
       );
+      alarmRepository = DriftAlarmRepository(
+        database,
+        clock: const _FixedClock(),
+        idGenerator: _SequenceIds('alarm-link'),
+      );
+      alarmSyncCount = 0;
       gateway = AssistantActionGateway(
         assistantRepository,
         DriftAssistantActionUnitOfWork(database, assistantRepository),
@@ -128,6 +137,11 @@ void main() {
         clock: const _FixedClock(),
         idGenerator: _SequenceIds('action'),
         secureRandom: Random(3),
+        alarmRepository: alarmRepository,
+        syncAlarms: () async {
+          alarmSyncCount++;
+          return true;
+        },
       );
       await scheduleService.saveSetup(_scheduleDraft());
       final now = const _FixedClock().nowUtc();
@@ -230,6 +244,46 @@ void main() {
         AiActionStatus.invalidated,
       );
     });
+
+    test(
+      'creates an alarm only after confirmation, synchronizes, and undoes',
+      () async {
+        final proposal = await gateway.proposeAlarmChange(
+          conversationId: conversationId,
+          arguments: <String, Object?>{
+            'operation': 'create',
+            'template': <String, Object?>{
+              'name': 'Morning',
+              'mode': 'fixedTime',
+              'fixed_minute': 430,
+              'offset_minutes': null,
+              'sound_id': null,
+              'vibrate': true,
+              'volume_ramp': true,
+              'snooze_minutes': 10,
+              'max_snooze_count': 3,
+              'enabled': true,
+              'shift_ids': <Object?>['default-shift'],
+            },
+          },
+        );
+        expect(await alarmRepository.loadTemplates(), isEmpty);
+
+        final succeeded = await gateway.confirmAction(
+          actionId: proposal.action.id,
+          confirmationToken: proposal.confirmationToken,
+        );
+
+        expect(succeeded.status, AiActionStatus.succeeded);
+        expect(await alarmRepository.loadTemplates(), hasLength(1));
+        expect(alarmSyncCount, 1);
+
+        final undone = await gateway.undoAction(proposal.action.id);
+        expect(undone.status, AiActionStatus.undone);
+        expect(await alarmRepository.loadTemplates(), isEmpty);
+        expect(alarmSyncCount, 2);
+      },
+    );
   });
 }
 

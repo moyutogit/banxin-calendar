@@ -24,9 +24,12 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
   final _restRate = TextEditingController(text: '2.0');
   final _holidayRate = TextEditingController(text: '3.0');
   final _periodStart = TextEditingController(text: '1');
+  final _allowance = TextEditingController(text: '0.00');
+  final _deduction = TextEditingController(text: '0.00');
   WageMode _mode = WageMode.hourly;
   int _roundingIncrement = 1;
   bool _confirmedOnly = false;
+  String? _ruleId;
   var _saving = false;
 
   @override
@@ -43,6 +46,8 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
     _restRate.dispose();
     _holidayRate.dispose();
     _periodStart.dispose();
+    _allowance.dispose();
+    _deduction.dispose();
     super.dispose();
   }
 
@@ -53,6 +58,7 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
         .loadFor(LocalDate(now.year, now.month, now.day));
     if (rule == null || !mounted) return;
     setState(() {
+      _ruleId = rule.id;
       _mode = rule.mode;
       _baseRate.text = (rule.baseRateMinor / 100).toStringAsFixed(2);
       _currency.text = rule.currency;
@@ -71,6 +77,14 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
       _periodStart.text = '${rule.periodStartDay}';
       _roundingIncrement = rule.roundingIncrementMinutes;
       _confirmedOnly = rule.confirmedOnly;
+      _allowance.text =
+          (rule.allowances.fold<int>(0, (sum, line) => sum + line.amountMinor) /
+                  100)
+              .toStringAsFixed(2);
+      _deduction.text =
+          (rule.deductions.fold<int>(0, (sum, line) => sum + line.amountMinor) /
+                  100)
+              .toStringAsFixed(2);
     });
   }
 
@@ -160,6 +174,22 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
                     : strings.invalidFormMessage;
               },
             ),
+            TextFormField(
+              controller: _allowance,
+              decoration: InputDecoration(labelText: strings.fixedAllowance),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              validator: _positiveNumber,
+            ),
+            TextFormField(
+              controller: _deduction,
+              decoration: InputDecoration(labelText: strings.fixedDeduction),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              validator: _positiveNumber,
+            ),
             DropdownButtonFormField<int>(
               initialValue: _roundingIncrement,
               decoration: InputDecoration(labelText: strings.roundingIncrement),
@@ -210,6 +240,7 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
         .read(wageApplicationServiceProvider)
         .save(
           WageRuleDraft(
+            id: _ruleId,
             mode: _mode,
             currency: _currency.text.trim(),
             baseRateMinor: (double.parse(_baseRate.text) * 100).round(),
@@ -226,6 +257,20 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
             roundingIncrementMinutes: _roundingIncrement,
             confirmedOnly: _confirmedOnly,
             effectiveStart: LocalDate(now.year, now.month, now.day),
+            allowances: <MoneyLine>[
+              if (double.parse(_allowance.text) > 0)
+                MoneyLine(
+                  label: AppLocalizations.of(context).fixedAllowance,
+                  amountMinor: (double.parse(_allowance.text) * 100).round(),
+                ),
+            ],
+            deductions: <MoneyLine>[
+              if (double.parse(_deduction.text) > 0)
+                MoneyLine(
+                  label: AppLocalizations.of(context).fixedDeduction,
+                  amountMinor: (double.parse(_deduction.text) * 100).round(),
+                ),
+            ],
           ),
         );
     if (mounted) {

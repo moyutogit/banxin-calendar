@@ -58,8 +58,8 @@ final class DriftWageRepository implements WageRepository {
               for (final entry in rule.overtimeRateBasisPoints.entries)
                 entry.key.name: entry.value,
             }),
-            allowanceRulesJson: '[]',
-            deductionRulesJson: '[]',
+            allowanceRulesJson: _encodeMoneyLines(rule.allowances),
+            deductionRulesJson: _encodeMoneyLines(rule.deductions),
             periodStartDay: rule.periodStartDay,
             roundingRuleJson: jsonEncode(<String, Object>{
               'mode': rule.roundingMode.name,
@@ -160,6 +160,31 @@ final class DriftWageRepository implements WageRepository {
       ),
       normalMonthlyMinutes:
           roundingJson['normalMonthlyMinutes'] as int? ?? 10440,
+      allowances: _decodeMoneyLines(row.allowanceRulesJson),
+      deductions: _decodeMoneyLines(row.deductionRulesJson),
+    );
+  }
+
+  String _encodeMoneyLines(List<MoneyLine> lines) => jsonEncode(<Object?>[
+    for (final line in lines)
+      <String, Object>{'label': line.label, 'amount_minor': line.amountMinor},
+  ]);
+
+  List<MoneyLine> _decodeMoneyLines(String source) {
+    final decoded = jsonDecode(source);
+    if (decoded is! List<Object?>) throw const FormatException();
+    return List<MoneyLine>.unmodifiable(
+      decoded.map((raw) {
+        if (raw is! Map<String, Object?> ||
+            raw['label'] is! String ||
+            raw['amount_minor'] is! int) {
+          throw const FormatException();
+        }
+        return MoneyLine(
+          label: raw['label']! as String,
+          amountMinor: raw['amount_minor']! as int,
+        );
+      }),
     );
   }
 }

@@ -91,11 +91,26 @@ class _AlarmSettingsPageState extends ConsumerState<AlarmSettingsPage> {
                       title: Text(template.name),
                       subtitle: Text(_templateSummary(strings, template)),
                       onTap: _busy ? null : () => _edit(view, template),
-                      trailing: Switch(
-                        value: template.enabled,
-                        onChanged: _busy
-                            ? null
-                            : (enabled) => _setEnabled(template, enabled),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Switch(
+                            value: template.enabled,
+                            onChanged: _busy
+                                ? null
+                                : (enabled) => _setEnabled(template, enabled),
+                          ),
+                          PopupMenuButton<String>(
+                            enabled: !_busy,
+                            onSelected: (_) => _delete(template),
+                            itemBuilder: (_) => <PopupMenuEntry<String>>[
+                              PopupMenuItem<String>(
+                                value: 'delete',
+                                child: Text(strings.deleteRecord),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -163,6 +178,30 @@ class _AlarmSettingsPageState extends ConsumerState<AlarmSettingsPage> {
 
   Future<void> _setEnabled(AlarmTemplate template, bool enabled) async {
     await _runSync(_service.setTemplateEnabled(template.id, enabled: enabled));
+  }
+
+  Future<void> _delete(AlarmTemplate template) async {
+    final strings = AppLocalizations.of(context);
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(strings.alarmDeleteTitle),
+        content: Text(strings.alarmDeleteDescription(template.name)),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(strings.actionCancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(strings.deleteRecord),
+          ),
+        ],
+      ),
+    );
+    if (confirmed == true) {
+      await _runSync(_service.deleteTemplate(template.id));
+    }
   }
 
   Future<void> _runSync(Future<AlarmSyncResult> operation) async {

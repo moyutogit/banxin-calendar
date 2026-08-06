@@ -129,6 +129,37 @@ final class DriftAlarmRepository implements AlarmRepository {
   }
 
   @override
+  Future<void> deleteTemplate(String id) async {
+    final now = _now;
+    await _database.transaction(() async {
+      await (_database.update(_database.shiftAlarmTemplates)..where(
+            (table) =>
+                table.alarmTemplateId.equals(id) & table.deletedAt.isNull(),
+          ))
+          .write(
+            database.ShiftAlarmTemplatesCompanion(
+              deletedAt: Value<int?>(now),
+              updatedAt: Value<int>(now),
+            ),
+          );
+      final changed =
+          await (_database.update(_database.alarmTemplates)..where(
+                (table) => table.id.equals(id) & table.deletedAt.isNull(),
+              ))
+              .write(
+                database.AlarmTemplatesCompanion(
+                  enabled: const Value<int>(0),
+                  deletedAt: Value<int?>(now),
+                  updatedAt: Value<int>(now),
+                ),
+              );
+      if (changed != 1) {
+        throw StateError('Alarm template $id does not exist.');
+      }
+    });
+  }
+
+  @override
   Future<List<AlarmInstance>> loadInstances(DateRange range) async {
     final rows =
         await (_database.select(_database.alarmInstances)..where(

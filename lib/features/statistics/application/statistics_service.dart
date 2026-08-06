@@ -32,50 +32,46 @@ final class StatisticsService {
   final AppClock _clock;
   final StableIdGenerator _idGenerator;
 
-  Future<StatisticsReport> build(DateRange range) async {
+  Future<StatisticsReport> build(
+    DateRange range, {
+    StatisticsAttributionMode attributionMode =
+        StatisticsAttributionMode.workDate,
+  }) async {
     final calendar = await _scheduleService.loadCalendar(range);
-    final segments = await _attendanceRepository.loadSegments(range);
+    final loadedSegments = await _attendanceRepository.loadSegments(
+      attributionMode == StatisticsAttributionMode.naturalDay
+          ? DateRange(start: range.start.addDays(-1), end: range.end)
+          : range,
+    );
+    final workDateSegments = loadedSegments
+        .where((segment) => range.contains(segment.workDate))
+        .toList();
+    final segments = attributionMode == StatisticsAttributionMode.naturalDay
+        ? loadedSegments
+              .expand(_splitByNaturalDay)
+              .where((segment) => range.contains(segment.workDate))
+              .toList()
+        : workDateSegments;
     final wageRules = await _wageRepository.loadRules(range);
     final wageRule = wageRules.isEmpty ? null : wageRules.first;
     final savedPeriod = await _wageRepository.loadPayrollPeriod(range);
-    final grouped = <LocalDate, List<AttendanceSegment>>{};
-    for (final segment in segments) {
-      grouped
-          .putIfAbsent(segment.workDate, () => <AttendanceSegment>[])
-          .add(segment);
-    }
-    final daily = <DailyStatistics>[];
-    for (final day in calendar.days) {
-      final daySegments = grouped[day.date] ?? const <AttendanceSegment>[];
-      final (plannedStart, plannedEnd) = _plannedTimes(day);
-      final policy = WorkTimePolicy(
-        normalLimitMinutes: 480,
-        roundingMode: wageRule?.roundingMode ?? MinuteRoundingMode.none,
-        roundingIncrementMinutes: wageRule?.roundingIncrementMinutes ?? 1,
-      );
-      daily.add(
-        DailyStatistics(
-          date: day.date,
-          scheduleStatus: day.status,
-          shiftName: day.shift?.name,
-          hours: _attendanceEngine.calculate(
-            segments: daySegments,
-            policy: policy,
-            plannedStartUtc: plannedStart,
-            plannedEndUtc: plannedEnd,
-          ),
-          confirmed:
-              daySegments.isNotEmpty &&
-              daySegments.every((segment) => segment.confirmed),
-        ),
-      );
-    }
+    final daily = _buildDaily(
+      calendar.days,
+      segments,
+      wageRule,
+      usePlannedTimes: attributionMode == StatisticsAttributionMode.workDate,
+    );
+    final payrollDaily = attributionMode == StatisticsAttributionMode.workDate
+        ? daily
+        : _buildDaily(calendar.days, workDateSegments, wageRule);
     final calculatedPayroll = wageRule == null
         ? null
         : _wageEngine.calculate(
             rule: wageRule,
+            allowances: wageRule.allowances,
+            deductions: wageRule.deductions,
             days: <PayrollDayInput>[
-              for (final day in daily)
+              for (final day in payrollDaily)
                 PayrollDayInput(
                   date: day.date,
                   scheduleStatus: day.scheduleStatus,
@@ -132,6 +128,85 @@ final class StatisticsService {
       payroll: payroll,
       savedPeriod: savedPeriod,
     );
+  }
+
+  List<DailyStatistics> _buildDaily(
+    List<ResolvedCalendarDay> calendarDays,
+    List<AttendanceSegment> segments,
+    WageRule? wageRule, {
+    bool usePlannedTimes = true,
+  }) {
+    final grouped = <LocalDate, List<AttendanceSegment>>{};
+    for (final segment in segments) {
+      grouped
+          .putIfAbsent(segment.workDate, () => <AttendanceSegment>[])
+          .add(segment);
+    }
+    final daily = <DailyStatistics>[];
+    for (final day in calendarDays) {
+      final daySegments = grouped[day.date] ?? const <AttendanceSegment>[];
+      final (plannedStart, plannedEnd) = usePlannedTimes
+          ? _plannedTimes(day)
+          : (null, null);
+      final policy = WorkTimePolicy(
+        normalLimitMinutes: 480,
+        roundingMode: wageRule?.roundingMode ?? MinuteRoundingMode.none,
+        roundingIncrementMinutes: wageRule?.roundingIncrementMinutes ?? 1,
+      );
+      daily.add(
+        DailyStatistics(
+          date: day.date,
+          scheduleStatus: day.status,
+          shiftName: day.shift?.name,
+          hours: _attendanceEngine.calculate(
+            segments: daySegments,
+            policy: policy,
+            plannedStartUtc: plannedStart,
+            plannedEndUtc: plannedEnd,
+          ),
+          confirmed:
+              daySegments.isNotEmpty &&
+              daySegments.every((segment) => segment.confirmed),
+        ),
+      );
+    }
+    return daily;
+  }
+
+  Iterable<AttendanceSegment> _splitByNaturalDay(
+    AttendanceSegment source,
+  ) sync* {
+    if (!source.isComplete) {
+      yield source;
+      return;
+    }
+    var cursor = source.clockInUtc!.toLocal();
+    final end = source.clockOutUtc!.toLocal();
+    var breakRemaining = source.unpaidBreakMinutes;
+    var index = 0;
+    while (cursor.isBefore(end)) {
+      final nextMidnight = DateTime(cursor.year, cursor.month, cursor.day + 1);
+      final portionEnd = nextMidnight.isBefore(end) ? nextMidnight : end;
+      final duration = portionEnd.difference(cursor).inMinutes;
+      final breakForPortion = breakRemaining < duration
+          ? breakRemaining
+          : duration;
+      breakRemaining -= breakForPortion;
+      yield AttendanceSegment(
+        id: '${source.id}:natural:${index++}',
+        workDate: LocalDate(cursor.year, cursor.month, cursor.day),
+        clockInUtc: cursor.toUtc(),
+        clockOutUtc: portionEnd.toUtc(),
+        unpaidBreakMinutes: breakForPortion,
+        source: source.source,
+        status: source.status,
+        editReason: source.editReason,
+        note: source.note,
+        createdTimezone: source.createdTimezone,
+        confirmed: source.confirmed,
+      );
+      cursor = portionEnd;
+    }
   }
 
   Future<PayrollPeriod> saveCalculation(DateRange range) async {

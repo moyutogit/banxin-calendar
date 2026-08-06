@@ -13,4 +13,10 @@ attendance + schedule；statistics → schedule + attendance + wage；alarm →
 schedule；assistant → application tool gateway。禁止 schedule 反向依赖。
 
 安全边界：API Key、Bearer Token 和敏感请求头只写入系统安全存储；SQLite
-和普通备份未来仅保存随机 `credential_ref`。AI Provider 不得直接访问仓储。
+仅保存随机 `credential_ref`，普通备份还会把该引用脱敏为不可用占位符。AI
+Provider 不得直接访问仓储，所有模型工具调用必须经过 ToolGateway。
+
+备份恢复依赖方向为 `presentation → application → domain repository → data`。
+Data 层用 SQLite `VACUUM INTO` 获取一致性快照，在临时数据库执行迁移、
+`integrity_check` 与外键检查，再在正式连接的单个事务中导入；缓存和平台闹钟属于
+可重建派生状态，不随快照直接恢复。
