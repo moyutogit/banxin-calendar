@@ -9,6 +9,189 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get homeTodayShift => '今日班次';
+
+  @override
+  String get homeRestToday => '今天休息';
+
+  @override
+  String get punchIn => '上班打卡';
+
+  @override
+  String get punchOut => '下班打卡';
+
+  @override
+  String get missingPunch => '缺卡';
+
+  @override
+  String get nextAlarm => '下一个闹钟';
+
+  @override
+  String get monthlyEstimatedIncome => '本月预计收入';
+
+  @override
+  String get attendanceDays => '出勤天数';
+
+  @override
+  String get actualHours => '实际工时';
+
+  @override
+  String get overtimeHours => '加班工时';
+
+  @override
+  String get futureSevenDays => '未来 7 天';
+
+  @override
+  String get setupWageRule => '设置工资规则';
+
+  @override
+  String get attendanceTitle => '出勤记录';
+
+  @override
+  String get addAttendance => '补录出勤';
+
+  @override
+  String get clockInTime => '上班时间';
+
+  @override
+  String get clockOutTime => '下班时间';
+
+  @override
+  String get unpaidBreak => '不计薪休息';
+
+  @override
+  String get rawWorkMinutes => '原始实际分钟';
+
+  @override
+  String get payableWorkMinutes => '取整后计薪分钟';
+
+  @override
+  String get normalWorkMinutes => '正常工时分钟';
+
+  @override
+  String get overtimeWorkMinutes => '加班分钟';
+
+  @override
+  String get attendanceConfirmed => '已确认出勤';
+
+  @override
+  String get attendanceReason => '修改原因';
+
+  @override
+  String get attendanceNote => '备注（最多 500 字）';
+
+  @override
+  String get payrollRecalculationWarning => '该日期属于已结算周期，工资需要重新计算。';
+
+  @override
+  String get noAttendanceRecords => '暂无出勤记录';
+
+  @override
+  String get deleteRecord => '删除记录';
+
+  @override
+  String get wageSettingsTitle => '工资规则';
+
+  @override
+  String get wageModeHourly => '时薪';
+
+  @override
+  String get wageModeDaily => '日薪';
+
+  @override
+  String get wageModeMonthly => '月薪';
+
+  @override
+  String get baseRate => '基本金额（元）';
+
+  @override
+  String get currencyCode => '币种';
+
+  @override
+  String get workdayOvertimeRate => '工作日加班倍率';
+
+  @override
+  String get restDayOvertimeRate => '休息日加班倍率';
+
+  @override
+  String get holidayOvertimeRate => '法定节假日加班倍率';
+
+  @override
+  String get payPeriodStartDay => '计薪周期起始日（1-28）';
+
+  @override
+  String get roundingIncrement => '工时取整分钟';
+
+  @override
+  String get confirmedOnly => '仅计算已确认出勤';
+
+  @override
+  String get wageDisclaimer => '工资结果仅为个人预估，不替代企业工资条或法定核算。';
+
+  @override
+  String get wageRuleSaved => '工资规则已保存';
+
+  @override
+  String get statisticsThisWeek => '本周';
+
+  @override
+  String get statisticsThisMonth => '本月';
+
+  @override
+  String get statisticsLastMonth => '上月';
+
+  @override
+  String get expectedAttendance => '应出勤';
+
+  @override
+  String get actualAttendance => '实际出勤';
+
+  @override
+  String get plannedHours => '计划工时';
+
+  @override
+  String get normalHours => '正常工时';
+
+  @override
+  String get lateCount => '迟到';
+
+  @override
+  String get earlyLeaveCount => '早退';
+
+  @override
+  String get exportCsv => '导出 CSV';
+
+  @override
+  String get csvExported => 'CSV 已保存';
+
+  @override
+  String get payrollBreakdown => '工资明细';
+
+  @override
+  String get basePay => '基本工资';
+
+  @override
+  String get normalHoursPay => '正常工时工资';
+
+  @override
+  String get overtimePay => '加班工资';
+
+  @override
+  String get estimatedTotal => '预估合计';
+
+  @override
+  String get settlePayroll => '确认结算';
+
+  @override
+  String get actualPaidAmount => '实发金额（元）';
+
+  @override
+  String get estimatedDifference => '与预估差额';
+
+  @override
+  String get numericDetails => '每日数值明细';
+
+  @override
   String get alarmSettingsTitle => '智能闹钟';
 
   @override

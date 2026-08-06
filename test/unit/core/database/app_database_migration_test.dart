@@ -54,6 +54,10 @@ void main() {
           'alarm_templates',
           'shift_alarm_templates',
           'alarm_instances',
+          'attendance_records',
+          'leave_records',
+          'wage_rules',
+          'payroll_periods',
         ]),
       );
     });
@@ -231,6 +235,45 @@ void main() {
         );
       },
     );
+
+    test('migrates v4 to workforce schema without losing metadata', () async {
+      final file = File(path.join(tempDirectory.path, 'legacy_v4.sqlite'));
+      final legacy = sqlite.sqlite3.open(file.path);
+      legacy.execute('''
+        CREATE TABLE database_metadata (
+          key TEXT NOT NULL PRIMARY KEY,
+          value TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+        INSERT INTO database_metadata VALUES ('fixture', 'v4', 1, 1);
+        PRAGMA user_version = 4;
+      ''');
+      legacy.close();
+
+      final database = AppDatabase(NativeDatabase(file));
+      addTearDown(database.close);
+      await database.ensureReady();
+
+      final metadata = await database
+          .select(database.databaseMetadata)
+          .getSingle();
+      final tables = await database
+          .customSelect(
+            "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name",
+          )
+          .get();
+      expect(metadata.value, 'v4');
+      expect(
+        tables.map((row) => row.read<String>('name')),
+        containsAll(<String>[
+          'attendance_records',
+          'leave_records',
+          'wage_rules',
+          'payroll_periods',
+        ]),
+      );
+    });
 
     test('allows only one active override per date', () async {
       final database = AppDatabase.inMemory();

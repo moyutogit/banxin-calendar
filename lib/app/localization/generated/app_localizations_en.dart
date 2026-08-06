@@ -9,6 +9,191 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get homeTodayShift => 'Today\'s shift';
+
+  @override
+  String get homeRestToday => 'Rest day';
+
+  @override
+  String get punchIn => 'Clock in';
+
+  @override
+  String get punchOut => 'Clock out';
+
+  @override
+  String get missingPunch => 'Missing punch';
+
+  @override
+  String get nextAlarm => 'Next alarm';
+
+  @override
+  String get monthlyEstimatedIncome => 'Estimated monthly income';
+
+  @override
+  String get attendanceDays => 'Attendance days';
+
+  @override
+  String get actualHours => 'Actual hours';
+
+  @override
+  String get overtimeHours => 'Overtime hours';
+
+  @override
+  String get futureSevenDays => 'Next 7 days';
+
+  @override
+  String get setupWageRule => 'Set up wage rule';
+
+  @override
+  String get attendanceTitle => 'Attendance';
+
+  @override
+  String get addAttendance => 'Add attendance';
+
+  @override
+  String get clockInTime => 'Clock-in time';
+
+  @override
+  String get clockOutTime => 'Clock-out time';
+
+  @override
+  String get unpaidBreak => 'Unpaid break';
+
+  @override
+  String get rawWorkMinutes => 'Raw actual minutes';
+
+  @override
+  String get payableWorkMinutes => 'Rounded payable minutes';
+
+  @override
+  String get normalWorkMinutes => 'Normal minutes';
+
+  @override
+  String get overtimeWorkMinutes => 'Overtime minutes';
+
+  @override
+  String get attendanceConfirmed => 'Attendance confirmed';
+
+  @override
+  String get attendanceReason => 'Edit reason';
+
+  @override
+  String get attendanceNote => 'Note (up to 500 characters)';
+
+  @override
+  String get payrollRecalculationWarning =>
+      'This date is in a settled period. Payroll must be recalculated.';
+
+  @override
+  String get noAttendanceRecords => 'No attendance records';
+
+  @override
+  String get deleteRecord => 'Delete record';
+
+  @override
+  String get wageSettingsTitle => 'Wage rules';
+
+  @override
+  String get wageModeHourly => 'Hourly';
+
+  @override
+  String get wageModeDaily => 'Daily';
+
+  @override
+  String get wageModeMonthly => 'Monthly';
+
+  @override
+  String get baseRate => 'Base amount';
+
+  @override
+  String get currencyCode => 'Currency';
+
+  @override
+  String get workdayOvertimeRate => 'Workday overtime multiplier';
+
+  @override
+  String get restDayOvertimeRate => 'Rest-day overtime multiplier';
+
+  @override
+  String get holidayOvertimeRate => 'Public-holiday overtime multiplier';
+
+  @override
+  String get payPeriodStartDay => 'Pay period start day (1-28)';
+
+  @override
+  String get roundingIncrement => 'Time rounding increment';
+
+  @override
+  String get confirmedOnly => 'Count confirmed attendance only';
+
+  @override
+  String get wageDisclaimer =>
+      'Payroll is a personal estimate and does not replace an employer payslip or legal calculation.';
+
+  @override
+  String get wageRuleSaved => 'Wage rule saved';
+
+  @override
+  String get statisticsThisWeek => 'This week';
+
+  @override
+  String get statisticsThisMonth => 'This month';
+
+  @override
+  String get statisticsLastMonth => 'Last month';
+
+  @override
+  String get expectedAttendance => 'Expected attendance';
+
+  @override
+  String get actualAttendance => 'Actual attendance';
+
+  @override
+  String get plannedHours => 'Planned hours';
+
+  @override
+  String get normalHours => 'Normal hours';
+
+  @override
+  String get lateCount => 'Late';
+
+  @override
+  String get earlyLeaveCount => 'Early leave';
+
+  @override
+  String get exportCsv => 'Export CSV';
+
+  @override
+  String get csvExported => 'CSV saved';
+
+  @override
+  String get payrollBreakdown => 'Payroll breakdown';
+
+  @override
+  String get basePay => 'Base pay';
+
+  @override
+  String get normalHoursPay => 'Normal-hours pay';
+
+  @override
+  String get overtimePay => 'Overtime pay';
+
+  @override
+  String get estimatedTotal => 'Estimated total';
+
+  @override
+  String get settlePayroll => 'Settle payroll';
+
+  @override
+  String get actualPaidAmount => 'Actual paid amount';
+
+  @override
+  String get estimatedDifference => 'Difference from estimate';
+
+  @override
+  String get numericDetails => 'Daily numeric details';
+
+  @override
   String get alarmSettingsTitle => 'Smart alarms';
 
   @override

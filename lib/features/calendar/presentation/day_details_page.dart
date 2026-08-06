@@ -1,5 +1,6 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
 import 'package:banxin_calendar/app/theme/app_theme.dart';
+import 'package:banxin_calendar/features/attendance/presentation/attendance_section.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_providers.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_entities.dart';
@@ -125,6 +126,8 @@ class _DayDetailsPageState extends ConsumerState<DayDetailsPage> {
               ),
           ],
         ),
+        const SizedBox(height: AppSpacing.md),
+        AttendanceSection(date: widget.date),
       ],
     );
   }

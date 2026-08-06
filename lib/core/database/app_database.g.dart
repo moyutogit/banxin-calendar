@@ -6956,6 +6956,2973 @@ class AlarmInstancesCompanion extends UpdateCompanion<AlarmInstance> {
   }
 }
 
+class $AttendanceRecordsTable extends AttendanceRecords
+    with TableInfo<$AttendanceRecordsTable, AttendanceRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AttendanceRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workDateMeta = const VerificationMeta(
+    'workDate',
+  );
+  @override
+  late final GeneratedColumn<String> workDate = GeneratedColumn<String>(
+    'work_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _clockInAtMeta = const VerificationMeta(
+    'clockInAt',
+  );
+  @override
+  late final GeneratedColumn<int> clockInAt = GeneratedColumn<int>(
+    'clock_in_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _clockOutAtMeta = const VerificationMeta(
+    'clockOutAt',
+  );
+  @override
+  late final GeneratedColumn<int> clockOutAt = GeneratedColumn<int>(
+    'clock_out_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _unpaidBreakMinutesMeta =
+      const VerificationMeta('unpaidBreakMinutes');
+  @override
+  late final GeneratedColumn<int> unpaidBreakMinutes = GeneratedColumn<int>(
+    'unpaid_break_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceMeta = const VerificationMeta('source');
+  @override
+  late final GeneratedColumn<String> source = GeneratedColumn<String>(
+    'source',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _editReasonMeta = const VerificationMeta(
+    'editReason',
+  );
+  @override
+  late final GeneratedColumn<String> editReason = GeneratedColumn<String>(
+    'edit_reason',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdTimezoneMeta = const VerificationMeta(
+    'createdTimezone',
+  );
+  @override
+  late final GeneratedColumn<String> createdTimezone = GeneratedColumn<String>(
+    'created_timezone',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confirmedMeta = const VerificationMeta(
+    'confirmed',
+  );
+  @override
+  late final GeneratedColumn<int> confirmed = GeneratedColumn<int>(
+    'confirmed',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant<int>(0),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    workDate,
+    clockInAt,
+    clockOutAt,
+    unpaidBreakMinutes,
+    source,
+    status,
+    editReason,
+    note,
+    createdTimezone,
+    confirmed,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'attendance_records';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AttendanceRecord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('work_date')) {
+      context.handle(
+        _workDateMeta,
+        workDate.isAcceptableOrUnknown(data['work_date']!, _workDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_workDateMeta);
+    }
+    if (data.containsKey('clock_in_at')) {
+      context.handle(
+        _clockInAtMeta,
+        clockInAt.isAcceptableOrUnknown(data['clock_in_at']!, _clockInAtMeta),
+      );
+    }
+    if (data.containsKey('clock_out_at')) {
+      context.handle(
+        _clockOutAtMeta,
+        clockOutAt.isAcceptableOrUnknown(
+          data['clock_out_at']!,
+          _clockOutAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('unpaid_break_minutes')) {
+      context.handle(
+        _unpaidBreakMinutesMeta,
+        unpaidBreakMinutes.isAcceptableOrUnknown(
+          data['unpaid_break_minutes']!,
+          _unpaidBreakMinutesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_unpaidBreakMinutesMeta);
+    }
+    if (data.containsKey('source')) {
+      context.handle(
+        _sourceMeta,
+        source.isAcceptableOrUnknown(data['source']!, _sourceMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sourceMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('edit_reason')) {
+      context.handle(
+        _editReasonMeta,
+        editReason.isAcceptableOrUnknown(data['edit_reason']!, _editReasonMeta),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('created_timezone')) {
+      context.handle(
+        _createdTimezoneMeta,
+        createdTimezone.isAcceptableOrUnknown(
+          data['created_timezone']!,
+          _createdTimezoneMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_createdTimezoneMeta);
+    }
+    if (data.containsKey('confirmed')) {
+      context.handle(
+        _confirmedMeta,
+        confirmed.isAcceptableOrUnknown(data['confirmed']!, _confirmedMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AttendanceRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AttendanceRecord(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}work_date'],
+      )!,
+      clockInAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}clock_in_at'],
+      ),
+      clockOutAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}clock_out_at'],
+      ),
+      unpaidBreakMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}unpaid_break_minutes'],
+      )!,
+      source: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      editReason: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}edit_reason'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      createdTimezone: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}created_timezone'],
+      )!,
+      confirmed: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}confirmed'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $AttendanceRecordsTable createAlias(String alias) {
+    return $AttendanceRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class AttendanceRecord extends DataClass
+    implements Insertable<AttendanceRecord> {
+  final String id;
+  final String workDate;
+  final int? clockInAt;
+  final int? clockOutAt;
+  final int unpaidBreakMinutes;
+  final String source;
+  final String status;
+  final String? editReason;
+  final String? note;
+  final String createdTimezone;
+  final int confirmed;
+  final int createdAt;
+  final int updatedAt;
+  final int? deletedAt;
+  const AttendanceRecord({
+    required this.id,
+    required this.workDate,
+    this.clockInAt,
+    this.clockOutAt,
+    required this.unpaidBreakMinutes,
+    required this.source,
+    required this.status,
+    this.editReason,
+    this.note,
+    required this.createdTimezone,
+    required this.confirmed,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['work_date'] = Variable<String>(workDate);
+    if (!nullToAbsent || clockInAt != null) {
+      map['clock_in_at'] = Variable<int>(clockInAt);
+    }
+    if (!nullToAbsent || clockOutAt != null) {
+      map['clock_out_at'] = Variable<int>(clockOutAt);
+    }
+    map['unpaid_break_minutes'] = Variable<int>(unpaidBreakMinutes);
+    map['source'] = Variable<String>(source);
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || editReason != null) {
+      map['edit_reason'] = Variable<String>(editReason);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['created_timezone'] = Variable<String>(createdTimezone);
+    map['confirmed'] = Variable<int>(confirmed);
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<int>(deletedAt);
+    }
+    return map;
+  }
+
+  AttendanceRecordsCompanion toCompanion(bool nullToAbsent) {
+    return AttendanceRecordsCompanion(
+      id: Value(id),
+      workDate: Value(workDate),
+      clockInAt: clockInAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(clockInAt),
+      clockOutAt: clockOutAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(clockOutAt),
+      unpaidBreakMinutes: Value(unpaidBreakMinutes),
+      source: Value(source),
+      status: Value(status),
+      editReason: editReason == null && nullToAbsent
+          ? const Value.absent()
+          : Value(editReason),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      createdTimezone: Value(createdTimezone),
+      confirmed: Value(confirmed),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory AttendanceRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AttendanceRecord(
+      id: serializer.fromJson<String>(json['id']),
+      workDate: serializer.fromJson<String>(json['workDate']),
+      clockInAt: serializer.fromJson<int?>(json['clockInAt']),
+      clockOutAt: serializer.fromJson<int?>(json['clockOutAt']),
+      unpaidBreakMinutes: serializer.fromJson<int>(json['unpaidBreakMinutes']),
+      source: serializer.fromJson<String>(json['source']),
+      status: serializer.fromJson<String>(json['status']),
+      editReason: serializer.fromJson<String?>(json['editReason']),
+      note: serializer.fromJson<String?>(json['note']),
+      createdTimezone: serializer.fromJson<String>(json['createdTimezone']),
+      confirmed: serializer.fromJson<int>(json['confirmed']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deletedAt: serializer.fromJson<int?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'workDate': serializer.toJson<String>(workDate),
+      'clockInAt': serializer.toJson<int?>(clockInAt),
+      'clockOutAt': serializer.toJson<int?>(clockOutAt),
+      'unpaidBreakMinutes': serializer.toJson<int>(unpaidBreakMinutes),
+      'source': serializer.toJson<String>(source),
+      'status': serializer.toJson<String>(status),
+      'editReason': serializer.toJson<String?>(editReason),
+      'note': serializer.toJson<String?>(note),
+      'createdTimezone': serializer.toJson<String>(createdTimezone),
+      'confirmed': serializer.toJson<int>(confirmed),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deletedAt': serializer.toJson<int?>(deletedAt),
+    };
+  }
+
+  AttendanceRecord copyWith({
+    String? id,
+    String? workDate,
+    Value<int?> clockInAt = const Value.absent(),
+    Value<int?> clockOutAt = const Value.absent(),
+    int? unpaidBreakMinutes,
+    String? source,
+    String? status,
+    Value<String?> editReason = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    String? createdTimezone,
+    int? confirmed,
+    int? createdAt,
+    int? updatedAt,
+    Value<int?> deletedAt = const Value.absent(),
+  }) => AttendanceRecord(
+    id: id ?? this.id,
+    workDate: workDate ?? this.workDate,
+    clockInAt: clockInAt.present ? clockInAt.value : this.clockInAt,
+    clockOutAt: clockOutAt.present ? clockOutAt.value : this.clockOutAt,
+    unpaidBreakMinutes: unpaidBreakMinutes ?? this.unpaidBreakMinutes,
+    source: source ?? this.source,
+    status: status ?? this.status,
+    editReason: editReason.present ? editReason.value : this.editReason,
+    note: note.present ? note.value : this.note,
+    createdTimezone: createdTimezone ?? this.createdTimezone,
+    confirmed: confirmed ?? this.confirmed,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  AttendanceRecord copyWithCompanion(AttendanceRecordsCompanion data) {
+    return AttendanceRecord(
+      id: data.id.present ? data.id.value : this.id,
+      workDate: data.workDate.present ? data.workDate.value : this.workDate,
+      clockInAt: data.clockInAt.present ? data.clockInAt.value : this.clockInAt,
+      clockOutAt: data.clockOutAt.present
+          ? data.clockOutAt.value
+          : this.clockOutAt,
+      unpaidBreakMinutes: data.unpaidBreakMinutes.present
+          ? data.unpaidBreakMinutes.value
+          : this.unpaidBreakMinutes,
+      source: data.source.present ? data.source.value : this.source,
+      status: data.status.present ? data.status.value : this.status,
+      editReason: data.editReason.present
+          ? data.editReason.value
+          : this.editReason,
+      note: data.note.present ? data.note.value : this.note,
+      createdTimezone: data.createdTimezone.present
+          ? data.createdTimezone.value
+          : this.createdTimezone,
+      confirmed: data.confirmed.present ? data.confirmed.value : this.confirmed,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AttendanceRecord(')
+          ..write('id: $id, ')
+          ..write('workDate: $workDate, ')
+          ..write('clockInAt: $clockInAt, ')
+          ..write('clockOutAt: $clockOutAt, ')
+          ..write('unpaidBreakMinutes: $unpaidBreakMinutes, ')
+          ..write('source: $source, ')
+          ..write('status: $status, ')
+          ..write('editReason: $editReason, ')
+          ..write('note: $note, ')
+          ..write('createdTimezone: $createdTimezone, ')
+          ..write('confirmed: $confirmed, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    workDate,
+    clockInAt,
+    clockOutAt,
+    unpaidBreakMinutes,
+    source,
+    status,
+    editReason,
+    note,
+    createdTimezone,
+    confirmed,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AttendanceRecord &&
+          other.id == this.id &&
+          other.workDate == this.workDate &&
+          other.clockInAt == this.clockInAt &&
+          other.clockOutAt == this.clockOutAt &&
+          other.unpaidBreakMinutes == this.unpaidBreakMinutes &&
+          other.source == this.source &&
+          other.status == this.status &&
+          other.editReason == this.editReason &&
+          other.note == this.note &&
+          other.createdTimezone == this.createdTimezone &&
+          other.confirmed == this.confirmed &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class AttendanceRecordsCompanion extends UpdateCompanion<AttendanceRecord> {
+  final Value<String> id;
+  final Value<String> workDate;
+  final Value<int?> clockInAt;
+  final Value<int?> clockOutAt;
+  final Value<int> unpaidBreakMinutes;
+  final Value<String> source;
+  final Value<String> status;
+  final Value<String?> editReason;
+  final Value<String?> note;
+  final Value<String> createdTimezone;
+  final Value<int> confirmed;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int?> deletedAt;
+  final Value<int> rowid;
+  const AttendanceRecordsCompanion({
+    this.id = const Value.absent(),
+    this.workDate = const Value.absent(),
+    this.clockInAt = const Value.absent(),
+    this.clockOutAt = const Value.absent(),
+    this.unpaidBreakMinutes = const Value.absent(),
+    this.source = const Value.absent(),
+    this.status = const Value.absent(),
+    this.editReason = const Value.absent(),
+    this.note = const Value.absent(),
+    this.createdTimezone = const Value.absent(),
+    this.confirmed = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AttendanceRecordsCompanion.insert({
+    required String id,
+    required String workDate,
+    this.clockInAt = const Value.absent(),
+    this.clockOutAt = const Value.absent(),
+    required int unpaidBreakMinutes,
+    required String source,
+    required String status,
+    this.editReason = const Value.absent(),
+    this.note = const Value.absent(),
+    required String createdTimezone,
+    this.confirmed = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       workDate = Value(workDate),
+       unpaidBreakMinutes = Value(unpaidBreakMinutes),
+       source = Value(source),
+       status = Value(status),
+       createdTimezone = Value(createdTimezone),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<AttendanceRecord> custom({
+    Expression<String>? id,
+    Expression<String>? workDate,
+    Expression<int>? clockInAt,
+    Expression<int>? clockOutAt,
+    Expression<int>? unpaidBreakMinutes,
+    Expression<String>? source,
+    Expression<String>? status,
+    Expression<String>? editReason,
+    Expression<String>? note,
+    Expression<String>? createdTimezone,
+    Expression<int>? confirmed,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (workDate != null) 'work_date': workDate,
+      if (clockInAt != null) 'clock_in_at': clockInAt,
+      if (clockOutAt != null) 'clock_out_at': clockOutAt,
+      if (unpaidBreakMinutes != null)
+        'unpaid_break_minutes': unpaidBreakMinutes,
+      if (source != null) 'source': source,
+      if (status != null) 'status': status,
+      if (editReason != null) 'edit_reason': editReason,
+      if (note != null) 'note': note,
+      if (createdTimezone != null) 'created_timezone': createdTimezone,
+      if (confirmed != null) 'confirmed': confirmed,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AttendanceRecordsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workDate,
+    Value<int?>? clockInAt,
+    Value<int?>? clockOutAt,
+    Value<int>? unpaidBreakMinutes,
+    Value<String>? source,
+    Value<String>? status,
+    Value<String?>? editReason,
+    Value<String?>? note,
+    Value<String>? createdTimezone,
+    Value<int>? confirmed,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return AttendanceRecordsCompanion(
+      id: id ?? this.id,
+      workDate: workDate ?? this.workDate,
+      clockInAt: clockInAt ?? this.clockInAt,
+      clockOutAt: clockOutAt ?? this.clockOutAt,
+      unpaidBreakMinutes: unpaidBreakMinutes ?? this.unpaidBreakMinutes,
+      source: source ?? this.source,
+      status: status ?? this.status,
+      editReason: editReason ?? this.editReason,
+      note: note ?? this.note,
+      createdTimezone: createdTimezone ?? this.createdTimezone,
+      confirmed: confirmed ?? this.confirmed,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (workDate.present) {
+      map['work_date'] = Variable<String>(workDate.value);
+    }
+    if (clockInAt.present) {
+      map['clock_in_at'] = Variable<int>(clockInAt.value);
+    }
+    if (clockOutAt.present) {
+      map['clock_out_at'] = Variable<int>(clockOutAt.value);
+    }
+    if (unpaidBreakMinutes.present) {
+      map['unpaid_break_minutes'] = Variable<int>(unpaidBreakMinutes.value);
+    }
+    if (source.present) {
+      map['source'] = Variable<String>(source.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (editReason.present) {
+      map['edit_reason'] = Variable<String>(editReason.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (createdTimezone.present) {
+      map['created_timezone'] = Variable<String>(createdTimezone.value);
+    }
+    if (confirmed.present) {
+      map['confirmed'] = Variable<int>(confirmed.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<int>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AttendanceRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('workDate: $workDate, ')
+          ..write('clockInAt: $clockInAt, ')
+          ..write('clockOutAt: $clockOutAt, ')
+          ..write('unpaidBreakMinutes: $unpaidBreakMinutes, ')
+          ..write('source: $source, ')
+          ..write('status: $status, ')
+          ..write('editReason: $editReason, ')
+          ..write('note: $note, ')
+          ..write('createdTimezone: $createdTimezone, ')
+          ..write('confirmed: $confirmed, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $LeaveRecordsTable extends LeaveRecords
+    with TableInfo<$LeaveRecordsTable, LeaveRecord> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $LeaveRecordsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _workDateMeta = const VerificationMeta(
+    'workDate',
+  );
+  @override
+  late final GeneratedColumn<String> workDate = GeneratedColumn<String>(
+    'work_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _leaveTypeMeta = const VerificationMeta(
+    'leaveType',
+  );
+  @override
+  late final GeneratedColumn<String> leaveType = GeneratedColumn<String>(
+    'leave_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startAtMeta = const VerificationMeta(
+    'startAt',
+  );
+  @override
+  late final GeneratedColumn<int> startAt = GeneratedColumn<int>(
+    'start_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _endAtMeta = const VerificationMeta('endAt');
+  @override
+  late final GeneratedColumn<int> endAt = GeneratedColumn<int>(
+    'end_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _paidMeta = const VerificationMeta('paid');
+  @override
+  late final GeneratedColumn<int> paid = GeneratedColumn<int>(
+    'paid',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deductionMinorMeta = const VerificationMeta(
+    'deductionMinor',
+  );
+  @override
+  late final GeneratedColumn<int> deductionMinor = GeneratedColumn<int>(
+    'deduction_minor',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _noteMeta = const VerificationMeta('note');
+  @override
+  late final GeneratedColumn<String> note = GeneratedColumn<String>(
+    'note',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    workDate,
+    leaveType,
+    startAt,
+    endAt,
+    paid,
+    deductionMinor,
+    note,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'leave_records';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<LeaveRecord> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('work_date')) {
+      context.handle(
+        _workDateMeta,
+        workDate.isAcceptableOrUnknown(data['work_date']!, _workDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_workDateMeta);
+    }
+    if (data.containsKey('leave_type')) {
+      context.handle(
+        _leaveTypeMeta,
+        leaveType.isAcceptableOrUnknown(data['leave_type']!, _leaveTypeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_leaveTypeMeta);
+    }
+    if (data.containsKey('start_at')) {
+      context.handle(
+        _startAtMeta,
+        startAt.isAcceptableOrUnknown(data['start_at']!, _startAtMeta),
+      );
+    }
+    if (data.containsKey('end_at')) {
+      context.handle(
+        _endAtMeta,
+        endAt.isAcceptableOrUnknown(data['end_at']!, _endAtMeta),
+      );
+    }
+    if (data.containsKey('paid')) {
+      context.handle(
+        _paidMeta,
+        paid.isAcceptableOrUnknown(data['paid']!, _paidMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_paidMeta);
+    }
+    if (data.containsKey('deduction_minor')) {
+      context.handle(
+        _deductionMinorMeta,
+        deductionMinor.isAcceptableOrUnknown(
+          data['deduction_minor']!,
+          _deductionMinorMeta,
+        ),
+      );
+    }
+    if (data.containsKey('note')) {
+      context.handle(
+        _noteMeta,
+        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  LeaveRecord map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return LeaveRecord(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      workDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}work_date'],
+      )!,
+      leaveType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}leave_type'],
+      )!,
+      startAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}start_at'],
+      ),
+      endAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}end_at'],
+      ),
+      paid: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}paid'],
+      )!,
+      deductionMinor: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deduction_minor'],
+      ),
+      note: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}note'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $LeaveRecordsTable createAlias(String alias) {
+    return $LeaveRecordsTable(attachedDatabase, alias);
+  }
+}
+
+class LeaveRecord extends DataClass implements Insertable<LeaveRecord> {
+  final String id;
+  final String workDate;
+  final String leaveType;
+  final int? startAt;
+  final int? endAt;
+  final int paid;
+  final int? deductionMinor;
+  final String? note;
+  final int createdAt;
+  final int updatedAt;
+  final int? deletedAt;
+  const LeaveRecord({
+    required this.id,
+    required this.workDate,
+    required this.leaveType,
+    this.startAt,
+    this.endAt,
+    required this.paid,
+    this.deductionMinor,
+    this.note,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['work_date'] = Variable<String>(workDate);
+    map['leave_type'] = Variable<String>(leaveType);
+    if (!nullToAbsent || startAt != null) {
+      map['start_at'] = Variable<int>(startAt);
+    }
+    if (!nullToAbsent || endAt != null) {
+      map['end_at'] = Variable<int>(endAt);
+    }
+    map['paid'] = Variable<int>(paid);
+    if (!nullToAbsent || deductionMinor != null) {
+      map['deduction_minor'] = Variable<int>(deductionMinor);
+    }
+    if (!nullToAbsent || note != null) {
+      map['note'] = Variable<String>(note);
+    }
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<int>(deletedAt);
+    }
+    return map;
+  }
+
+  LeaveRecordsCompanion toCompanion(bool nullToAbsent) {
+    return LeaveRecordsCompanion(
+      id: Value(id),
+      workDate: Value(workDate),
+      leaveType: Value(leaveType),
+      startAt: startAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startAt),
+      endAt: endAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endAt),
+      paid: Value(paid),
+      deductionMinor: deductionMinor == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deductionMinor),
+      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory LeaveRecord.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return LeaveRecord(
+      id: serializer.fromJson<String>(json['id']),
+      workDate: serializer.fromJson<String>(json['workDate']),
+      leaveType: serializer.fromJson<String>(json['leaveType']),
+      startAt: serializer.fromJson<int?>(json['startAt']),
+      endAt: serializer.fromJson<int?>(json['endAt']),
+      paid: serializer.fromJson<int>(json['paid']),
+      deductionMinor: serializer.fromJson<int?>(json['deductionMinor']),
+      note: serializer.fromJson<String?>(json['note']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deletedAt: serializer.fromJson<int?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'workDate': serializer.toJson<String>(workDate),
+      'leaveType': serializer.toJson<String>(leaveType),
+      'startAt': serializer.toJson<int?>(startAt),
+      'endAt': serializer.toJson<int?>(endAt),
+      'paid': serializer.toJson<int>(paid),
+      'deductionMinor': serializer.toJson<int?>(deductionMinor),
+      'note': serializer.toJson<String?>(note),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deletedAt': serializer.toJson<int?>(deletedAt),
+    };
+  }
+
+  LeaveRecord copyWith({
+    String? id,
+    String? workDate,
+    String? leaveType,
+    Value<int?> startAt = const Value.absent(),
+    Value<int?> endAt = const Value.absent(),
+    int? paid,
+    Value<int?> deductionMinor = const Value.absent(),
+    Value<String?> note = const Value.absent(),
+    int? createdAt,
+    int? updatedAt,
+    Value<int?> deletedAt = const Value.absent(),
+  }) => LeaveRecord(
+    id: id ?? this.id,
+    workDate: workDate ?? this.workDate,
+    leaveType: leaveType ?? this.leaveType,
+    startAt: startAt.present ? startAt.value : this.startAt,
+    endAt: endAt.present ? endAt.value : this.endAt,
+    paid: paid ?? this.paid,
+    deductionMinor: deductionMinor.present
+        ? deductionMinor.value
+        : this.deductionMinor,
+    note: note.present ? note.value : this.note,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  LeaveRecord copyWithCompanion(LeaveRecordsCompanion data) {
+    return LeaveRecord(
+      id: data.id.present ? data.id.value : this.id,
+      workDate: data.workDate.present ? data.workDate.value : this.workDate,
+      leaveType: data.leaveType.present ? data.leaveType.value : this.leaveType,
+      startAt: data.startAt.present ? data.startAt.value : this.startAt,
+      endAt: data.endAt.present ? data.endAt.value : this.endAt,
+      paid: data.paid.present ? data.paid.value : this.paid,
+      deductionMinor: data.deductionMinor.present
+          ? data.deductionMinor.value
+          : this.deductionMinor,
+      note: data.note.present ? data.note.value : this.note,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LeaveRecord(')
+          ..write('id: $id, ')
+          ..write('workDate: $workDate, ')
+          ..write('leaveType: $leaveType, ')
+          ..write('startAt: $startAt, ')
+          ..write('endAt: $endAt, ')
+          ..write('paid: $paid, ')
+          ..write('deductionMinor: $deductionMinor, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    workDate,
+    leaveType,
+    startAt,
+    endAt,
+    paid,
+    deductionMinor,
+    note,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is LeaveRecord &&
+          other.id == this.id &&
+          other.workDate == this.workDate &&
+          other.leaveType == this.leaveType &&
+          other.startAt == this.startAt &&
+          other.endAt == this.endAt &&
+          other.paid == this.paid &&
+          other.deductionMinor == this.deductionMinor &&
+          other.note == this.note &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class LeaveRecordsCompanion extends UpdateCompanion<LeaveRecord> {
+  final Value<String> id;
+  final Value<String> workDate;
+  final Value<String> leaveType;
+  final Value<int?> startAt;
+  final Value<int?> endAt;
+  final Value<int> paid;
+  final Value<int?> deductionMinor;
+  final Value<String?> note;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int?> deletedAt;
+  final Value<int> rowid;
+  const LeaveRecordsCompanion({
+    this.id = const Value.absent(),
+    this.workDate = const Value.absent(),
+    this.leaveType = const Value.absent(),
+    this.startAt = const Value.absent(),
+    this.endAt = const Value.absent(),
+    this.paid = const Value.absent(),
+    this.deductionMinor = const Value.absent(),
+    this.note = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  LeaveRecordsCompanion.insert({
+    required String id,
+    required String workDate,
+    required String leaveType,
+    this.startAt = const Value.absent(),
+    this.endAt = const Value.absent(),
+    required int paid,
+    this.deductionMinor = const Value.absent(),
+    this.note = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       workDate = Value(workDate),
+       leaveType = Value(leaveType),
+       paid = Value(paid),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<LeaveRecord> custom({
+    Expression<String>? id,
+    Expression<String>? workDate,
+    Expression<String>? leaveType,
+    Expression<int>? startAt,
+    Expression<int>? endAt,
+    Expression<int>? paid,
+    Expression<int>? deductionMinor,
+    Expression<String>? note,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (workDate != null) 'work_date': workDate,
+      if (leaveType != null) 'leave_type': leaveType,
+      if (startAt != null) 'start_at': startAt,
+      if (endAt != null) 'end_at': endAt,
+      if (paid != null) 'paid': paid,
+      if (deductionMinor != null) 'deduction_minor': deductionMinor,
+      if (note != null) 'note': note,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  LeaveRecordsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? workDate,
+    Value<String>? leaveType,
+    Value<int?>? startAt,
+    Value<int?>? endAt,
+    Value<int>? paid,
+    Value<int?>? deductionMinor,
+    Value<String?>? note,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return LeaveRecordsCompanion(
+      id: id ?? this.id,
+      workDate: workDate ?? this.workDate,
+      leaveType: leaveType ?? this.leaveType,
+      startAt: startAt ?? this.startAt,
+      endAt: endAt ?? this.endAt,
+      paid: paid ?? this.paid,
+      deductionMinor: deductionMinor ?? this.deductionMinor,
+      note: note ?? this.note,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (workDate.present) {
+      map['work_date'] = Variable<String>(workDate.value);
+    }
+    if (leaveType.present) {
+      map['leave_type'] = Variable<String>(leaveType.value);
+    }
+    if (startAt.present) {
+      map['start_at'] = Variable<int>(startAt.value);
+    }
+    if (endAt.present) {
+      map['end_at'] = Variable<int>(endAt.value);
+    }
+    if (paid.present) {
+      map['paid'] = Variable<int>(paid.value);
+    }
+    if (deductionMinor.present) {
+      map['deduction_minor'] = Variable<int>(deductionMinor.value);
+    }
+    if (note.present) {
+      map['note'] = Variable<String>(note.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<int>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('LeaveRecordsCompanion(')
+          ..write('id: $id, ')
+          ..write('workDate: $workDate, ')
+          ..write('leaveType: $leaveType, ')
+          ..write('startAt: $startAt, ')
+          ..write('endAt: $endAt, ')
+          ..write('paid: $paid, ')
+          ..write('deductionMinor: $deductionMinor, ')
+          ..write('note: $note, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $WageRulesTable extends WageRules
+    with TableInfo<$WageRulesTable, WageRule> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $WageRulesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modeMeta = const VerificationMeta('mode');
+  @override
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
+    'mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _currencyMeta = const VerificationMeta(
+    'currency',
+  );
+  @override
+  late final GeneratedColumn<String> currency = GeneratedColumn<String>(
+    'currency',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _baseRateMinorMeta = const VerificationMeta(
+    'baseRateMinor',
+  );
+  @override
+  late final GeneratedColumn<int> baseRateMinor = GeneratedColumn<int>(
+    'base_rate_minor',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _overtimeRatesJsonMeta = const VerificationMeta(
+    'overtimeRatesJson',
+  );
+  @override
+  late final GeneratedColumn<String> overtimeRatesJson =
+      GeneratedColumn<String>(
+        'overtime_rates_json',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _allowanceRulesJsonMeta =
+      const VerificationMeta('allowanceRulesJson');
+  @override
+  late final GeneratedColumn<String> allowanceRulesJson =
+      GeneratedColumn<String>(
+        'allowance_rules_json',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _deductionRulesJsonMeta =
+      const VerificationMeta('deductionRulesJson');
+  @override
+  late final GeneratedColumn<String> deductionRulesJson =
+      GeneratedColumn<String>(
+        'deduction_rules_json',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _periodStartDayMeta = const VerificationMeta(
+    'periodStartDay',
+  );
+  @override
+  late final GeneratedColumn<int> periodStartDay = GeneratedColumn<int>(
+    'period_start_day',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roundingRuleJsonMeta = const VerificationMeta(
+    'roundingRuleJson',
+  );
+  @override
+  late final GeneratedColumn<String> roundingRuleJson = GeneratedColumn<String>(
+    'rounding_rule_json',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confirmedOnlyMeta = const VerificationMeta(
+    'confirmedOnly',
+  );
+  @override
+  late final GeneratedColumn<int> confirmedOnly = GeneratedColumn<int>(
+    'confirmed_only',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant<int>(0),
+  );
+  static const VerificationMeta _effectiveStartMeta = const VerificationMeta(
+    'effectiveStart',
+  );
+  @override
+  late final GeneratedColumn<String> effectiveStart = GeneratedColumn<String>(
+    'effective_start',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _effectiveEndMeta = const VerificationMeta(
+    'effectiveEnd',
+  );
+  @override
+  late final GeneratedColumn<String> effectiveEnd = GeneratedColumn<String>(
+    'effective_end',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    mode,
+    currency,
+    baseRateMinor,
+    overtimeRatesJson,
+    allowanceRulesJson,
+    deductionRulesJson,
+    periodStartDay,
+    roundingRuleJson,
+    confirmedOnly,
+    effectiveStart,
+    effectiveEnd,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'wage_rules';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<WageRule> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('mode')) {
+      context.handle(
+        _modeMeta,
+        mode.isAcceptableOrUnknown(data['mode']!, _modeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modeMeta);
+    }
+    if (data.containsKey('currency')) {
+      context.handle(
+        _currencyMeta,
+        currency.isAcceptableOrUnknown(data['currency']!, _currencyMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_currencyMeta);
+    }
+    if (data.containsKey('base_rate_minor')) {
+      context.handle(
+        _baseRateMinorMeta,
+        baseRateMinor.isAcceptableOrUnknown(
+          data['base_rate_minor']!,
+          _baseRateMinorMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_baseRateMinorMeta);
+    }
+    if (data.containsKey('overtime_rates_json')) {
+      context.handle(
+        _overtimeRatesJsonMeta,
+        overtimeRatesJson.isAcceptableOrUnknown(
+          data['overtime_rates_json']!,
+          _overtimeRatesJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_overtimeRatesJsonMeta);
+    }
+    if (data.containsKey('allowance_rules_json')) {
+      context.handle(
+        _allowanceRulesJsonMeta,
+        allowanceRulesJson.isAcceptableOrUnknown(
+          data['allowance_rules_json']!,
+          _allowanceRulesJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_allowanceRulesJsonMeta);
+    }
+    if (data.containsKey('deduction_rules_json')) {
+      context.handle(
+        _deductionRulesJsonMeta,
+        deductionRulesJson.isAcceptableOrUnknown(
+          data['deduction_rules_json']!,
+          _deductionRulesJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_deductionRulesJsonMeta);
+    }
+    if (data.containsKey('period_start_day')) {
+      context.handle(
+        _periodStartDayMeta,
+        periodStartDay.isAcceptableOrUnknown(
+          data['period_start_day']!,
+          _periodStartDayMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_periodStartDayMeta);
+    }
+    if (data.containsKey('rounding_rule_json')) {
+      context.handle(
+        _roundingRuleJsonMeta,
+        roundingRuleJson.isAcceptableOrUnknown(
+          data['rounding_rule_json']!,
+          _roundingRuleJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_roundingRuleJsonMeta);
+    }
+    if (data.containsKey('confirmed_only')) {
+      context.handle(
+        _confirmedOnlyMeta,
+        confirmedOnly.isAcceptableOrUnknown(
+          data['confirmed_only']!,
+          _confirmedOnlyMeta,
+        ),
+      );
+    }
+    if (data.containsKey('effective_start')) {
+      context.handle(
+        _effectiveStartMeta,
+        effectiveStart.isAcceptableOrUnknown(
+          data['effective_start']!,
+          _effectiveStartMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_effectiveStartMeta);
+    }
+    if (data.containsKey('effective_end')) {
+      context.handle(
+        _effectiveEndMeta,
+        effectiveEnd.isAcceptableOrUnknown(
+          data['effective_end']!,
+          _effectiveEndMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  WageRule map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return WageRule(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      mode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mode'],
+      )!,
+      currency: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}currency'],
+      )!,
+      baseRateMinor: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}base_rate_minor'],
+      )!,
+      overtimeRatesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}overtime_rates_json'],
+      )!,
+      allowanceRulesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}allowance_rules_json'],
+      )!,
+      deductionRulesJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}deduction_rules_json'],
+      )!,
+      periodStartDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}period_start_day'],
+      )!,
+      roundingRuleJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}rounding_rule_json'],
+      )!,
+      confirmedOnly: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}confirmed_only'],
+      )!,
+      effectiveStart: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}effective_start'],
+      )!,
+      effectiveEnd: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}effective_end'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $WageRulesTable createAlias(String alias) {
+    return $WageRulesTable(attachedDatabase, alias);
+  }
+}
+
+class WageRule extends DataClass implements Insertable<WageRule> {
+  final String id;
+  final String mode;
+  final String currency;
+  final int baseRateMinor;
+  final String overtimeRatesJson;
+  final String allowanceRulesJson;
+  final String deductionRulesJson;
+  final int periodStartDay;
+  final String roundingRuleJson;
+  final int confirmedOnly;
+  final String effectiveStart;
+  final String? effectiveEnd;
+  final int createdAt;
+  final int updatedAt;
+  const WageRule({
+    required this.id,
+    required this.mode,
+    required this.currency,
+    required this.baseRateMinor,
+    required this.overtimeRatesJson,
+    required this.allowanceRulesJson,
+    required this.deductionRulesJson,
+    required this.periodStartDay,
+    required this.roundingRuleJson,
+    required this.confirmedOnly,
+    required this.effectiveStart,
+    this.effectiveEnd,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['mode'] = Variable<String>(mode);
+    map['currency'] = Variable<String>(currency);
+    map['base_rate_minor'] = Variable<int>(baseRateMinor);
+    map['overtime_rates_json'] = Variable<String>(overtimeRatesJson);
+    map['allowance_rules_json'] = Variable<String>(allowanceRulesJson);
+    map['deduction_rules_json'] = Variable<String>(deductionRulesJson);
+    map['period_start_day'] = Variable<int>(periodStartDay);
+    map['rounding_rule_json'] = Variable<String>(roundingRuleJson);
+    map['confirmed_only'] = Variable<int>(confirmedOnly);
+    map['effective_start'] = Variable<String>(effectiveStart);
+    if (!nullToAbsent || effectiveEnd != null) {
+      map['effective_end'] = Variable<String>(effectiveEnd);
+    }
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    return map;
+  }
+
+  WageRulesCompanion toCompanion(bool nullToAbsent) {
+    return WageRulesCompanion(
+      id: Value(id),
+      mode: Value(mode),
+      currency: Value(currency),
+      baseRateMinor: Value(baseRateMinor),
+      overtimeRatesJson: Value(overtimeRatesJson),
+      allowanceRulesJson: Value(allowanceRulesJson),
+      deductionRulesJson: Value(deductionRulesJson),
+      periodStartDay: Value(periodStartDay),
+      roundingRuleJson: Value(roundingRuleJson),
+      confirmedOnly: Value(confirmedOnly),
+      effectiveStart: Value(effectiveStart),
+      effectiveEnd: effectiveEnd == null && nullToAbsent
+          ? const Value.absent()
+          : Value(effectiveEnd),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory WageRule.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return WageRule(
+      id: serializer.fromJson<String>(json['id']),
+      mode: serializer.fromJson<String>(json['mode']),
+      currency: serializer.fromJson<String>(json['currency']),
+      baseRateMinor: serializer.fromJson<int>(json['baseRateMinor']),
+      overtimeRatesJson: serializer.fromJson<String>(json['overtimeRatesJson']),
+      allowanceRulesJson: serializer.fromJson<String>(
+        json['allowanceRulesJson'],
+      ),
+      deductionRulesJson: serializer.fromJson<String>(
+        json['deductionRulesJson'],
+      ),
+      periodStartDay: serializer.fromJson<int>(json['periodStartDay']),
+      roundingRuleJson: serializer.fromJson<String>(json['roundingRuleJson']),
+      confirmedOnly: serializer.fromJson<int>(json['confirmedOnly']),
+      effectiveStart: serializer.fromJson<String>(json['effectiveStart']),
+      effectiveEnd: serializer.fromJson<String?>(json['effectiveEnd']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'mode': serializer.toJson<String>(mode),
+      'currency': serializer.toJson<String>(currency),
+      'baseRateMinor': serializer.toJson<int>(baseRateMinor),
+      'overtimeRatesJson': serializer.toJson<String>(overtimeRatesJson),
+      'allowanceRulesJson': serializer.toJson<String>(allowanceRulesJson),
+      'deductionRulesJson': serializer.toJson<String>(deductionRulesJson),
+      'periodStartDay': serializer.toJson<int>(periodStartDay),
+      'roundingRuleJson': serializer.toJson<String>(roundingRuleJson),
+      'confirmedOnly': serializer.toJson<int>(confirmedOnly),
+      'effectiveStart': serializer.toJson<String>(effectiveStart),
+      'effectiveEnd': serializer.toJson<String?>(effectiveEnd),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+    };
+  }
+
+  WageRule copyWith({
+    String? id,
+    String? mode,
+    String? currency,
+    int? baseRateMinor,
+    String? overtimeRatesJson,
+    String? allowanceRulesJson,
+    String? deductionRulesJson,
+    int? periodStartDay,
+    String? roundingRuleJson,
+    int? confirmedOnly,
+    String? effectiveStart,
+    Value<String?> effectiveEnd = const Value.absent(),
+    int? createdAt,
+    int? updatedAt,
+  }) => WageRule(
+    id: id ?? this.id,
+    mode: mode ?? this.mode,
+    currency: currency ?? this.currency,
+    baseRateMinor: baseRateMinor ?? this.baseRateMinor,
+    overtimeRatesJson: overtimeRatesJson ?? this.overtimeRatesJson,
+    allowanceRulesJson: allowanceRulesJson ?? this.allowanceRulesJson,
+    deductionRulesJson: deductionRulesJson ?? this.deductionRulesJson,
+    periodStartDay: periodStartDay ?? this.periodStartDay,
+    roundingRuleJson: roundingRuleJson ?? this.roundingRuleJson,
+    confirmedOnly: confirmedOnly ?? this.confirmedOnly,
+    effectiveStart: effectiveStart ?? this.effectiveStart,
+    effectiveEnd: effectiveEnd.present ? effectiveEnd.value : this.effectiveEnd,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  WageRule copyWithCompanion(WageRulesCompanion data) {
+    return WageRule(
+      id: data.id.present ? data.id.value : this.id,
+      mode: data.mode.present ? data.mode.value : this.mode,
+      currency: data.currency.present ? data.currency.value : this.currency,
+      baseRateMinor: data.baseRateMinor.present
+          ? data.baseRateMinor.value
+          : this.baseRateMinor,
+      overtimeRatesJson: data.overtimeRatesJson.present
+          ? data.overtimeRatesJson.value
+          : this.overtimeRatesJson,
+      allowanceRulesJson: data.allowanceRulesJson.present
+          ? data.allowanceRulesJson.value
+          : this.allowanceRulesJson,
+      deductionRulesJson: data.deductionRulesJson.present
+          ? data.deductionRulesJson.value
+          : this.deductionRulesJson,
+      periodStartDay: data.periodStartDay.present
+          ? data.periodStartDay.value
+          : this.periodStartDay,
+      roundingRuleJson: data.roundingRuleJson.present
+          ? data.roundingRuleJson.value
+          : this.roundingRuleJson,
+      confirmedOnly: data.confirmedOnly.present
+          ? data.confirmedOnly.value
+          : this.confirmedOnly,
+      effectiveStart: data.effectiveStart.present
+          ? data.effectiveStart.value
+          : this.effectiveStart,
+      effectiveEnd: data.effectiveEnd.present
+          ? data.effectiveEnd.value
+          : this.effectiveEnd,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WageRule(')
+          ..write('id: $id, ')
+          ..write('mode: $mode, ')
+          ..write('currency: $currency, ')
+          ..write('baseRateMinor: $baseRateMinor, ')
+          ..write('overtimeRatesJson: $overtimeRatesJson, ')
+          ..write('allowanceRulesJson: $allowanceRulesJson, ')
+          ..write('deductionRulesJson: $deductionRulesJson, ')
+          ..write('periodStartDay: $periodStartDay, ')
+          ..write('roundingRuleJson: $roundingRuleJson, ')
+          ..write('confirmedOnly: $confirmedOnly, ')
+          ..write('effectiveStart: $effectiveStart, ')
+          ..write('effectiveEnd: $effectiveEnd, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    mode,
+    currency,
+    baseRateMinor,
+    overtimeRatesJson,
+    allowanceRulesJson,
+    deductionRulesJson,
+    periodStartDay,
+    roundingRuleJson,
+    confirmedOnly,
+    effectiveStart,
+    effectiveEnd,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is WageRule &&
+          other.id == this.id &&
+          other.mode == this.mode &&
+          other.currency == this.currency &&
+          other.baseRateMinor == this.baseRateMinor &&
+          other.overtimeRatesJson == this.overtimeRatesJson &&
+          other.allowanceRulesJson == this.allowanceRulesJson &&
+          other.deductionRulesJson == this.deductionRulesJson &&
+          other.periodStartDay == this.periodStartDay &&
+          other.roundingRuleJson == this.roundingRuleJson &&
+          other.confirmedOnly == this.confirmedOnly &&
+          other.effectiveStart == this.effectiveStart &&
+          other.effectiveEnd == this.effectiveEnd &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class WageRulesCompanion extends UpdateCompanion<WageRule> {
+  final Value<String> id;
+  final Value<String> mode;
+  final Value<String> currency;
+  final Value<int> baseRateMinor;
+  final Value<String> overtimeRatesJson;
+  final Value<String> allowanceRulesJson;
+  final Value<String> deductionRulesJson;
+  final Value<int> periodStartDay;
+  final Value<String> roundingRuleJson;
+  final Value<int> confirmedOnly;
+  final Value<String> effectiveStart;
+  final Value<String?> effectiveEnd;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int> rowid;
+  const WageRulesCompanion({
+    this.id = const Value.absent(),
+    this.mode = const Value.absent(),
+    this.currency = const Value.absent(),
+    this.baseRateMinor = const Value.absent(),
+    this.overtimeRatesJson = const Value.absent(),
+    this.allowanceRulesJson = const Value.absent(),
+    this.deductionRulesJson = const Value.absent(),
+    this.periodStartDay = const Value.absent(),
+    this.roundingRuleJson = const Value.absent(),
+    this.confirmedOnly = const Value.absent(),
+    this.effectiveStart = const Value.absent(),
+    this.effectiveEnd = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  WageRulesCompanion.insert({
+    required String id,
+    required String mode,
+    required String currency,
+    required int baseRateMinor,
+    required String overtimeRatesJson,
+    required String allowanceRulesJson,
+    required String deductionRulesJson,
+    required int periodStartDay,
+    required String roundingRuleJson,
+    this.confirmedOnly = const Value.absent(),
+    required String effectiveStart,
+    this.effectiveEnd = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       mode = Value(mode),
+       currency = Value(currency),
+       baseRateMinor = Value(baseRateMinor),
+       overtimeRatesJson = Value(overtimeRatesJson),
+       allowanceRulesJson = Value(allowanceRulesJson),
+       deductionRulesJson = Value(deductionRulesJson),
+       periodStartDay = Value(periodStartDay),
+       roundingRuleJson = Value(roundingRuleJson),
+       effectiveStart = Value(effectiveStart),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<WageRule> custom({
+    Expression<String>? id,
+    Expression<String>? mode,
+    Expression<String>? currency,
+    Expression<int>? baseRateMinor,
+    Expression<String>? overtimeRatesJson,
+    Expression<String>? allowanceRulesJson,
+    Expression<String>? deductionRulesJson,
+    Expression<int>? periodStartDay,
+    Expression<String>? roundingRuleJson,
+    Expression<int>? confirmedOnly,
+    Expression<String>? effectiveStart,
+    Expression<String>? effectiveEnd,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (mode != null) 'mode': mode,
+      if (currency != null) 'currency': currency,
+      if (baseRateMinor != null) 'base_rate_minor': baseRateMinor,
+      if (overtimeRatesJson != null) 'overtime_rates_json': overtimeRatesJson,
+      if (allowanceRulesJson != null)
+        'allowance_rules_json': allowanceRulesJson,
+      if (deductionRulesJson != null)
+        'deduction_rules_json': deductionRulesJson,
+      if (periodStartDay != null) 'period_start_day': periodStartDay,
+      if (roundingRuleJson != null) 'rounding_rule_json': roundingRuleJson,
+      if (confirmedOnly != null) 'confirmed_only': confirmedOnly,
+      if (effectiveStart != null) 'effective_start': effectiveStart,
+      if (effectiveEnd != null) 'effective_end': effectiveEnd,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  WageRulesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? mode,
+    Value<String>? currency,
+    Value<int>? baseRateMinor,
+    Value<String>? overtimeRatesJson,
+    Value<String>? allowanceRulesJson,
+    Value<String>? deductionRulesJson,
+    Value<int>? periodStartDay,
+    Value<String>? roundingRuleJson,
+    Value<int>? confirmedOnly,
+    Value<String>? effectiveStart,
+    Value<String?>? effectiveEnd,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return WageRulesCompanion(
+      id: id ?? this.id,
+      mode: mode ?? this.mode,
+      currency: currency ?? this.currency,
+      baseRateMinor: baseRateMinor ?? this.baseRateMinor,
+      overtimeRatesJson: overtimeRatesJson ?? this.overtimeRatesJson,
+      allowanceRulesJson: allowanceRulesJson ?? this.allowanceRulesJson,
+      deductionRulesJson: deductionRulesJson ?? this.deductionRulesJson,
+      periodStartDay: periodStartDay ?? this.periodStartDay,
+      roundingRuleJson: roundingRuleJson ?? this.roundingRuleJson,
+      confirmedOnly: confirmedOnly ?? this.confirmedOnly,
+      effectiveStart: effectiveStart ?? this.effectiveStart,
+      effectiveEnd: effectiveEnd ?? this.effectiveEnd,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (mode.present) {
+      map['mode'] = Variable<String>(mode.value);
+    }
+    if (currency.present) {
+      map['currency'] = Variable<String>(currency.value);
+    }
+    if (baseRateMinor.present) {
+      map['base_rate_minor'] = Variable<int>(baseRateMinor.value);
+    }
+    if (overtimeRatesJson.present) {
+      map['overtime_rates_json'] = Variable<String>(overtimeRatesJson.value);
+    }
+    if (allowanceRulesJson.present) {
+      map['allowance_rules_json'] = Variable<String>(allowanceRulesJson.value);
+    }
+    if (deductionRulesJson.present) {
+      map['deduction_rules_json'] = Variable<String>(deductionRulesJson.value);
+    }
+    if (periodStartDay.present) {
+      map['period_start_day'] = Variable<int>(periodStartDay.value);
+    }
+    if (roundingRuleJson.present) {
+      map['rounding_rule_json'] = Variable<String>(roundingRuleJson.value);
+    }
+    if (confirmedOnly.present) {
+      map['confirmed_only'] = Variable<int>(confirmedOnly.value);
+    }
+    if (effectiveStart.present) {
+      map['effective_start'] = Variable<String>(effectiveStart.value);
+    }
+    if (effectiveEnd.present) {
+      map['effective_end'] = Variable<String>(effectiveEnd.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('WageRulesCompanion(')
+          ..write('id: $id, ')
+          ..write('mode: $mode, ')
+          ..write('currency: $currency, ')
+          ..write('baseRateMinor: $baseRateMinor, ')
+          ..write('overtimeRatesJson: $overtimeRatesJson, ')
+          ..write('allowanceRulesJson: $allowanceRulesJson, ')
+          ..write('deductionRulesJson: $deductionRulesJson, ')
+          ..write('periodStartDay: $periodStartDay, ')
+          ..write('roundingRuleJson: $roundingRuleJson, ')
+          ..write('confirmedOnly: $confirmedOnly, ')
+          ..write('effectiveStart: $effectiveStart, ')
+          ..write('effectiveEnd: $effectiveEnd, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $PayrollPeriodsTable extends PayrollPeriods
+    with TableInfo<$PayrollPeriodsTable, PayrollPeriod> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $PayrollPeriodsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startDateMeta = const VerificationMeta(
+    'startDate',
+  );
+  @override
+  late final GeneratedColumn<String> startDate = GeneratedColumn<String>(
+    'start_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endDateMeta = const VerificationMeta(
+    'endDate',
+  );
+  @override
+  late final GeneratedColumn<String> endDate = GeneratedColumn<String>(
+    'end_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _calculatedMinorMeta = const VerificationMeta(
+    'calculatedMinor',
+  );
+  @override
+  late final GeneratedColumn<int> calculatedMinor = GeneratedColumn<int>(
+    'calculated_minor',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _confirmedMinorMeta = const VerificationMeta(
+    'confirmedMinor',
+  );
+  @override
+  late final GeneratedColumn<int> confirmedMinor = GeneratedColumn<int>(
+    'confirmed_minor',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _calculationSnapshotJsonMeta =
+      const VerificationMeta('calculationSnapshotJson');
+  @override
+  late final GeneratedColumn<String> calculationSnapshotJson =
+      GeneratedColumn<String>(
+        'calculation_snapshot_json',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _confirmedAtMeta = const VerificationMeta(
+    'confirmedAt',
+  );
+  @override
+  late final GeneratedColumn<int> confirmedAt = GeneratedColumn<int>(
+    'confirmed_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    startDate,
+    endDate,
+    status,
+    calculatedMinor,
+    confirmedMinor,
+    calculationSnapshotJson,
+    confirmedAt,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'payroll_periods';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<PayrollPeriod> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('start_date')) {
+      context.handle(
+        _startDateMeta,
+        startDate.isAcceptableOrUnknown(data['start_date']!, _startDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startDateMeta);
+    }
+    if (data.containsKey('end_date')) {
+      context.handle(
+        _endDateMeta,
+        endDate.isAcceptableOrUnknown(data['end_date']!, _endDateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_endDateMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('calculated_minor')) {
+      context.handle(
+        _calculatedMinorMeta,
+        calculatedMinor.isAcceptableOrUnknown(
+          data['calculated_minor']!,
+          _calculatedMinorMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_calculatedMinorMeta);
+    }
+    if (data.containsKey('confirmed_minor')) {
+      context.handle(
+        _confirmedMinorMeta,
+        confirmedMinor.isAcceptableOrUnknown(
+          data['confirmed_minor']!,
+          _confirmedMinorMeta,
+        ),
+      );
+    }
+    if (data.containsKey('calculation_snapshot_json')) {
+      context.handle(
+        _calculationSnapshotJsonMeta,
+        calculationSnapshotJson.isAcceptableOrUnknown(
+          data['calculation_snapshot_json']!,
+          _calculationSnapshotJsonMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_calculationSnapshotJsonMeta);
+    }
+    if (data.containsKey('confirmed_at')) {
+      context.handle(
+        _confirmedAtMeta,
+        confirmedAt.isAcceptableOrUnknown(
+          data['confirmed_at']!,
+          _confirmedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  List<Set<GeneratedColumn>> get uniqueKeys => [
+    {startDate, endDate},
+  ];
+  @override
+  PayrollPeriod map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return PayrollPeriod(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      startDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}start_date'],
+      )!,
+      endDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}end_date'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      calculatedMinor: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}calculated_minor'],
+      )!,
+      confirmedMinor: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}confirmed_minor'],
+      ),
+      calculationSnapshotJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}calculation_snapshot_json'],
+      )!,
+      confirmedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}confirmed_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $PayrollPeriodsTable createAlias(String alias) {
+    return $PayrollPeriodsTable(attachedDatabase, alias);
+  }
+}
+
+class PayrollPeriod extends DataClass implements Insertable<PayrollPeriod> {
+  final String id;
+  final String startDate;
+  final String endDate;
+  final String status;
+  final int calculatedMinor;
+  final int? confirmedMinor;
+  final String calculationSnapshotJson;
+  final int? confirmedAt;
+  final int createdAt;
+  final int updatedAt;
+  const PayrollPeriod({
+    required this.id,
+    required this.startDate,
+    required this.endDate,
+    required this.status,
+    required this.calculatedMinor,
+    this.confirmedMinor,
+    required this.calculationSnapshotJson,
+    this.confirmedAt,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['start_date'] = Variable<String>(startDate);
+    map['end_date'] = Variable<String>(endDate);
+    map['status'] = Variable<String>(status);
+    map['calculated_minor'] = Variable<int>(calculatedMinor);
+    if (!nullToAbsent || confirmedMinor != null) {
+      map['confirmed_minor'] = Variable<int>(confirmedMinor);
+    }
+    map['calculation_snapshot_json'] = Variable<String>(
+      calculationSnapshotJson,
+    );
+    if (!nullToAbsent || confirmedAt != null) {
+      map['confirmed_at'] = Variable<int>(confirmedAt);
+    }
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    return map;
+  }
+
+  PayrollPeriodsCompanion toCompanion(bool nullToAbsent) {
+    return PayrollPeriodsCompanion(
+      id: Value(id),
+      startDate: Value(startDate),
+      endDate: Value(endDate),
+      status: Value(status),
+      calculatedMinor: Value(calculatedMinor),
+      confirmedMinor: confirmedMinor == null && nullToAbsent
+          ? const Value.absent()
+          : Value(confirmedMinor),
+      calculationSnapshotJson: Value(calculationSnapshotJson),
+      confirmedAt: confirmedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(confirmedAt),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory PayrollPeriod.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return PayrollPeriod(
+      id: serializer.fromJson<String>(json['id']),
+      startDate: serializer.fromJson<String>(json['startDate']),
+      endDate: serializer.fromJson<String>(json['endDate']),
+      status: serializer.fromJson<String>(json['status']),
+      calculatedMinor: serializer.fromJson<int>(json['calculatedMinor']),
+      confirmedMinor: serializer.fromJson<int?>(json['confirmedMinor']),
+      calculationSnapshotJson: serializer.fromJson<String>(
+        json['calculationSnapshotJson'],
+      ),
+      confirmedAt: serializer.fromJson<int?>(json['confirmedAt']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'startDate': serializer.toJson<String>(startDate),
+      'endDate': serializer.toJson<String>(endDate),
+      'status': serializer.toJson<String>(status),
+      'calculatedMinor': serializer.toJson<int>(calculatedMinor),
+      'confirmedMinor': serializer.toJson<int?>(confirmedMinor),
+      'calculationSnapshotJson': serializer.toJson<String>(
+        calculationSnapshotJson,
+      ),
+      'confirmedAt': serializer.toJson<int?>(confirmedAt),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+    };
+  }
+
+  PayrollPeriod copyWith({
+    String? id,
+    String? startDate,
+    String? endDate,
+    String? status,
+    int? calculatedMinor,
+    Value<int?> confirmedMinor = const Value.absent(),
+    String? calculationSnapshotJson,
+    Value<int?> confirmedAt = const Value.absent(),
+    int? createdAt,
+    int? updatedAt,
+  }) => PayrollPeriod(
+    id: id ?? this.id,
+    startDate: startDate ?? this.startDate,
+    endDate: endDate ?? this.endDate,
+    status: status ?? this.status,
+    calculatedMinor: calculatedMinor ?? this.calculatedMinor,
+    confirmedMinor: confirmedMinor.present
+        ? confirmedMinor.value
+        : this.confirmedMinor,
+    calculationSnapshotJson:
+        calculationSnapshotJson ?? this.calculationSnapshotJson,
+    confirmedAt: confirmedAt.present ? confirmedAt.value : this.confirmedAt,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  PayrollPeriod copyWithCompanion(PayrollPeriodsCompanion data) {
+    return PayrollPeriod(
+      id: data.id.present ? data.id.value : this.id,
+      startDate: data.startDate.present ? data.startDate.value : this.startDate,
+      endDate: data.endDate.present ? data.endDate.value : this.endDate,
+      status: data.status.present ? data.status.value : this.status,
+      calculatedMinor: data.calculatedMinor.present
+          ? data.calculatedMinor.value
+          : this.calculatedMinor,
+      confirmedMinor: data.confirmedMinor.present
+          ? data.confirmedMinor.value
+          : this.confirmedMinor,
+      calculationSnapshotJson: data.calculationSnapshotJson.present
+          ? data.calculationSnapshotJson.value
+          : this.calculationSnapshotJson,
+      confirmedAt: data.confirmedAt.present
+          ? data.confirmedAt.value
+          : this.confirmedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PayrollPeriod(')
+          ..write('id: $id, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('status: $status, ')
+          ..write('calculatedMinor: $calculatedMinor, ')
+          ..write('confirmedMinor: $confirmedMinor, ')
+          ..write('calculationSnapshotJson: $calculationSnapshotJson, ')
+          ..write('confirmedAt: $confirmedAt, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    startDate,
+    endDate,
+    status,
+    calculatedMinor,
+    confirmedMinor,
+    calculationSnapshotJson,
+    confirmedAt,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is PayrollPeriod &&
+          other.id == this.id &&
+          other.startDate == this.startDate &&
+          other.endDate == this.endDate &&
+          other.status == this.status &&
+          other.calculatedMinor == this.calculatedMinor &&
+          other.confirmedMinor == this.confirmedMinor &&
+          other.calculationSnapshotJson == this.calculationSnapshotJson &&
+          other.confirmedAt == this.confirmedAt &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class PayrollPeriodsCompanion extends UpdateCompanion<PayrollPeriod> {
+  final Value<String> id;
+  final Value<String> startDate;
+  final Value<String> endDate;
+  final Value<String> status;
+  final Value<int> calculatedMinor;
+  final Value<int?> confirmedMinor;
+  final Value<String> calculationSnapshotJson;
+  final Value<int?> confirmedAt;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int> rowid;
+  const PayrollPeriodsCompanion({
+    this.id = const Value.absent(),
+    this.startDate = const Value.absent(),
+    this.endDate = const Value.absent(),
+    this.status = const Value.absent(),
+    this.calculatedMinor = const Value.absent(),
+    this.confirmedMinor = const Value.absent(),
+    this.calculationSnapshotJson = const Value.absent(),
+    this.confirmedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  PayrollPeriodsCompanion.insert({
+    required String id,
+    required String startDate,
+    required String endDate,
+    required String status,
+    required int calculatedMinor,
+    this.confirmedMinor = const Value.absent(),
+    required String calculationSnapshotJson,
+    this.confirmedAt = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       startDate = Value(startDate),
+       endDate = Value(endDate),
+       status = Value(status),
+       calculatedMinor = Value(calculatedMinor),
+       calculationSnapshotJson = Value(calculationSnapshotJson),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<PayrollPeriod> custom({
+    Expression<String>? id,
+    Expression<String>? startDate,
+    Expression<String>? endDate,
+    Expression<String>? status,
+    Expression<int>? calculatedMinor,
+    Expression<int>? confirmedMinor,
+    Expression<String>? calculationSnapshotJson,
+    Expression<int>? confirmedAt,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startDate != null) 'start_date': startDate,
+      if (endDate != null) 'end_date': endDate,
+      if (status != null) 'status': status,
+      if (calculatedMinor != null) 'calculated_minor': calculatedMinor,
+      if (confirmedMinor != null) 'confirmed_minor': confirmedMinor,
+      if (calculationSnapshotJson != null)
+        'calculation_snapshot_json': calculationSnapshotJson,
+      if (confirmedAt != null) 'confirmed_at': confirmedAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  PayrollPeriodsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? startDate,
+    Value<String>? endDate,
+    Value<String>? status,
+    Value<int>? calculatedMinor,
+    Value<int?>? confirmedMinor,
+    Value<String>? calculationSnapshotJson,
+    Value<int?>? confirmedAt,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return PayrollPeriodsCompanion(
+      id: id ?? this.id,
+      startDate: startDate ?? this.startDate,
+      endDate: endDate ?? this.endDate,
+      status: status ?? this.status,
+      calculatedMinor: calculatedMinor ?? this.calculatedMinor,
+      confirmedMinor: confirmedMinor ?? this.confirmedMinor,
+      calculationSnapshotJson:
+          calculationSnapshotJson ?? this.calculationSnapshotJson,
+      confirmedAt: confirmedAt ?? this.confirmedAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (startDate.present) {
+      map['start_date'] = Variable<String>(startDate.value);
+    }
+    if (endDate.present) {
+      map['end_date'] = Variable<String>(endDate.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (calculatedMinor.present) {
+      map['calculated_minor'] = Variable<int>(calculatedMinor.value);
+    }
+    if (confirmedMinor.present) {
+      map['confirmed_minor'] = Variable<int>(confirmedMinor.value);
+    }
+    if (calculationSnapshotJson.present) {
+      map['calculation_snapshot_json'] = Variable<String>(
+        calculationSnapshotJson.value,
+      );
+    }
+    if (confirmedAt.present) {
+      map['confirmed_at'] = Variable<int>(confirmedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('PayrollPeriodsCompanion(')
+          ..write('id: $id, ')
+          ..write('startDate: $startDate, ')
+          ..write('endDate: $endDate, ')
+          ..write('status: $status, ')
+          ..write('calculatedMinor: $calculatedMinor, ')
+          ..write('confirmedMinor: $confirmedMinor, ')
+          ..write('calculationSnapshotJson: $calculationSnapshotJson, ')
+          ..write('confirmedAt: $confirmedAt, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -6975,6 +9942,11 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ShiftAlarmTemplatesTable shiftAlarmTemplates =
       $ShiftAlarmTemplatesTable(this);
   late final $AlarmInstancesTable alarmInstances = $AlarmInstancesTable(this);
+  late final $AttendanceRecordsTable attendanceRecords =
+      $AttendanceRecordsTable(this);
+  late final $LeaveRecordsTable leaveRecords = $LeaveRecordsTable(this);
+  late final $WageRulesTable wageRules = $WageRulesTable(this);
+  late final $PayrollPeriodsTable payrollPeriods = $PayrollPeriodsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -6991,6 +9963,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     alarmTemplates,
     shiftAlarmTemplates,
     alarmInstances,
+    attendanceRecords,
+    leaveRecords,
+    wageRules,
+    payrollPeriods,
   ];
 }
 
@@ -11262,6 +14238,1402 @@ typedef $$AlarmInstancesTableProcessedTableManager =
       AlarmInstance,
       PrefetchHooks Function({bool templateId})
     >;
+typedef $$AttendanceRecordsTableCreateCompanionBuilder =
+    AttendanceRecordsCompanion Function({
+      required String id,
+      required String workDate,
+      Value<int?> clockInAt,
+      Value<int?> clockOutAt,
+      required int unpaidBreakMinutes,
+      required String source,
+      required String status,
+      Value<String?> editReason,
+      Value<String?> note,
+      required String createdTimezone,
+      Value<int> confirmed,
+      required int createdAt,
+      required int updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$AttendanceRecordsTableUpdateCompanionBuilder =
+    AttendanceRecordsCompanion Function({
+      Value<String> id,
+      Value<String> workDate,
+      Value<int?> clockInAt,
+      Value<int?> clockOutAt,
+      Value<int> unpaidBreakMinutes,
+      Value<String> source,
+      Value<String> status,
+      Value<String?> editReason,
+      Value<String?> note,
+      Value<String> createdTimezone,
+      Value<int> confirmed,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$AttendanceRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $AttendanceRecordsTable> {
+  $$AttendanceRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get workDate => $composableBuilder(
+    column: $table.workDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get clockInAt => $composableBuilder(
+    column: $table.clockInAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get clockOutAt => $composableBuilder(
+    column: $table.clockOutAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get unpaidBreakMinutes => $composableBuilder(
+    column: $table.unpaidBreakMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get editReason => $composableBuilder(
+    column: $table.editReason,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get createdTimezone => $composableBuilder(
+    column: $table.createdTimezone,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get confirmed => $composableBuilder(
+    column: $table.confirmed,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AttendanceRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $AttendanceRecordsTable> {
+  $$AttendanceRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get workDate => $composableBuilder(
+    column: $table.workDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get clockInAt => $composableBuilder(
+    column: $table.clockInAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get clockOutAt => $composableBuilder(
+    column: $table.clockOutAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get unpaidBreakMinutes => $composableBuilder(
+    column: $table.unpaidBreakMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get source => $composableBuilder(
+    column: $table.source,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get editReason => $composableBuilder(
+    column: $table.editReason,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get createdTimezone => $composableBuilder(
+    column: $table.createdTimezone,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get confirmed => $composableBuilder(
+    column: $table.confirmed,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AttendanceRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AttendanceRecordsTable> {
+  $$AttendanceRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get workDate =>
+      $composableBuilder(column: $table.workDate, builder: (column) => column);
+
+  GeneratedColumn<int> get clockInAt =>
+      $composableBuilder(column: $table.clockInAt, builder: (column) => column);
+
+  GeneratedColumn<int> get clockOutAt => $composableBuilder(
+    column: $table.clockOutAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get unpaidBreakMinutes => $composableBuilder(
+    column: $table.unpaidBreakMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get editReason => $composableBuilder(
+    column: $table.editReason,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<String> get createdTimezone => $composableBuilder(
+    column: $table.createdTimezone,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get confirmed =>
+      $composableBuilder(column: $table.confirmed, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$AttendanceRecordsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AttendanceRecordsTable,
+          AttendanceRecord,
+          $$AttendanceRecordsTableFilterComposer,
+          $$AttendanceRecordsTableOrderingComposer,
+          $$AttendanceRecordsTableAnnotationComposer,
+          $$AttendanceRecordsTableCreateCompanionBuilder,
+          $$AttendanceRecordsTableUpdateCompanionBuilder,
+          (
+            AttendanceRecord,
+            BaseReferences<
+              _$AppDatabase,
+              $AttendanceRecordsTable,
+              AttendanceRecord
+            >,
+          ),
+          AttendanceRecord,
+          PrefetchHooks Function()
+        > {
+  $$AttendanceRecordsTableTableManager(
+    _$AppDatabase db,
+    $AttendanceRecordsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AttendanceRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AttendanceRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AttendanceRecordsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workDate = const Value.absent(),
+                Value<int?> clockInAt = const Value.absent(),
+                Value<int?> clockOutAt = const Value.absent(),
+                Value<int> unpaidBreakMinutes = const Value.absent(),
+                Value<String> source = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> editReason = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<String> createdTimezone = const Value.absent(),
+                Value<int> confirmed = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AttendanceRecordsCompanion(
+                id: id,
+                workDate: workDate,
+                clockInAt: clockInAt,
+                clockOutAt: clockOutAt,
+                unpaidBreakMinutes: unpaidBreakMinutes,
+                source: source,
+                status: status,
+                editReason: editReason,
+                note: note,
+                createdTimezone: createdTimezone,
+                confirmed: confirmed,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workDate,
+                Value<int?> clockInAt = const Value.absent(),
+                Value<int?> clockOutAt = const Value.absent(),
+                required int unpaidBreakMinutes,
+                required String source,
+                required String status,
+                Value<String?> editReason = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                required String createdTimezone,
+                Value<int> confirmed = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AttendanceRecordsCompanion.insert(
+                id: id,
+                workDate: workDate,
+                clockInAt: clockInAt,
+                clockOutAt: clockOutAt,
+                unpaidBreakMinutes: unpaidBreakMinutes,
+                source: source,
+                status: status,
+                editReason: editReason,
+                note: note,
+                createdTimezone: createdTimezone,
+                confirmed: confirmed,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AttendanceRecordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AttendanceRecordsTable,
+      AttendanceRecord,
+      $$AttendanceRecordsTableFilterComposer,
+      $$AttendanceRecordsTableOrderingComposer,
+      $$AttendanceRecordsTableAnnotationComposer,
+      $$AttendanceRecordsTableCreateCompanionBuilder,
+      $$AttendanceRecordsTableUpdateCompanionBuilder,
+      (
+        AttendanceRecord,
+        BaseReferences<
+          _$AppDatabase,
+          $AttendanceRecordsTable,
+          AttendanceRecord
+        >,
+      ),
+      AttendanceRecord,
+      PrefetchHooks Function()
+    >;
+typedef $$LeaveRecordsTableCreateCompanionBuilder =
+    LeaveRecordsCompanion Function({
+      required String id,
+      required String workDate,
+      required String leaveType,
+      Value<int?> startAt,
+      Value<int?> endAt,
+      required int paid,
+      Value<int?> deductionMinor,
+      Value<String?> note,
+      required int createdAt,
+      required int updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$LeaveRecordsTableUpdateCompanionBuilder =
+    LeaveRecordsCompanion Function({
+      Value<String> id,
+      Value<String> workDate,
+      Value<String> leaveType,
+      Value<int?> startAt,
+      Value<int?> endAt,
+      Value<int> paid,
+      Value<int?> deductionMinor,
+      Value<String?> note,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$LeaveRecordsTableFilterComposer
+    extends Composer<_$AppDatabase, $LeaveRecordsTable> {
+  $$LeaveRecordsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get workDate => $composableBuilder(
+    column: $table.workDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get leaveType => $composableBuilder(
+    column: $table.leaveType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get startAt => $composableBuilder(
+    column: $table.startAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get endAt => $composableBuilder(
+    column: $table.endAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get paid => $composableBuilder(
+    column: $table.paid,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deductionMinor => $composableBuilder(
+    column: $table.deductionMinor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$LeaveRecordsTableOrderingComposer
+    extends Composer<_$AppDatabase, $LeaveRecordsTable> {
+  $$LeaveRecordsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get workDate => $composableBuilder(
+    column: $table.workDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get leaveType => $composableBuilder(
+    column: $table.leaveType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get startAt => $composableBuilder(
+    column: $table.startAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get endAt => $composableBuilder(
+    column: $table.endAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get paid => $composableBuilder(
+    column: $table.paid,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deductionMinor => $composableBuilder(
+    column: $table.deductionMinor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get note => $composableBuilder(
+    column: $table.note,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$LeaveRecordsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $LeaveRecordsTable> {
+  $$LeaveRecordsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get workDate =>
+      $composableBuilder(column: $table.workDate, builder: (column) => column);
+
+  GeneratedColumn<String> get leaveType =>
+      $composableBuilder(column: $table.leaveType, builder: (column) => column);
+
+  GeneratedColumn<int> get startAt =>
+      $composableBuilder(column: $table.startAt, builder: (column) => column);
+
+  GeneratedColumn<int> get endAt =>
+      $composableBuilder(column: $table.endAt, builder: (column) => column);
+
+  GeneratedColumn<int> get paid =>
+      $composableBuilder(column: $table.paid, builder: (column) => column);
+
+  GeneratedColumn<int> get deductionMinor => $composableBuilder(
+    column: $table.deductionMinor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get note =>
+      $composableBuilder(column: $table.note, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$LeaveRecordsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $LeaveRecordsTable,
+          LeaveRecord,
+          $$LeaveRecordsTableFilterComposer,
+          $$LeaveRecordsTableOrderingComposer,
+          $$LeaveRecordsTableAnnotationComposer,
+          $$LeaveRecordsTableCreateCompanionBuilder,
+          $$LeaveRecordsTableUpdateCompanionBuilder,
+          (
+            LeaveRecord,
+            BaseReferences<_$AppDatabase, $LeaveRecordsTable, LeaveRecord>,
+          ),
+          LeaveRecord,
+          PrefetchHooks Function()
+        > {
+  $$LeaveRecordsTableTableManager(_$AppDatabase db, $LeaveRecordsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$LeaveRecordsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$LeaveRecordsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$LeaveRecordsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> workDate = const Value.absent(),
+                Value<String> leaveType = const Value.absent(),
+                Value<int?> startAt = const Value.absent(),
+                Value<int?> endAt = const Value.absent(),
+                Value<int> paid = const Value.absent(),
+                Value<int?> deductionMinor = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LeaveRecordsCompanion(
+                id: id,
+                workDate: workDate,
+                leaveType: leaveType,
+                startAt: startAt,
+                endAt: endAt,
+                paid: paid,
+                deductionMinor: deductionMinor,
+                note: note,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String workDate,
+                required String leaveType,
+                Value<int?> startAt = const Value.absent(),
+                Value<int?> endAt = const Value.absent(),
+                required int paid,
+                Value<int?> deductionMinor = const Value.absent(),
+                Value<String?> note = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => LeaveRecordsCompanion.insert(
+                id: id,
+                workDate: workDate,
+                leaveType: leaveType,
+                startAt: startAt,
+                endAt: endAt,
+                paid: paid,
+                deductionMinor: deductionMinor,
+                note: note,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$LeaveRecordsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $LeaveRecordsTable,
+      LeaveRecord,
+      $$LeaveRecordsTableFilterComposer,
+      $$LeaveRecordsTableOrderingComposer,
+      $$LeaveRecordsTableAnnotationComposer,
+      $$LeaveRecordsTableCreateCompanionBuilder,
+      $$LeaveRecordsTableUpdateCompanionBuilder,
+      (
+        LeaveRecord,
+        BaseReferences<_$AppDatabase, $LeaveRecordsTable, LeaveRecord>,
+      ),
+      LeaveRecord,
+      PrefetchHooks Function()
+    >;
+typedef $$WageRulesTableCreateCompanionBuilder =
+    WageRulesCompanion Function({
+      required String id,
+      required String mode,
+      required String currency,
+      required int baseRateMinor,
+      required String overtimeRatesJson,
+      required String allowanceRulesJson,
+      required String deductionRulesJson,
+      required int periodStartDay,
+      required String roundingRuleJson,
+      Value<int> confirmedOnly,
+      required String effectiveStart,
+      Value<String?> effectiveEnd,
+      required int createdAt,
+      required int updatedAt,
+      Value<int> rowid,
+    });
+typedef $$WageRulesTableUpdateCompanionBuilder =
+    WageRulesCompanion Function({
+      Value<String> id,
+      Value<String> mode,
+      Value<String> currency,
+      Value<int> baseRateMinor,
+      Value<String> overtimeRatesJson,
+      Value<String> allowanceRulesJson,
+      Value<String> deductionRulesJson,
+      Value<int> periodStartDay,
+      Value<String> roundingRuleJson,
+      Value<int> confirmedOnly,
+      Value<String> effectiveStart,
+      Value<String?> effectiveEnd,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$WageRulesTableFilterComposer
+    extends Composer<_$AppDatabase, $WageRulesTable> {
+  $$WageRulesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get currency => $composableBuilder(
+    column: $table.currency,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get baseRateMinor => $composableBuilder(
+    column: $table.baseRateMinor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get overtimeRatesJson => $composableBuilder(
+    column: $table.overtimeRatesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get allowanceRulesJson => $composableBuilder(
+    column: $table.allowanceRulesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get deductionRulesJson => $composableBuilder(
+    column: $table.deductionRulesJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get periodStartDay => $composableBuilder(
+    column: $table.periodStartDay,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get roundingRuleJson => $composableBuilder(
+    column: $table.roundingRuleJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get confirmedOnly => $composableBuilder(
+    column: $table.confirmedOnly,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get effectiveStart => $composableBuilder(
+    column: $table.effectiveStart,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get effectiveEnd => $composableBuilder(
+    column: $table.effectiveEnd,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$WageRulesTableOrderingComposer
+    extends Composer<_$AppDatabase, $WageRulesTable> {
+  $$WageRulesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get currency => $composableBuilder(
+    column: $table.currency,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get baseRateMinor => $composableBuilder(
+    column: $table.baseRateMinor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get overtimeRatesJson => $composableBuilder(
+    column: $table.overtimeRatesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get allowanceRulesJson => $composableBuilder(
+    column: $table.allowanceRulesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get deductionRulesJson => $composableBuilder(
+    column: $table.deductionRulesJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get periodStartDay => $composableBuilder(
+    column: $table.periodStartDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get roundingRuleJson => $composableBuilder(
+    column: $table.roundingRuleJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get confirmedOnly => $composableBuilder(
+    column: $table.confirmedOnly,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get effectiveStart => $composableBuilder(
+    column: $table.effectiveStart,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get effectiveEnd => $composableBuilder(
+    column: $table.effectiveEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$WageRulesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $WageRulesTable> {
+  $$WageRulesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => column);
+
+  GeneratedColumn<String> get currency =>
+      $composableBuilder(column: $table.currency, builder: (column) => column);
+
+  GeneratedColumn<int> get baseRateMinor => $composableBuilder(
+    column: $table.baseRateMinor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get overtimeRatesJson => $composableBuilder(
+    column: $table.overtimeRatesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get allowanceRulesJson => $composableBuilder(
+    column: $table.allowanceRulesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get deductionRulesJson => $composableBuilder(
+    column: $table.deductionRulesJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get periodStartDay => $composableBuilder(
+    column: $table.periodStartDay,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get roundingRuleJson => $composableBuilder(
+    column: $table.roundingRuleJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get confirmedOnly => $composableBuilder(
+    column: $table.confirmedOnly,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get effectiveStart => $composableBuilder(
+    column: $table.effectiveStart,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get effectiveEnd => $composableBuilder(
+    column: $table.effectiveEnd,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$WageRulesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $WageRulesTable,
+          WageRule,
+          $$WageRulesTableFilterComposer,
+          $$WageRulesTableOrderingComposer,
+          $$WageRulesTableAnnotationComposer,
+          $$WageRulesTableCreateCompanionBuilder,
+          $$WageRulesTableUpdateCompanionBuilder,
+          (WageRule, BaseReferences<_$AppDatabase, $WageRulesTable, WageRule>),
+          WageRule,
+          PrefetchHooks Function()
+        > {
+  $$WageRulesTableTableManager(_$AppDatabase db, $WageRulesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$WageRulesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WageRulesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WageRulesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> mode = const Value.absent(),
+                Value<String> currency = const Value.absent(),
+                Value<int> baseRateMinor = const Value.absent(),
+                Value<String> overtimeRatesJson = const Value.absent(),
+                Value<String> allowanceRulesJson = const Value.absent(),
+                Value<String> deductionRulesJson = const Value.absent(),
+                Value<int> periodStartDay = const Value.absent(),
+                Value<String> roundingRuleJson = const Value.absent(),
+                Value<int> confirmedOnly = const Value.absent(),
+                Value<String> effectiveStart = const Value.absent(),
+                Value<String?> effectiveEnd = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => WageRulesCompanion(
+                id: id,
+                mode: mode,
+                currency: currency,
+                baseRateMinor: baseRateMinor,
+                overtimeRatesJson: overtimeRatesJson,
+                allowanceRulesJson: allowanceRulesJson,
+                deductionRulesJson: deductionRulesJson,
+                periodStartDay: periodStartDay,
+                roundingRuleJson: roundingRuleJson,
+                confirmedOnly: confirmedOnly,
+                effectiveStart: effectiveStart,
+                effectiveEnd: effectiveEnd,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String mode,
+                required String currency,
+                required int baseRateMinor,
+                required String overtimeRatesJson,
+                required String allowanceRulesJson,
+                required String deductionRulesJson,
+                required int periodStartDay,
+                required String roundingRuleJson,
+                Value<int> confirmedOnly = const Value.absent(),
+                required String effectiveStart,
+                Value<String?> effectiveEnd = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => WageRulesCompanion.insert(
+                id: id,
+                mode: mode,
+                currency: currency,
+                baseRateMinor: baseRateMinor,
+                overtimeRatesJson: overtimeRatesJson,
+                allowanceRulesJson: allowanceRulesJson,
+                deductionRulesJson: deductionRulesJson,
+                periodStartDay: periodStartDay,
+                roundingRuleJson: roundingRuleJson,
+                confirmedOnly: confirmedOnly,
+                effectiveStart: effectiveStart,
+                effectiveEnd: effectiveEnd,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$WageRulesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $WageRulesTable,
+      WageRule,
+      $$WageRulesTableFilterComposer,
+      $$WageRulesTableOrderingComposer,
+      $$WageRulesTableAnnotationComposer,
+      $$WageRulesTableCreateCompanionBuilder,
+      $$WageRulesTableUpdateCompanionBuilder,
+      (WageRule, BaseReferences<_$AppDatabase, $WageRulesTable, WageRule>),
+      WageRule,
+      PrefetchHooks Function()
+    >;
+typedef $$PayrollPeriodsTableCreateCompanionBuilder =
+    PayrollPeriodsCompanion Function({
+      required String id,
+      required String startDate,
+      required String endDate,
+      required String status,
+      required int calculatedMinor,
+      Value<int?> confirmedMinor,
+      required String calculationSnapshotJson,
+      Value<int?> confirmedAt,
+      required int createdAt,
+      required int updatedAt,
+      Value<int> rowid,
+    });
+typedef $$PayrollPeriodsTableUpdateCompanionBuilder =
+    PayrollPeriodsCompanion Function({
+      Value<String> id,
+      Value<String> startDate,
+      Value<String> endDate,
+      Value<String> status,
+      Value<int> calculatedMinor,
+      Value<int?> confirmedMinor,
+      Value<String> calculationSnapshotJson,
+      Value<int?> confirmedAt,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$PayrollPeriodsTableFilterComposer
+    extends Composer<_$AppDatabase, $PayrollPeriodsTable> {
+  $$PayrollPeriodsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get calculatedMinor => $composableBuilder(
+    column: $table.calculatedMinor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get confirmedMinor => $composableBuilder(
+    column: $table.confirmedMinor,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get calculationSnapshotJson => $composableBuilder(
+    column: $table.calculationSnapshotJson,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get confirmedAt => $composableBuilder(
+    column: $table.confirmedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$PayrollPeriodsTableOrderingComposer
+    extends Composer<_$AppDatabase, $PayrollPeriodsTable> {
+  $$PayrollPeriodsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get startDate => $composableBuilder(
+    column: $table.startDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get endDate => $composableBuilder(
+    column: $table.endDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get calculatedMinor => $composableBuilder(
+    column: $table.calculatedMinor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get confirmedMinor => $composableBuilder(
+    column: $table.confirmedMinor,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get calculationSnapshotJson => $composableBuilder(
+    column: $table.calculationSnapshotJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get confirmedAt => $composableBuilder(
+    column: $table.confirmedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$PayrollPeriodsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $PayrollPeriodsTable> {
+  $$PayrollPeriodsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get startDate =>
+      $composableBuilder(column: $table.startDate, builder: (column) => column);
+
+  GeneratedColumn<String> get endDate =>
+      $composableBuilder(column: $table.endDate, builder: (column) => column);
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<int> get calculatedMinor => $composableBuilder(
+    column: $table.calculatedMinor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get confirmedMinor => $composableBuilder(
+    column: $table.confirmedMinor,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get calculationSnapshotJson => $composableBuilder(
+    column: $table.calculationSnapshotJson,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get confirmedAt => $composableBuilder(
+    column: $table.confirmedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$PayrollPeriodsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $PayrollPeriodsTable,
+          PayrollPeriod,
+          $$PayrollPeriodsTableFilterComposer,
+          $$PayrollPeriodsTableOrderingComposer,
+          $$PayrollPeriodsTableAnnotationComposer,
+          $$PayrollPeriodsTableCreateCompanionBuilder,
+          $$PayrollPeriodsTableUpdateCompanionBuilder,
+          (
+            PayrollPeriod,
+            BaseReferences<_$AppDatabase, $PayrollPeriodsTable, PayrollPeriod>,
+          ),
+          PayrollPeriod,
+          PrefetchHooks Function()
+        > {
+  $$PayrollPeriodsTableTableManager(
+    _$AppDatabase db,
+    $PayrollPeriodsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$PayrollPeriodsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$PayrollPeriodsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$PayrollPeriodsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> startDate = const Value.absent(),
+                Value<String> endDate = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<int> calculatedMinor = const Value.absent(),
+                Value<int?> confirmedMinor = const Value.absent(),
+                Value<String> calculationSnapshotJson = const Value.absent(),
+                Value<int?> confirmedAt = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => PayrollPeriodsCompanion(
+                id: id,
+                startDate: startDate,
+                endDate: endDate,
+                status: status,
+                calculatedMinor: calculatedMinor,
+                confirmedMinor: confirmedMinor,
+                calculationSnapshotJson: calculationSnapshotJson,
+                confirmedAt: confirmedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String startDate,
+                required String endDate,
+                required String status,
+                required int calculatedMinor,
+                Value<int?> confirmedMinor = const Value.absent(),
+                required String calculationSnapshotJson,
+                Value<int?> confirmedAt = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => PayrollPeriodsCompanion.insert(
+                id: id,
+                startDate: startDate,
+                endDate: endDate,
+                status: status,
+                calculatedMinor: calculatedMinor,
+                confirmedMinor: confirmedMinor,
+                calculationSnapshotJson: calculationSnapshotJson,
+                confirmedAt: confirmedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$PayrollPeriodsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $PayrollPeriodsTable,
+      PayrollPeriod,
+      $$PayrollPeriodsTableFilterComposer,
+      $$PayrollPeriodsTableOrderingComposer,
+      $$PayrollPeriodsTableAnnotationComposer,
+      $$PayrollPeriodsTableCreateCompanionBuilder,
+      $$PayrollPeriodsTableUpdateCompanionBuilder,
+      (
+        PayrollPeriod,
+        BaseReferences<_$AppDatabase, $PayrollPeriodsTable, PayrollPeriod>,
+      ),
+      PayrollPeriod,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -11288,4 +15660,12 @@ class $AppDatabaseManager {
       $$ShiftAlarmTemplatesTableTableManager(_db, _db.shiftAlarmTemplates);
   $$AlarmInstancesTableTableManager get alarmInstances =>
       $$AlarmInstancesTableTableManager(_db, _db.alarmInstances);
+  $$AttendanceRecordsTableTableManager get attendanceRecords =>
+      $$AttendanceRecordsTableTableManager(_db, _db.attendanceRecords);
+  $$LeaveRecordsTableTableManager get leaveRecords =>
+      $$LeaveRecordsTableTableManager(_db, _db.leaveRecords);
+  $$WageRulesTableTableManager get wageRules =>
+      $$WageRulesTableTableManager(_db, _db.wageRules);
+  $$PayrollPeriodsTableTableManager get payrollPeriods =>
+      $$PayrollPeriodsTableTableManager(_db, _db.payrollPeriods);
 }

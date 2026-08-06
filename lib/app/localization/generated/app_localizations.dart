@@ -98,6 +98,372 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
+  /// No description provided for @homeTodayShift.
+  ///
+  /// In zh, this message translates to:
+  /// **'今日班次'**
+  String get homeTodayShift;
+
+  /// No description provided for @homeRestToday.
+  ///
+  /// In zh, this message translates to:
+  /// **'今天休息'**
+  String get homeRestToday;
+
+  /// No description provided for @punchIn.
+  ///
+  /// In zh, this message translates to:
+  /// **'上班打卡'**
+  String get punchIn;
+
+  /// No description provided for @punchOut.
+  ///
+  /// In zh, this message translates to:
+  /// **'下班打卡'**
+  String get punchOut;
+
+  /// No description provided for @missingPunch.
+  ///
+  /// In zh, this message translates to:
+  /// **'缺卡'**
+  String get missingPunch;
+
+  /// No description provided for @nextAlarm.
+  ///
+  /// In zh, this message translates to:
+  /// **'下一个闹钟'**
+  String get nextAlarm;
+
+  /// No description provided for @monthlyEstimatedIncome.
+  ///
+  /// In zh, this message translates to:
+  /// **'本月预计收入'**
+  String get monthlyEstimatedIncome;
+
+  /// No description provided for @attendanceDays.
+  ///
+  /// In zh, this message translates to:
+  /// **'出勤天数'**
+  String get attendanceDays;
+
+  /// No description provided for @actualHours.
+  ///
+  /// In zh, this message translates to:
+  /// **'实际工时'**
+  String get actualHours;
+
+  /// No description provided for @overtimeHours.
+  ///
+  /// In zh, this message translates to:
+  /// **'加班工时'**
+  String get overtimeHours;
+
+  /// No description provided for @futureSevenDays.
+  ///
+  /// In zh, this message translates to:
+  /// **'未来 7 天'**
+  String get futureSevenDays;
+
+  /// No description provided for @setupWageRule.
+  ///
+  /// In zh, this message translates to:
+  /// **'设置工资规则'**
+  String get setupWageRule;
+
+  /// No description provided for @attendanceTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'出勤记录'**
+  String get attendanceTitle;
+
+  /// No description provided for @addAttendance.
+  ///
+  /// In zh, this message translates to:
+  /// **'补录出勤'**
+  String get addAttendance;
+
+  /// No description provided for @clockInTime.
+  ///
+  /// In zh, this message translates to:
+  /// **'上班时间'**
+  String get clockInTime;
+
+  /// No description provided for @clockOutTime.
+  ///
+  /// In zh, this message translates to:
+  /// **'下班时间'**
+  String get clockOutTime;
+
+  /// No description provided for @unpaidBreak.
+  ///
+  /// In zh, this message translates to:
+  /// **'不计薪休息'**
+  String get unpaidBreak;
+
+  /// No description provided for @rawWorkMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'原始实际分钟'**
+  String get rawWorkMinutes;
+
+  /// No description provided for @payableWorkMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'取整后计薪分钟'**
+  String get payableWorkMinutes;
+
+  /// No description provided for @normalWorkMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'正常工时分钟'**
+  String get normalWorkMinutes;
+
+  /// No description provided for @overtimeWorkMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'加班分钟'**
+  String get overtimeWorkMinutes;
+
+  /// No description provided for @attendanceConfirmed.
+  ///
+  /// In zh, this message translates to:
+  /// **'已确认出勤'**
+  String get attendanceConfirmed;
+
+  /// No description provided for @attendanceReason.
+  ///
+  /// In zh, this message translates to:
+  /// **'修改原因'**
+  String get attendanceReason;
+
+  /// No description provided for @attendanceNote.
+  ///
+  /// In zh, this message translates to:
+  /// **'备注（最多 500 字）'**
+  String get attendanceNote;
+
+  /// No description provided for @payrollRecalculationWarning.
+  ///
+  /// In zh, this message translates to:
+  /// **'该日期属于已结算周期，工资需要重新计算。'**
+  String get payrollRecalculationWarning;
+
+  /// No description provided for @noAttendanceRecords.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂无出勤记录'**
+  String get noAttendanceRecords;
+
+  /// No description provided for @deleteRecord.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除记录'**
+  String get deleteRecord;
+
+  /// No description provided for @wageSettingsTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'工资规则'**
+  String get wageSettingsTitle;
+
+  /// No description provided for @wageModeHourly.
+  ///
+  /// In zh, this message translates to:
+  /// **'时薪'**
+  String get wageModeHourly;
+
+  /// No description provided for @wageModeDaily.
+  ///
+  /// In zh, this message translates to:
+  /// **'日薪'**
+  String get wageModeDaily;
+
+  /// No description provided for @wageModeMonthly.
+  ///
+  /// In zh, this message translates to:
+  /// **'月薪'**
+  String get wageModeMonthly;
+
+  /// No description provided for @baseRate.
+  ///
+  /// In zh, this message translates to:
+  /// **'基本金额（元）'**
+  String get baseRate;
+
+  /// No description provided for @currencyCode.
+  ///
+  /// In zh, this message translates to:
+  /// **'币种'**
+  String get currencyCode;
+
+  /// No description provided for @workdayOvertimeRate.
+  ///
+  /// In zh, this message translates to:
+  /// **'工作日加班倍率'**
+  String get workdayOvertimeRate;
+
+  /// No description provided for @restDayOvertimeRate.
+  ///
+  /// In zh, this message translates to:
+  /// **'休息日加班倍率'**
+  String get restDayOvertimeRate;
+
+  /// No description provided for @holidayOvertimeRate.
+  ///
+  /// In zh, this message translates to:
+  /// **'法定节假日加班倍率'**
+  String get holidayOvertimeRate;
+
+  /// No description provided for @payPeriodStartDay.
+  ///
+  /// In zh, this message translates to:
+  /// **'计薪周期起始日（1-28）'**
+  String get payPeriodStartDay;
+
+  /// No description provided for @roundingIncrement.
+  ///
+  /// In zh, this message translates to:
+  /// **'工时取整分钟'**
+  String get roundingIncrement;
+
+  /// No description provided for @confirmedOnly.
+  ///
+  /// In zh, this message translates to:
+  /// **'仅计算已确认出勤'**
+  String get confirmedOnly;
+
+  /// No description provided for @wageDisclaimer.
+  ///
+  /// In zh, this message translates to:
+  /// **'工资结果仅为个人预估，不替代企业工资条或法定核算。'**
+  String get wageDisclaimer;
+
+  /// No description provided for @wageRuleSaved.
+  ///
+  /// In zh, this message translates to:
+  /// **'工资规则已保存'**
+  String get wageRuleSaved;
+
+  /// No description provided for @statisticsThisWeek.
+  ///
+  /// In zh, this message translates to:
+  /// **'本周'**
+  String get statisticsThisWeek;
+
+  /// No description provided for @statisticsThisMonth.
+  ///
+  /// In zh, this message translates to:
+  /// **'本月'**
+  String get statisticsThisMonth;
+
+  /// No description provided for @statisticsLastMonth.
+  ///
+  /// In zh, this message translates to:
+  /// **'上月'**
+  String get statisticsLastMonth;
+
+  /// No description provided for @expectedAttendance.
+  ///
+  /// In zh, this message translates to:
+  /// **'应出勤'**
+  String get expectedAttendance;
+
+  /// No description provided for @actualAttendance.
+  ///
+  /// In zh, this message translates to:
+  /// **'实际出勤'**
+  String get actualAttendance;
+
+  /// No description provided for @plannedHours.
+  ///
+  /// In zh, this message translates to:
+  /// **'计划工时'**
+  String get plannedHours;
+
+  /// No description provided for @normalHours.
+  ///
+  /// In zh, this message translates to:
+  /// **'正常工时'**
+  String get normalHours;
+
+  /// No description provided for @lateCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'迟到'**
+  String get lateCount;
+
+  /// No description provided for @earlyLeaveCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'早退'**
+  String get earlyLeaveCount;
+
+  /// No description provided for @exportCsv.
+  ///
+  /// In zh, this message translates to:
+  /// **'导出 CSV'**
+  String get exportCsv;
+
+  /// No description provided for @csvExported.
+  ///
+  /// In zh, this message translates to:
+  /// **'CSV 已保存'**
+  String get csvExported;
+
+  /// No description provided for @payrollBreakdown.
+  ///
+  /// In zh, this message translates to:
+  /// **'工资明细'**
+  String get payrollBreakdown;
+
+  /// No description provided for @basePay.
+  ///
+  /// In zh, this message translates to:
+  /// **'基本工资'**
+  String get basePay;
+
+  /// No description provided for @normalHoursPay.
+  ///
+  /// In zh, this message translates to:
+  /// **'正常工时工资'**
+  String get normalHoursPay;
+
+  /// No description provided for @overtimePay.
+  ///
+  /// In zh, this message translates to:
+  /// **'加班工资'**
+  String get overtimePay;
+
+  /// No description provided for @estimatedTotal.
+  ///
+  /// In zh, this message translates to:
+  /// **'预估合计'**
+  String get estimatedTotal;
+
+  /// No description provided for @settlePayroll.
+  ///
+  /// In zh, this message translates to:
+  /// **'确认结算'**
+  String get settlePayroll;
+
+  /// No description provided for @actualPaidAmount.
+  ///
+  /// In zh, this message translates to:
+  /// **'实发金额（元）'**
+  String get actualPaidAmount;
+
+  /// No description provided for @estimatedDifference.
+  ///
+  /// In zh, this message translates to:
+  /// **'与预估差额'**
+  String get estimatedDifference;
+
+  /// No description provided for @numericDetails.
+  ///
+  /// In zh, this message translates to:
+  /// **'每日数值明细'**
+  String get numericDetails;
+
   /// No description provided for @alarmSettingsTitle.
   ///
   /// In zh, this message translates to:

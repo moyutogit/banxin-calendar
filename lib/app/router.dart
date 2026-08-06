@@ -12,6 +12,7 @@ import 'package:banxin_calendar/features/schedule/presentation/schedule_setup_pa
 import 'package:banxin_calendar/features/schedule/presentation/shift_templates_page.dart';
 import 'package:banxin_calendar/features/settings/presentation/settings_page.dart';
 import 'package:banxin_calendar/features/statistics/presentation/statistics_page.dart';
+import 'package:banxin_calendar/features/wage/presentation/wage_settings_page.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -93,6 +94,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings/alarm',
         builder: (_, _) => const AlarmSettingsPage(),
+      ),
+      GoRoute(
+        path: '/settings/wage',
+        builder: (_, _) => const WageSettingsPage(),
       ),
     ],
   );

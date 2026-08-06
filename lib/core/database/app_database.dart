@@ -3,15 +3,19 @@ import 'dart:io';
 import 'package:banxin_calendar/core/database/migrations/schema_versions.dart';
 import 'package:banxin_calendar/core/database/tables/alarm_instances.dart';
 import 'package:banxin_calendar/core/database/tables/alarm_templates.dart';
+import 'package:banxin_calendar/core/database/tables/attendance_records.dart';
 import 'package:banxin_calendar/core/database/tables/calendar_day_cache.dart';
 import 'package:banxin_calendar/core/database/tables/change_log.dart';
 import 'package:banxin_calendar/core/database/tables/database_metadata.dart';
 import 'package:banxin_calendar/core/database/tables/day_overrides.dart';
 import 'package:banxin_calendar/core/database/tables/holiday_records.dart';
+import 'package:banxin_calendar/core/database/tables/leave_records.dart';
+import 'package:banxin_calendar/core/database/tables/payroll_periods.dart';
 import 'package:banxin_calendar/core/database/tables/schedule_rules.dart';
 import 'package:banxin_calendar/core/database/tables/shift_alarm_templates.dart';
 import 'package:banxin_calendar/core/database/tables/shift_templates.dart';
 import 'package:banxin_calendar/core/database/tables/user_settings.dart';
+import 'package:banxin_calendar/core/database/tables/wage_rules.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path/path.dart' as path;
@@ -32,6 +36,10 @@ part 'app_database.g.dart';
     AlarmTemplates,
     ShiftAlarmTemplates,
     AlarmInstances,
+    AttendanceRecords,
+    LeaveRecords,
+    WageRules,
+    PayrollPeriods,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -48,6 +56,7 @@ class AppDatabase extends _$AppDatabase {
       await migrator.createAll();
       await _createScheduleIndexes();
       await _createAlarmIndexes();
+      await _createWorkforceIndexes();
     },
     onUpgrade: _upgrade,
     beforeOpen: (details) async {
@@ -87,6 +96,14 @@ class AppDatabase extends _$AppDatabase {
       await migrator.createTable(alarmInstances);
       await _createAlarmIndexes();
     }
+
+    if (from < SchemaVersions.workforceFoundation) {
+      await migrator.createTable(attendanceRecords);
+      await migrator.createTable(leaveRecords);
+      await migrator.createTable(wageRules);
+      await migrator.createTable(payrollPeriods);
+      await _createWorkforceIndexes();
+    }
   }
 
   Future<void> _createScheduleIndexes() async {
@@ -122,6 +139,21 @@ class AppDatabase extends _$AppDatabase {
     await customStatement('''
       CREATE INDEX IF NOT EXISTS idx_alarm_instances_schedule_date
       ON alarm_instances(schedule_date)
+    ''');
+  }
+
+  Future<void> _createWorkforceIndexes() async {
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_attendance_work_date_deleted
+      ON attendance_records(work_date, deleted_at)
+    ''');
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_leave_work_date_deleted
+      ON leave_records(work_date, deleted_at)
+    ''');
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_wage_rules_effective
+      ON wage_rules(effective_start, effective_end)
     ''');
   }
 }

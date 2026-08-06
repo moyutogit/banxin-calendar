@@ -70,7 +70,11 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('工程骨架已就绪'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsOneWidget);
+    expect(find.byIcon(Icons.add), findsWidgets);
+    await tester.tap(find.text('统计'));
+    await tester.pumpAndSettle();
+    expect(find.byType(CustomPaint), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 
