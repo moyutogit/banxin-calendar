@@ -84,6 +84,62 @@ void main() {
     expect(stored.last.content, '这是流式回复。');
   });
 
+  testWidgets(
+    'keeps a visible persisted reply when a recurring-rule tool call ends without text',
+    (tester) async {
+      final fixture = await _AssistantFixture.create();
+      addTearDown(fixture.dispose);
+      await tester.pumpWidget(fixture.app);
+      await tester.pumpAndSettle();
+
+      const request = '帮我把双休改成大小周，本周是双休';
+      await tester.enterText(find.byType(TextField), request);
+      await tester.tap(find.byTooltip('发送'));
+      await tester.pump();
+
+      final firstResponse = await fixture.provider.nextResponse(tester);
+      firstResponse.add(const LlmReasoningDelta('需要尝试修改排班规则。'));
+      firstResponse.add(
+        const LlmToolCall(
+          id: 'schedule-change',
+          name: 'propose_schedule_change',
+          arguments: <String, Object?>{
+            'range': <String, Object?>{
+              'start': '2026-08-03',
+              'end': '2026-08-09',
+            },
+            'new_status': 'work',
+            'sync_alarms': true,
+          },
+        ),
+      );
+      firstResponse.add(const LlmCompleted());
+      await firstResponse.close();
+
+      final secondResponse = await fixture.provider.nextResponse(tester);
+      final toolResult = fixture.provider.requests[1].firstWhere(
+        (message) => message.role == LlmRole.tool,
+      );
+      expect(toolResult.content, contains('invalid_shift'));
+      secondResponse.add(const LlmReasoningDelta('现有工具不支持循环规则。'));
+      secondResponse.add(const LlmCompleted());
+      await secondResponse.close();
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('我没有修改排班'), findsOneWidget);
+      expect(find.textContaining('我的 → 排班规则'), findsOneWidget);
+      expect(find.textContaining('需要尝试修改排班规则'), findsOneWidget);
+      final stored = await fixture.database
+          .customSelect(
+            "SELECT content, reasoning_content, local_only FROM messages WHERE role = 'assistant' ORDER BY created_at DESC LIMIT 1",
+          )
+          .getSingle();
+      expect(stored.read<String>('content'), contains('循环排班规则'));
+      expect(stored.read<String>('reasoning_content'), contains('现有工具不支持'));
+      expect(stored.read<int>('local_only'), 1);
+    },
+  );
+
   testWidgets('quick query appears immediately and ignores repeated taps', (
     tester,
   ) async {

@@ -127,7 +127,7 @@
     },
     {
       "name": "propose_schedule_change",
-      "description": "Validate and preview a schedule change. Never applies it; explicit user confirmation remains required.",
+      "description": "Validate and preview temporary work/rest overrides for explicit ISO dates. Never use this tool to change recurring rule presets such as five-day, six-day, alternating-week, or custom cycles. Never applies changes; explicit user confirmation remains required.",
       "parameters": {
         "type": "object",
         "required": ["range", "new_status", "sync_alarms"],
