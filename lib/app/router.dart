@@ -2,6 +2,7 @@ import 'package:banxin_calendar/app/shell/app_shell.dart';
 import 'package:banxin_calendar/features/assistant/presentation/assistant_page.dart';
 import 'package:banxin_calendar/features/calendar/presentation/calendar_page.dart';
 import 'package:banxin_calendar/features/home/presentation/home_page.dart';
+import 'package:banxin_calendar/features/schedule/presentation/schedule_rules_page.dart';
 import 'package:banxin_calendar/features/settings/presentation/settings_page.dart';
 import 'package:banxin_calendar/features/statistics/presentation/statistics_page.dart';
 import 'package:flutter/widgets.dart';
@@ -58,6 +59,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/schedule/rules',
+        builder: (_, _) => const ScheduleRulesPage(),
       ),
     ],
   );

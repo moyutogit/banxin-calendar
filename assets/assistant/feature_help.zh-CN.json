@@ -4,7 +4,12 @@
     {
       "feature": "foundation",
       "status": "available",
-      "help": "当前构建为阶段 0 工程骨架，业务页面仅展示明确占位状态。"
+      "help": "阶段 0 工程骨架已完成，包括路由、主题、SQLite 迁移、安全存储和日志脱敏。"
+    },
+    {
+      "feature": "schedule",
+      "status": "in_progress",
+      "help": "确定性排班引擎和 Schema v3 已可验证；规则编辑、完整月历、节假日更新与批量改单仍在开发。"
     }
   ]
 }

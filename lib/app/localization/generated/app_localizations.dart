@@ -149,8 +149,74 @@ abstract class AppLocalizations {
   /// No description provided for @calendarDescription.
   ///
   /// In zh, this message translates to:
-  /// **'月历、日期详情和排班覆盖将在阶段 1 接入确定性排班引擎。'**
+  /// **'月历、日期详情和排班覆盖使用确定性排班引擎。'**
   String get calendarDescription;
+
+  /// No description provided for @scheduleNotConfiguredTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'尚未配置排班'**
+  String get scheduleNotConfiguredTitle;
+
+  /// No description provided for @scheduleNotConfiguredDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'配置排班规则后，日历将在本地生成可核对的工作日、休息日和班次结果。'**
+  String get scheduleNotConfiguredDescription;
+
+  /// No description provided for @configureScheduleRules.
+  ///
+  /// In zh, this message translates to:
+  /// **'配置排班规则'**
+  String get configureScheduleRules;
+
+  /// No description provided for @scheduleRulesTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'排班规则'**
+  String get scheduleRulesTitle;
+
+  /// No description provided for @scheduleRulesEmptyTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'还没有排班规则'**
+  String get scheduleRulesEmptyTitle;
+
+  /// No description provided for @scheduleRulesEmptyDescription.
+  ///
+  /// In zh, this message translates to:
+  /// **'排班结果由本地确定性引擎计算；手工改单、公司安排和官方节假日会按固定优先级覆盖规则。'**
+  String get scheduleRulesEmptyDescription;
+
+  /// No description provided for @supportedScheduleModes.
+  ///
+  /// In zh, this message translates to:
+  /// **'支持的排班模式'**
+  String get supportedScheduleModes;
+
+  /// No description provided for @scheduleModeFiveDay.
+  ///
+  /// In zh, this message translates to:
+  /// **'双休'**
+  String get scheduleModeFiveDay;
+
+  /// No description provided for @scheduleModeSixDay.
+  ///
+  /// In zh, this message translates to:
+  /// **'单休'**
+  String get scheduleModeSixDay;
+
+  /// No description provided for @scheduleModeAlternatingWeek.
+  ///
+  /// In zh, this message translates to:
+  /// **'大小周'**
+  String get scheduleModeAlternatingWeek;
+
+  /// No description provided for @scheduleModeCustomCycle.
+  ///
+  /// In zh, this message translates to:
+  /// **'自定义周期'**
+  String get scheduleModeCustomCycle;
 
   /// No description provided for @assistantDescription.
   ///

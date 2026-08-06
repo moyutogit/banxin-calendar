@@ -42,11 +42,20 @@ void main() {
       expect(version.data.values.single, SchemaVersions.current);
       expect(
         tables.map((row) => row.read<String>('name')),
-        containsAll(<String>['database_metadata', 'user_settings']),
+        containsAll(<String>[
+          'calendar_day_cache',
+          'change_log',
+          'database_metadata',
+          'day_overrides',
+          'holiday_records',
+          'schedule_rules',
+          'shift_templates',
+          'user_settings',
+        ]),
       );
     });
 
-    test('migrates v1 to v2 without losing metadata', () async {
+    test('migrates v1 to current without losing metadata', () async {
       final file = File(path.join(tempDirectory.path, 'legacy_v1.sqlite'));
       final legacy = sqlite.sqlite3.open(file.path);
       legacy.execute('''
@@ -75,6 +84,163 @@ void main() {
       expect(metadata.key, 'fixture');
       expect(metadata.value, 'preserved');
       expect(settings, isEmpty);
+    });
+
+    test('migrates v2 to current without losing user settings', () async {
+      final file = File(path.join(tempDirectory.path, 'legacy_v2.sqlite'));
+      final legacy = sqlite.sqlite3.open(file.path);
+      legacy.execute('''
+        CREATE TABLE database_metadata (
+          key TEXT NOT NULL PRIMARY KEY,
+          value TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+        CREATE TABLE user_settings (
+          id TEXT NOT NULL PRIMARY KEY,
+          locale TEXT NOT NULL,
+          timezone TEXT NOT NULL,
+          currency TEXT NOT NULL,
+          week_start INTEGER NOT NULL,
+          hour_display_mode TEXT NOT NULL,
+          theme_mode TEXT NOT NULL,
+          holiday_region TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+        INSERT INTO user_settings (
+          id,
+          locale,
+          timezone,
+          currency,
+          week_start,
+          hour_display_mode,
+          theme_mode,
+          holiday_region,
+          created_at,
+          updated_at
+        ) VALUES (
+          'local',
+          'zh_CN',
+          'Asia/Shanghai',
+          'CNY',
+          1,
+          '24h',
+          'system',
+          'CN',
+          1,
+          1
+        );
+        PRAGMA user_version = 2;
+      ''');
+      legacy.close();
+
+      final database = AppDatabase(NativeDatabase(file));
+      addTearDown(database.close);
+      await database.ensureReady();
+
+      final settings = await database.select(database.userSettings).getSingle();
+      final tables = await database
+          .customSelect(
+            "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name",
+          )
+          .get();
+
+      expect(settings.id, 'local');
+      expect(settings.locale, 'zh_CN');
+      expect(
+        tables.map((row) => row.read<String>('name')),
+        containsAll(<String>[
+          'calendar_day_cache',
+          'change_log',
+          'day_overrides',
+          'holiday_records',
+          'schedule_rules',
+          'shift_templates',
+        ]),
+      );
+    });
+
+    test('allows only one active override per date', () async {
+      final database = AppDatabase.inMemory();
+      addTearDown(database.close);
+      await database.ensureReady();
+
+      Future<void> insertOverride(String id) => database.customStatement(
+        '''
+        INSERT INTO day_overrides (
+          id,
+          work_date,
+          status,
+          shift_template_id,
+          shift_snapshot_json,
+          override_type,
+          reason,
+          note,
+          created_at,
+          updated_at,
+          deleted_at
+        ) VALUES (?, '2026-08-15', 'rest', NULL, NULL, 'user', NULL, NULL, 1, 1, NULL)
+        ''',
+        <Object>[id],
+      );
+
+      await insertOverride('first');
+
+      await expectLater(
+        insertOverride('second'),
+        throwsA(isA<sqlite.SqliteException>()),
+      );
+
+      await database.customStatement(
+        'UPDATE day_overrides SET deleted_at = 2 WHERE id = ?',
+        <Object>['first'],
+      );
+      await insertOverride('second');
+
+      final activeCount = await database
+          .customSelect(
+            'SELECT COUNT(*) AS count FROM day_overrides WHERE deleted_at IS NULL',
+          )
+          .getSingle();
+      expect(activeCount.read<int>('count'), 1);
+    });
+
+    test('enforces override shift-template foreign keys', () async {
+      final database = AppDatabase.inMemory();
+      addTearDown(database.close);
+      await database.ensureReady();
+
+      await expectLater(
+        database.customStatement('''
+          INSERT INTO day_overrides (
+            id,
+            work_date,
+            status,
+            shift_template_id,
+            shift_snapshot_json,
+            override_type,
+            reason,
+            note,
+            created_at,
+            updated_at,
+            deleted_at
+          ) VALUES (
+            'invalid-shift',
+            '2026-08-16',
+            'work',
+            'missing',
+            NULL,
+            'user',
+            NULL,
+            NULL,
+            1,
+            1,
+            NULL
+          )
+        '''),
+        throwsA(isA<sqlite.SqliteException>()),
+      );
     });
 
     test('enables foreign keys and WAL for file databases', () async {

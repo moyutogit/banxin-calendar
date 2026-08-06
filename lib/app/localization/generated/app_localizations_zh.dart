@@ -33,7 +33,42 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeDescription => '阶段 0 已接通基础导航、主题、状态管理和本地数据底座。';
 
   @override
-  String get calendarDescription => '月历、日期详情和排班覆盖将在阶段 1 接入确定性排班引擎。';
+  String get calendarDescription => '月历、日期详情和排班覆盖使用确定性排班引擎。';
+
+  @override
+  String get scheduleNotConfiguredTitle => '尚未配置排班';
+
+  @override
+  String get scheduleNotConfiguredDescription =>
+      '配置排班规则后，日历将在本地生成可核对的工作日、休息日和班次结果。';
+
+  @override
+  String get configureScheduleRules => '配置排班规则';
+
+  @override
+  String get scheduleRulesTitle => '排班规则';
+
+  @override
+  String get scheduleRulesEmptyTitle => '还没有排班规则';
+
+  @override
+  String get scheduleRulesEmptyDescription =>
+      '排班结果由本地确定性引擎计算；手工改单、公司安排和官方节假日会按固定优先级覆盖规则。';
+
+  @override
+  String get supportedScheduleModes => '支持的排班模式';
+
+  @override
+  String get scheduleModeFiveDay => '双休';
+
+  @override
+  String get scheduleModeSixDay => '单休';
+
+  @override
+  String get scheduleModeAlternatingWeek => '大小周';
+
+  @override
+  String get scheduleModeCustomCycle => '自定义周期';
 
   @override
   String get assistantDescription => 'AI 是可选增强模块；未配置模型不影响核心功能。';

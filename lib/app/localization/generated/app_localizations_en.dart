@@ -35,7 +35,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarDescription =>
-      'Calendar and overrides will use the deterministic scheduling engine in Phase 1.';
+      'Calendar details and overrides use the deterministic scheduling engine.';
+
+  @override
+  String get scheduleNotConfiguredTitle => 'Schedule not configured';
+
+  @override
+  String get scheduleNotConfiguredDescription =>
+      'Configure a schedule rule to generate verifiable workdays, rest days, and shifts locally.';
+
+  @override
+  String get configureScheduleRules => 'Configure schedule rules';
+
+  @override
+  String get scheduleRulesTitle => 'Schedule rules';
+
+  @override
+  String get scheduleRulesEmptyTitle => 'No schedule rules yet';
+
+  @override
+  String get scheduleRulesEmptyDescription =>
+      'Schedule results are calculated by the local deterministic engine. Manual overrides, company arrangements, and official holidays take precedence in a fixed order.';
+
+  @override
+  String get supportedScheduleModes => 'Supported schedule modes';
+
+  @override
+  String get scheduleModeFiveDay => 'Five-day week';
+
+  @override
+  String get scheduleModeSixDay => 'Six-day week';
+
+  @override
+  String get scheduleModeAlternatingWeek => 'Alternating weeks';
+
+  @override
+  String get scheduleModeCustomCycle => 'Custom cycle';
 
   @override
   String get assistantDescription =>

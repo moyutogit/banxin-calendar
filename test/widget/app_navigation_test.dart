@@ -18,7 +18,15 @@ void main() {
 
     await tester.tap(find.text('日历'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('月历、日期详情'), findsOneWidget);
+    expect(find.text('尚未配置排班'), findsOneWidget);
+
+    await tester.tap(find.text('配置排班规则'));
+    await tester.pumpAndSettle();
+    expect(find.text('排班规则'), findsOneWidget);
+    expect(find.text('双休'), findsOneWidget);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('AI 助理'));
     await tester.pumpAndSettle();
