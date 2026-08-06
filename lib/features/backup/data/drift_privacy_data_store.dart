@@ -13,6 +13,7 @@ final class DriftPrivacyDataStore implements PrivacyDataStore {
           .customSelect('SELECT COUNT(*) AS count FROM ai_actions')
           .getSingle();
       final retainedActions = actions.read<int>('count');
+      await _database.customStatement('DELETE FROM assistant_memories');
       await _database.customStatement('DELETE FROM messages');
       if (retainedActions == 0) {
         await _database.customStatement('DELETE FROM conversations');
@@ -79,6 +80,7 @@ final class DriftPrivacyDataStore implements PrivacyDataStore {
   @override
   Future<void> clearAllData() async {
     const tables = <String>[
+      'assistant_memories',
       'messages',
       'ai_actions',
       'conversations',

@@ -18,9 +18,23 @@ enum AiConnectionStatus {
 
 enum LlmRole { system, user, assistant, tool }
 
-enum AssistantPersonaPreset { gentle, professional, lively }
+enum AssistantPersonaPreset {
+  gentle,
+  professional,
+  lively,
+  humorous,
+  sarcastic,
+  calm,
+}
 
 enum AssistantReplyLength { short, medium, long }
+
+enum AssistantMemoryCategory {
+  preference,
+  personalFact,
+  reminderContext,
+  other,
+}
 
 enum AiActionStatus {
   proposed,
@@ -71,6 +85,7 @@ final class AssistantDataScopes {
     this.wageRead = false,
     this.alarmRead = true,
     this.notesRead = false,
+    this.memoryRead = true,
   });
 
   final bool scheduleRead;
@@ -78,6 +93,25 @@ final class AssistantDataScopes {
   final bool wageRead;
   final bool alarmRead;
   final bool notesRead;
+  final bool memoryRead;
+}
+
+final class AssistantMemory {
+  const AssistantMemory({
+    required this.id,
+    required this.content,
+    required this.category,
+    required this.createdAtUtc,
+    required this.updatedAtUtc,
+    this.sourceConversationId,
+  });
+
+  final String id;
+  final String content;
+  final AssistantMemoryCategory category;
+  final String? sourceConversationId;
+  final DateTime createdAtUtc;
+  final DateTime updatedAtUtc;
 }
 
 final class AssistantPersona {

@@ -23,6 +23,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
   StreamSubscription<ConversationEvent>? _subscription;
   AssistantPersona? _persona;
   Conversation? _conversation;
+  List<Conversation> _conversations = const <Conversation>[];
   List<AssistantMessage> _messages = const <AssistantMessage>[];
   String _partial = '';
   String _partialReasoning = '';
@@ -70,10 +71,14 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
     final messages = await ref
         .read(conversationServiceProvider)
         .loadMessages(conversation.id);
+    final conversations = await ref
+        .read(conversationServiceProvider)
+        .loadConversations();
     if (mounted) {
       setState(() {
         _persona = settings.persona;
         _conversation = conversation;
+        _conversations = conversations;
         _messages = messages;
         _configured = true;
         _loading = false;
@@ -120,14 +125,33 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                 child: Text((_persona?.displayName ?? 'AI').characters.first),
               ),
               title: Text(_persona?.displayName ?? strings.tabAssistant),
-              subtitle: Text(_persona?.preset.name ?? ''),
-              trailing: IconButton(
-                tooltip: strings.assistantConfigureTitle,
-                onPressed: () async {
-                  await context.push('/settings/assistant');
-                  if (mounted) unawaited(_initialize());
-                },
-                icon: const Icon(Icons.settings_outlined),
+              subtitle: Text(
+                '${_conversation?.title ?? ''} · ${_persona?.preset.name ?? ''}',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  IconButton(
+                    tooltip: strings.assistantConversations,
+                    onPressed: _generating ? null : _openConversationList,
+                    icon: const Icon(Icons.forum_outlined),
+                  ),
+                  IconButton(
+                    tooltip: strings.assistantNewConversation,
+                    onPressed: _generating ? null : _newConversation,
+                    icon: const Icon(Icons.add_comment_outlined),
+                  ),
+                  IconButton(
+                    tooltip: strings.assistantConfigureTitle,
+                    onPressed: () async {
+                      await context.push('/settings/assistant');
+                      if (mounted) unawaited(_initialize());
+                    },
+                    icon: const Icon(Icons.settings_outlined),
+                  ),
+                ],
               ),
             ),
           ),
@@ -162,6 +186,15 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                 ],
               ),
               const SizedBox(height: 12),
+              if (_messages.isEmpty && !_generating)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32),
+                  child: Text(
+                    strings.assistantEmptyConversation,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                ),
               ..._messages.map(_messageBubble),
               if (_generating ||
                   _partial.isNotEmpty ||
@@ -477,9 +510,19 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
     final messages = await ref
         .read(conversationServiceProvider)
         .loadMessages(conversation.id);
+    final settings = await ref.read(assistantSettingsServiceProvider).load();
+    final conversations = await ref
+        .read(conversationServiceProvider)
+        .loadConversations();
+    final refreshedConversation = conversations
+        .where((item) => item.id == conversation.id)
+        .firstOrNull;
     if (mounted) {
       setState(() {
         _messages = messages;
+        _persona = settings.persona;
+        _conversations = conversations;
+        _conversation = refreshedConversation ?? conversation;
         _partial = '';
         _partialReasoning = '';
         _queuedText = '';
@@ -492,6 +535,128 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
       });
       _scrollToBottom();
     }
+  }
+
+  Future<void> _openConversationList() async {
+    final strings = AppLocalizations.of(context);
+    final selected = await showModalBottomSheet<String>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: SizedBox(
+          height: MediaQuery.sizeOf(sheetContext).height * 0.65,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 0, 12, 8),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        strings.assistantConversations,
+                        style: Theme.of(sheetContext).textTheme.titleLarge,
+                      ),
+                    ),
+                    IconButton.filledTonal(
+                      tooltip: strings.assistantNewConversation,
+                      onPressed: () => Navigator.pop(sheetContext, '__new__'),
+                      icon: const Icon(Icons.add),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _conversations.length,
+                  itemBuilder: (context, index) {
+                    final conversation = _conversations[index];
+                    final selected = conversation.id == _conversation?.id;
+                    return ListTile(
+                      leading: Icon(
+                        selected
+                            ? Icons.chat_bubble
+                            : Icons.chat_bubble_outline,
+                      ),
+                      title: Text(
+                        conversation.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(_conversationTimestamp(conversation)),
+                      trailing: selected
+                          ? Tooltip(
+                              message: strings.assistantCurrentConversation,
+                              child: const Icon(Icons.check_circle_outline),
+                            )
+                          : null,
+                      onTap: () => Navigator.pop(context, conversation.id),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (!mounted || selected == null) return;
+    if (selected == '__new__') {
+      await _newConversation();
+    } else if (selected != _conversation?.id) {
+      await _switchConversation(selected);
+    }
+  }
+
+  Future<void> _newConversation() async {
+    if (_generating) return;
+    final service = ref.read(conversationServiceProvider);
+    final conversation = await service.createConversation();
+    final conversations = await service.loadConversations();
+    if (!mounted) return;
+    setState(() {
+      _conversation = conversation;
+      _conversations = conversations;
+      _messages = const <AssistantMessage>[];
+      _partial = '';
+      _partialReasoning = '';
+      _error = null;
+      _lastRequestText = null;
+      _proposalActionId = null;
+      _proposalToken = null;
+      _proposalSummary = null;
+      _undoActionId = null;
+    });
+  }
+
+  Future<void> _switchConversation(String id) async {
+    if (_generating) return;
+    final conversation = _conversations.firstWhere((item) => item.id == id);
+    final messages = await ref
+        .read(conversationServiceProvider)
+        .loadMessages(id);
+    if (!mounted) return;
+    setState(() {
+      _conversation = conversation;
+      _messages = messages;
+      _partial = '';
+      _partialReasoning = '';
+      _error = null;
+      _lastRequestText = null;
+      _proposalActionId = null;
+      _proposalToken = null;
+      _proposalSummary = null;
+      _undoActionId = null;
+    });
+    _scrollToBottom();
+  }
+
+  String _conversationTimestamp(Conversation conversation) {
+    final value = conversation.updatedAtUtc.toLocal();
+    String two(int number) => number.toString().padLeft(2, '0');
+    return '${value.year}-${two(value.month)}-${two(value.day)} '
+        '${two(value.hour)}:${two(value.minute)}';
   }
 
   Future<void> _stop() async {

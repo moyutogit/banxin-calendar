@@ -9,7 +9,6 @@ import 'package:banxin_calendar/features/assistant/domain/assistant_repository.d
 import 'package:banxin_calendar/features/assistant/domain/assistant_safety_policy.dart';
 import 'package:banxin_calendar/features/assistant/domain/capability_knowledge_source.dart';
 import 'package:banxin_calendar/features/assistant/domain/llm_provider.dart';
-import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 
 sealed class ConversationEvent {
   const ConversationEvent();
@@ -64,26 +63,44 @@ final class ConversationService {
   final AssistantSafetyPolicy _safetyPolicy;
   final StableIdGenerator _idGenerator;
 
-  Future<Conversation> createConversation() async {
+  Future<Conversation> createConversation({bool includeWelcome = false}) async {
     final config = await _repository.loadProviderConfig();
     final now = _clock.nowUtc();
+    final id = _idGenerator.generate();
+    final conversation = Conversation(
+      id: id,
+      title: includeWelcome ? '认识一下' : '新对话',
+      modelSnapshotJson: jsonEncode(<String, Object?>{
+        'provider': config?.providerType.name,
+        'model': config?.modelName,
+      }),
+      createdAtUtc: now,
+      updatedAtUtc: now,
+    );
     return _repository.createConversation(
-      Conversation(
-        id: _idGenerator.generate(),
-        title: '新对话',
-        modelSnapshotJson: jsonEncode(<String, Object?>{
-          'provider': config?.providerType.name,
-          'model': config?.modelName,
-        }),
-        createdAtUtc: now,
-        updatedAtUtc: now,
-      ),
+      conversation,
+      initialMessage: includeWelcome
+          ? AssistantMessage(
+              id: _idGenerator.generate(),
+              conversationId: id,
+              role: LlmRole.assistant,
+              content: _firstConversationWelcome,
+              contentType: 'onboarding',
+              localOnly: false,
+              createdAtUtc: now,
+            )
+          : null,
     );
   }
 
   Future<Conversation> loadOrCreateConversation() async {
     final conversations = await _repository.loadConversations();
-    return conversations.firstOrNull ?? createConversation();
+    return conversations.firstOrNull ??
+        createConversation(includeWelcome: true);
+  }
+
+  Future<List<Conversation>> loadConversations() {
+    return _repository.loadConversations();
   }
 
   Future<List<AssistantMessage>> loadMessages(String conversationId) {
@@ -109,6 +126,10 @@ final class ConversationService {
           localOnly: false,
           createdAtUtc: now,
         ),
+      );
+      await _repository.updateConversationTitle(
+        conversationId,
+        String.fromCharCodes(trimmed.runes.take(18)),
       );
     }
     if (_safetyPolicy.mustRefuse(trimmed)) {
@@ -202,12 +223,11 @@ final class ConversationService {
           yield ConversationTextDelta(response);
           yield const ConversationFinished();
           return;
-        } on FormatException {
+        } on FormatException catch (error) {
           result = <String, Object?>{
             'succeeded': false,
             'error': 'invalid_tool_arguments',
-            'guidance':
-                'Retry this tool with an explicit ISO date range containing start and end.',
+            'guidance': error.message.toString(),
           };
         }
         if (result['requiresConfirmation'] == true) {
@@ -247,20 +267,25 @@ final class ConversationService {
   }
 
   Future<String> _systemPrompt(AssistantPersona persona) async {
-    final shanghaiNow = _clock.nowUtc().add(const Duration(hours: 8));
-    final currentDate = LocalDate(
-      shanghaiNow.year,
-      shanghaiNow.month,
-      shanghaiNow.day,
-    );
-    return 'Current application date (Asia/Shanghai): $currentDate. '
-        'Resolve relative dates such as today, this month, and the next 7 days '
-        'from this date and call the matching local read tool directly; do not '
-        'ask the user to provide today\'s date.\n'
+    return 'You are a local-first app agent, not a plain chat bot. '
+        'For every request containing a relative date or time (including today, '
+        'yesterday, tomorrow, the day after tomorrow, 明后天, this week/month, '
+        'or the next N days), first call get_time_context. Use only the returned '
+        'Asia/Shanghai ISO dates to construct the range for the matching local '
+        'read tool. Never guess the current date and never ask the user for it.\n'
+        'The first assistant welcome asks for the agent name, personality, and '
+        'response style. When the user answers that question or later explicitly '
+        'changes those preferences, call update_agent_profile before replying.\n'
+        'Use get_memories only when saved context is relevant. Call save_memory '
+        'only when the latest user message explicitly asks you to remember '
+        'something, and call delete_memory only after an explicit forget request. '
+        'Never claim a memory was saved or deleted unless the tool succeeds.\n'
         'Current app capabilities:\n${await _knowledge.capabilities()}\n'
         'Feature help:\n${await _knowledge.featureHelp()}\n'
         'Safety rules:\n${await _knowledge.safetyRules()}\n'
-        'Persona: ${persona.preset.name}, reply length: ${persona.replyLength.name}. '
+        'Agent name: ${persona.displayName}. Persona: ${persona.preset.name}, '
+        'reply length: ${persona.replyLength.name}, style instruction: '
+        '${persona.customInstruction ?? 'none'}. '
         'Personality changes wording only, never facts, permissions, or tool parameters.';
   }
 
@@ -285,6 +310,7 @@ final class ConversationService {
       'wage' => '工资',
       'alarm' => '闹钟',
       'notes' => '备注',
+      'memory' => '智能体记忆',
       _ => '对应',
     };
     return '当前未授权读取$label数据。请先在“配置 AI 模型”的助理权限中开启后再试。';
@@ -311,4 +337,9 @@ final class ConversationService {
       ),
     );
   }
+
+  static const String _firstConversationWelcome =
+      '嗨，我们先把我变成你喜欢的助理吧。你希望我叫什么？性格和说话方式是什么？'
+      '可以选温柔、专业、活泼、幽默风趣、吐槽毒舌或冷静；回复偏精炼、适中还是啰嗦。'
+      '直接一句话告诉我就行，例如：“叫你小毒，冷静毒舌，回复精炼”。';
 }

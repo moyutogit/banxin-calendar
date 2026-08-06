@@ -229,6 +229,9 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
             ),
             DropdownButtonFormField<AssistantPersonaPreset>(
               initialValue: _preset,
+              decoration: InputDecoration(
+                labelText: strings.assistantPersonaStyle,
+              ),
               items: AssistantPersonaPreset.values
                   .map(
                     (preset) => DropdownMenuItem(
@@ -248,7 +251,7 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
                   .map(
                     (length) => DropdownMenuItem(
                       value: length,
-                      child: Text(length.name),
+                      child: Text(_replyLengthLabel(strings, length)),
                     ),
                   )
                   .toList(),
@@ -280,6 +283,11 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
               _scopes.notesRead,
               (value) => _updateScopes(notes: value),
             ),
+            _scopeTile(
+              strings.assistantScopeMemory,
+              _scopes.memoryRead,
+              (value) => _updateScopes(memory: value),
+            ),
             FilledButton.icon(
               onPressed: _busy ? null : _savePersona,
               icon: const Icon(Icons.face_outlined),
@@ -300,6 +308,7 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
     bool? wage,
     bool? alarm,
     bool? notes,
+    bool? memory,
   }) {
     setState(() {
       _scopes = AssistantDataScopes(
@@ -308,6 +317,7 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
         wageRead: wage ?? _scopes.wageRead,
         alarmRead: alarm ?? _scopes.alarmRead,
         notesRead: notes ?? _scopes.notesRead,
+        memoryRead: memory ?? _scopes.memoryRead,
       );
     });
   }
@@ -424,6 +434,18 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
     AssistantPersonaPreset.gentle => strings.assistantPersonaGentle,
     AssistantPersonaPreset.professional => strings.assistantPersonaProfessional,
     AssistantPersonaPreset.lively => strings.assistantPersonaLively,
+    AssistantPersonaPreset.humorous => strings.assistantPersonaHumorous,
+    AssistantPersonaPreset.sarcastic => strings.assistantPersonaSarcastic,
+    AssistantPersonaPreset.calm => strings.assistantPersonaCalm,
+  };
+
+  String _replyLengthLabel(
+    AppLocalizations strings,
+    AssistantReplyLength length,
+  ) => switch (length) {
+    AssistantReplyLength.short => strings.assistantReplyShort,
+    AssistantReplyLength.medium => strings.assistantReplyMedium,
+    AssistantReplyLength.long => strings.assistantReplyLong,
   };
 
   String _connectionLabel(

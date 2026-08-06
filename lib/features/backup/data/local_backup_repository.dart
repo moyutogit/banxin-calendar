@@ -264,6 +264,7 @@ final class LocalBackupRepository implements BackupRepository {
 
   Future<void> _replaceDatabaseAtomically(File restoreFile) async {
     const deleteOrder = <String>[
+      'assistant_memories',
       'messages',
       'ai_actions',
       'conversations',
@@ -302,6 +303,7 @@ final class LocalBackupRepository implements BackupRepository {
       'ai_provider_configs',
       'assistant_personas',
       'conversations',
+      'assistant_memories',
       'messages',
       'ai_actions',
     ];

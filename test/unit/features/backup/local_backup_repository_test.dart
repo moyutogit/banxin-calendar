@@ -78,8 +78,22 @@ void main() {
 
     test('restores atomically from a validated temporary database', () async {
       await _putMetadata(database, 'fixture', 'original');
+      await database.customStatement('''
+        INSERT INTO conversations VALUES (
+          'conversation', '记忆来源', '{}', 1, 1, NULL
+        )
+      ''');
+      await database.customStatement('''
+        INSERT INTO assistant_memories VALUES (
+          'memory', '用户不吃香菜', 'personalFact', 'conversation',
+          1, 1, NULL
+        )
+      ''');
       final entry = await repository.createBackup(reason: 'manual');
       await _putMetadata(database, 'fixture', 'changed');
+      await database.customStatement(
+        "UPDATE assistant_memories SET content = '已被修改' WHERE id = 'memory'",
+      );
 
       await repository.restoreBackup(entry.filePath);
 
@@ -87,6 +101,10 @@ void main() {
         database.databaseMetadata,
       )..where((table) => table.key.equals('fixture'))).getSingle();
       expect(restored.value, 'original');
+      expect(
+        (await database.select(database.assistantMemories).getSingle()).content,
+        '用户不吃香菜',
+      );
       final integrity = await database
           .customSelect('PRAGMA integrity_check')
           .getSingle();
@@ -130,6 +148,34 @@ void main() {
   });
 
   group('DriftPrivacyDataStore', () {
+    test(
+      'clears conversations and locally saved agent memories together',
+      () async {
+        final database = AppDatabase.inMemory();
+        addTearDown(database.close);
+        await database.ensureReady();
+        await database.customStatement('''
+        INSERT INTO conversations VALUES (
+          'conversation', '对话', '{}', 1, 1, NULL
+        )
+      ''');
+        await database.customStatement('''
+        INSERT INTO assistant_memories VALUES (
+          'memory', '用户不吃香菜', 'personalFact', 'conversation',
+          1, 1, NULL
+        )
+      ''');
+
+        await DriftPrivacyDataStore(database).clearConversations();
+
+        expect(await database.select(database.conversations).get(), isEmpty);
+        expect(
+          await database.select(database.assistantMemories).get(),
+          isEmpty,
+        );
+      },
+    );
+
     test('clears workforce independently from schedules', () async {
       final database = AppDatabase.inMemory();
       addTearDown(database.close);

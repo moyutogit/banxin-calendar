@@ -92,6 +92,7 @@ final class DriftAssistantRepository implements AssistantRepository {
         wageRead: row.wageRead == 1,
         alarmRead: row.alarmRead == 1,
         notesRead: row.notesRead == 1,
+        memoryRead: row.memoryRead == 1,
       ),
     );
   }
@@ -115,24 +116,33 @@ final class DriftAssistantRepository implements AssistantRepository {
             wageRead: persona.scopes.wageRead ? 1 : 0,
             alarmRead: persona.scopes.alarmRead ? 1 : 0,
             notesRead: persona.scopes.notesRead ? 1 : 0,
+            memoryRead: Value<int>(persona.scopes.memoryRead ? 1 : 0),
             updatedAt: _now,
           ),
         );
   }
 
   @override
-  Future<Conversation> createConversation(Conversation conversation) async {
-    await _database
-        .into(_database.conversations)
-        .insert(
-          database.ConversationsCompanion.insert(
-            id: conversation.id,
-            title: conversation.title,
-            modelSnapshotJson: conversation.modelSnapshotJson,
-            createdAt: conversation.createdAtUtc.millisecondsSinceEpoch,
-            updatedAt: conversation.updatedAtUtc.millisecondsSinceEpoch,
-          ),
-        );
+  Future<Conversation> createConversation(
+    Conversation conversation, {
+    AssistantMessage? initialMessage,
+  }) async {
+    await _database.transaction(() async {
+      await _database
+          .into(_database.conversations)
+          .insert(
+            database.ConversationsCompanion.insert(
+              id: conversation.id,
+              title: conversation.title,
+              modelSnapshotJson: conversation.modelSnapshotJson,
+              createdAt: conversation.createdAtUtc.millisecondsSinceEpoch,
+              updatedAt: conversation.updatedAtUtc.millisecondsSinceEpoch,
+            ),
+          );
+      if (initialMessage != null) {
+        await _insertMessage(initialMessage);
+      }
+    });
     return conversation;
   }
 
@@ -163,21 +173,7 @@ final class DriftAssistantRepository implements AssistantRepository {
   @override
   Future<void> saveMessage(AssistantMessage message) async {
     await _database.transaction(() async {
-      await _database
-          .into(_database.messages)
-          .insert(
-            database.MessagesCompanion.insert(
-              id: message.id,
-              conversationId: message.conversationId,
-              role: message.role.name,
-              content: message.content,
-              reasoningContent: Value<String?>(message.reasoningContent),
-              contentType: message.contentType,
-              toolCallId: Value<String?>(message.toolCallId),
-              localOnly: message.localOnly ? 1 : 0,
-              createdAt: message.createdAtUtc.millisecondsSinceEpoch,
-            ),
-          );
+      await _insertMessage(message);
       await (_database.update(
         _database.conversations,
       )..where((table) => table.id.equals(message.conversationId))).write(
@@ -186,6 +182,83 @@ final class DriftAssistantRepository implements AssistantRepository {
         ),
       );
     });
+  }
+
+  Future<void> _insertMessage(AssistantMessage message) => _database
+      .into(_database.messages)
+      .insert(
+        database.MessagesCompanion.insert(
+          id: message.id,
+          conversationId: message.conversationId,
+          role: message.role.name,
+          content: message.content,
+          reasoningContent: Value<String?>(message.reasoningContent),
+          contentType: message.contentType,
+          toolCallId: Value<String?>(message.toolCallId),
+          localOnly: message.localOnly ? 1 : 0,
+          createdAt: message.createdAtUtc.millisecondsSinceEpoch,
+        ),
+      );
+
+  @override
+  Future<void> updateConversationTitle(String id, String title) async {
+    await (_database.update(_database.conversations)..where(
+          (table) =>
+              table.id.equals(id) &
+              table.title.isIn(const <String>['新对话', '认识一下']),
+        ))
+        .write(database.ConversationsCompanion(title: Value<String>(title)));
+  }
+
+  @override
+  Future<List<AssistantMemory>> loadMemories({String? query}) async {
+    final normalized = query?.trim().toLowerCase();
+    final statement = _database.select(_database.assistantMemories)
+      ..where((table) => table.deletedAt.isNull())
+      ..orderBy(<OrderingTerm Function(database.$AssistantMemoriesTable)>[
+        (table) => OrderingTerm.desc(table.updatedAt),
+      ])
+      ..limit(50);
+    final rows = await statement.get();
+    return List<AssistantMemory>.unmodifiable(
+      rows
+          .map(_mapMemory)
+          .where(
+            (memory) =>
+                normalized == null ||
+                normalized.isEmpty ||
+                memory.content.toLowerCase().contains(normalized),
+          ),
+    );
+  }
+
+  @override
+  Future<void> saveMemory(AssistantMemory memory) {
+    return _database
+        .into(_database.assistantMemories)
+        .insertOnConflictUpdate(
+          database.AssistantMemoriesCompanion.insert(
+            id: memory.id,
+            content: memory.content,
+            category: memory.category.name,
+            sourceConversationId: Value<String?>(memory.sourceConversationId),
+            createdAt: memory.createdAtUtc.millisecondsSinceEpoch,
+            updatedAt: memory.updatedAtUtc.millisecondsSinceEpoch,
+            deletedAt: const Value<int?>.absent(),
+          ),
+        );
+  }
+
+  @override
+  Future<void> deleteMemory(String id, DateTime deletedAtUtc) async {
+    await (_database.update(
+      _database.assistantMemories,
+    )..where((table) => table.id.equals(id))).write(
+      database.AssistantMemoriesCompanion(
+        deletedAt: Value<int>(deletedAtUtc.millisecondsSinceEpoch),
+        updatedAt: Value<int>(deletedAtUtc.millisecondsSinceEpoch),
+      ),
+    );
   }
 
   @override
@@ -280,6 +353,21 @@ final class DriftAssistantRepository implements AssistantRepository {
     localOnly: row.localOnly == 1,
     createdAtUtc: DateTime.fromMillisecondsSinceEpoch(
       row.createdAt,
+      isUtc: true,
+    ),
+  );
+
+  AssistantMemory _mapMemory(database.AssistantMemory row) => AssistantMemory(
+    id: row.id,
+    content: row.content,
+    category: AssistantMemoryCategory.values.byName(row.category),
+    sourceConversationId: row.sourceConversationId,
+    createdAtUtc: DateTime.fromMillisecondsSinceEpoch(
+      row.createdAt,
+      isUtc: true,
+    ),
+    updatedAtUtc: DateTime.fromMillisecondsSinceEpoch(
+      row.updatedAt,
       isUtc: true,
     ),
   );

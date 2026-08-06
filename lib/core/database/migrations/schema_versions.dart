@@ -6,5 +6,6 @@ abstract final class SchemaVersions {
   static const int workforceFoundation = 5;
   static const int assistantFoundation = 6;
   static const int assistantReasoning = 7;
-  static const int current = assistantReasoning;
+  static const int assistantAgentMemory = 8;
+  static const int current = assistantAgentMemory;
 }

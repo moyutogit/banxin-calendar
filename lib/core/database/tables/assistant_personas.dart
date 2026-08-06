@@ -17,6 +17,7 @@ class AssistantPersonas extends Table {
   IntColumn get wageRead => integer()();
   IntColumn get alarmRead => integer()();
   IntColumn get notesRead => integer()();
+  IntColumn get memoryRead => integer().withDefault(const Constant<int>(1))();
   IntColumn get updatedAt => integer()();
 
   @override

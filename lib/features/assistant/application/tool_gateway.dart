@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:banxin_calendar/core/time/app_clock.dart';
 import 'package:banxin_calendar/features/alarm/domain/alarm_repository.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_action_gateway.dart';
+import 'package:banxin_calendar/features/assistant/application/assistant_agent_service.dart';
 import 'package:banxin_calendar/features/assistant/domain/assistant_entities.dart';
 import 'package:banxin_calendar/features/assistant/domain/capability_knowledge_source.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
@@ -22,6 +23,7 @@ final class ToolGateway {
     this._statistics,
     this._alarms,
     this._actions, {
+    required this._agent,
     this._clock = const SystemAppClock(),
   });
 
@@ -30,14 +32,20 @@ final class ToolGateway {
   final StatisticsService _statistics;
   final AlarmRepository _alarms;
   final AssistantActionGateway _actions;
+  final AssistantAgentService _agent;
   final AppClock _clock;
 
   static const Set<String> supportedTools = <String>{
     'get_app_capabilities',
+    'get_time_context',
     'get_schedule',
     'get_attendance_summary',
     'get_wage_summary',
     'get_alarm_summary',
+    'get_memories',
+    'save_memory',
+    'delete_memory',
+    'update_agent_profile',
     'propose_schedule_change',
     'apply_schedule_change',
     'propose_alarm_change',
@@ -58,6 +66,7 @@ final class ToolGateway {
       'get_app_capabilities' => <String, Object?>{
         'capabilities': jsonDecode(await _knowledge.capabilities()),
       },
+      'get_time_context' => _agent.timeContext(),
       'get_schedule' => _getSchedule(arguments, persona.scopes),
       'get_attendance_summary' => _getStatistics(
         arguments,
@@ -70,12 +79,98 @@ final class ToolGateway {
         includeWage: true,
       ),
       'get_alarm_summary' => _getAlarms(persona.scopes),
+      'get_memories' => _getMemories(arguments, persona.scopes),
+      'save_memory' => _saveMemory(conversationId, arguments, persona.scopes),
+      'delete_memory' => _deleteMemory(
+        conversationId,
+        arguments,
+        persona.scopes,
+      ),
+      'update_agent_profile' => _updateAgentProfile(
+        conversationId,
+        arguments,
+        persona,
+      ),
       'propose_schedule_change' => _propose(conversationId, arguments),
       'apply_schedule_change' => _apply(arguments),
       'propose_alarm_change' => _proposeAlarm(conversationId, arguments),
       'apply_alarm_change' => _apply(arguments),
       'undo_ai_action' => _undo(arguments),
       _ => throw UnsupportedError('Unsupported assistant tool.'),
+    };
+  }
+
+  Future<Map<String, Object?>> _getMemories(
+    Map<String, Object?> arguments,
+    AssistantDataScopes scopes,
+  ) async {
+    if (!scopes.memoryRead) throw const ToolPermissionException('memory');
+    final query = arguments['query'];
+    if (query != null && query is! String) {
+      throw const FormatException('query must be a string.');
+    }
+    final memories = await _agent.loadMemories(query: query as String?);
+    return <String, Object?>{
+      'storage': 'local',
+      'count': memories.length,
+      'memories': <Object?>[
+        for (final memory in memories.take(20))
+          <String, Object?>{
+            'id': memory.id,
+            'content': memory.content,
+            'category': memory.category.name,
+          },
+      ],
+    };
+  }
+
+  Future<Map<String, Object?>> _saveMemory(
+    String conversationId,
+    Map<String, Object?> arguments,
+    AssistantDataScopes scopes,
+  ) async {
+    if (!scopes.memoryRead) throw const ToolPermissionException('memory');
+    final memory = await _agent.remember(
+      conversationId: conversationId,
+      arguments: arguments,
+    );
+    return <String, Object?>{
+      'saved': true,
+      'storage': 'local',
+      'memoryId': memory.id,
+      'category': memory.category.name,
+    };
+  }
+
+  Future<Map<String, Object?>> _deleteMemory(
+    String conversationId,
+    Map<String, Object?> arguments,
+    AssistantDataScopes scopes,
+  ) async {
+    if (!scopes.memoryRead) throw const ToolPermissionException('memory');
+    final memoryId = arguments['memory_id'];
+    if (memoryId is! String || memoryId.trim().isEmpty) {
+      throw const FormatException('memory_id is required.');
+    }
+    await _agent.forget(conversationId: conversationId, memoryId: memoryId);
+    return <String, Object?>{'deleted': true, 'memoryId': memoryId};
+  }
+
+  Future<Map<String, Object?>> _updateAgentProfile(
+    String conversationId,
+    Map<String, Object?> arguments,
+    AssistantPersona persona,
+  ) async {
+    final updated = await _agent.updateProfile(
+      current: persona,
+      conversationId: conversationId,
+      arguments: arguments,
+    );
+    return <String, Object?>{
+      'updated': true,
+      'displayName': updated.displayName,
+      'persona': updated.preset.name,
+      'replyLength': updated.replyLength.name,
     };
   }
 

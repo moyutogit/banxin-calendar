@@ -2,6 +2,7 @@ import 'package:banxin_calendar/core/database/database_providers.dart';
 import 'package:banxin_calendar/core/secure_storage/secure_storage_providers.dart';
 import 'package:banxin_calendar/features/alarm/application/alarm_providers.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_action_gateway.dart';
+import 'package:banxin_calendar/features/assistant/application/assistant_agent_service.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_settings_service.dart';
 import 'package:banxin_calendar/features/assistant/application/conversation_service.dart';
 import 'package:banxin_calendar/features/assistant/application/tool_gateway.dart';
@@ -55,6 +56,10 @@ final assistantActionGatewayProvider = Provider<AssistantActionGateway>(
   ),
 );
 
+final assistantAgentServiceProvider = Provider<AssistantAgentService>(
+  (ref) => AssistantAgentService(ref.watch(assistantRepositoryProvider)),
+);
+
 final toolGatewayProvider = Provider<ToolGateway>(
   (ref) => ToolGateway(
     ref.watch(capabilityKnowledgeSourceProvider),
@@ -62,6 +67,7 @@ final toolGatewayProvider = Provider<ToolGateway>(
     ref.watch(statisticsServiceProvider),
     ref.watch(alarmRepositoryProvider),
     ref.watch(assistantActionGatewayProvider),
+    agent: ref.watch(assistantAgentServiceProvider),
   ),
 );
 

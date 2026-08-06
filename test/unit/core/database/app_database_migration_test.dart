@@ -368,6 +368,51 @@ void main() {
       },
     );
 
+    test('migrates v7 persona to local agent memory schema', () async {
+      final file = File(path.join(tempDirectory.path, 'legacy_v7.sqlite'));
+      final legacy = sqlite.sqlite3.open(file.path);
+      legacy.execute('''
+        CREATE TABLE assistant_personas (
+          id TEXT NOT NULL PRIMARY KEY,
+          display_name TEXT NOT NULL,
+          preset_type TEXT NOT NULL,
+          custom_instruction TEXT,
+          reply_length TEXT NOT NULL,
+          initiative_level INTEGER NOT NULL,
+          emoji_level INTEGER NOT NULL,
+          avatar_asset_id TEXT NOT NULL,
+          schedule_read INTEGER NOT NULL,
+          attendance_read INTEGER NOT NULL,
+          wage_read INTEGER NOT NULL,
+          alarm_read INTEGER NOT NULL,
+          notes_read INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+        INSERT INTO assistant_personas VALUES (
+          'persona', '小班', 'gentle', NULL, 'medium', 1, 1,
+          'default_gentle', 1, 1, 0, 1, 0, 1
+        );
+        PRAGMA user_version = 7;
+      ''');
+      legacy.close();
+
+      final database = AppDatabase(NativeDatabase(file));
+      addTearDown(database.close);
+      await database.ensureReady();
+      final persona = await database
+          .select(database.assistantPersonas)
+          .getSingle();
+      final memoryTable = await database
+          .customSelect(
+            "SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'assistant_memories'",
+          )
+          .getSingleOrNull();
+
+      expect(persona.displayName, '小班');
+      expect(persona.memoryRead, 1);
+      expect(memoryTable, isNotNull);
+    });
+
     test('allows only one active override per date', () async {
       final database = AppDatabase.inMemory();
       addTearDown(database.close);
