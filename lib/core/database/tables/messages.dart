@@ -9,6 +9,7 @@ class Messages extends Table {
   TextColumn get conversationId => text().references(Conversations, #id)();
   TextColumn get role => text()();
   TextColumn get content => text()();
+  TextColumn get reasoningContent => text().nullable()();
   TextColumn get contentType => text()();
   TextColumn get toolCallId => text().nullable()();
   IntColumn get localOnly => integer()();

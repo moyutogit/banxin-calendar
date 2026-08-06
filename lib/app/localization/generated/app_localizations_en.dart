@@ -126,6 +126,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantStop => 'Stop generating';
 
   @override
+  String get assistantThinking => 'Thinking process';
+
+  @override
+  String get assistantThinkingInProgress => 'Thinking…';
+
+  @override
+  String get assistantPreparingResponse => 'Preparing a response…';
+
+  @override
+  String get assistantRequestFailed =>
+      'The AI request failed. Check the model connection and try again.';
+
+  @override
   String get assistantQuickAttendance => 'Summarize this month\'s attendance';
 
   @override
@@ -136,6 +149,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantQuickAlarm => 'Check alarms';
+
+  @override
+  String get assistantQuickPermissionRequired =>
+      'Enable the matching data permission in assistant settings first.';
 
   @override
   String get assistantProposalTitle => 'Change awaiting confirmation';

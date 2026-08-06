@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "entries": [
     {
       "feature": "foundation",
@@ -24,7 +24,7 @@
     {
       "feature": "assistant",
       "status": "available",
-      "help": "AI 可读取用户授权的最小范围摘要。排班与闹钟写操作必须预览、在 10 分钟内由本地界面确认，并支持冲突安全撤销。"
+      "help": "AI 消息会即时显示，并分别流式呈现可折叠的思考过程与正文；只读取用户授权的最小范围摘要。快捷查询会按当前日期调用本地工具。排班与闹钟写操作必须预览、在 10 分钟内由本地界面确认，并支持冲突安全撤销。"
     },
     {
       "feature": "backup_and_privacy",

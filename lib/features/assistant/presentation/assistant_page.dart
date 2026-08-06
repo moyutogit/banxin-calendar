@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_action_gateway.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_providers.dart';
 import 'package:banxin_calendar/features/assistant/application/conversation_service.dart';
@@ -24,7 +25,12 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
   Conversation? _conversation;
   List<AssistantMessage> _messages = const <AssistantMessage>[];
   String _partial = '';
+  String _partialReasoning = '';
+  String _queuedText = '';
+  String _queuedReasoning = '';
+  bool _streamUpdateScheduled = false;
   String? _error;
+  String? _lastRequestText;
   String? _proposalActionId;
   String? _proposalToken;
   String? _proposalSummary;
@@ -117,7 +123,10 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
               subtitle: Text(_persona?.preset.name ?? ''),
               trailing: IconButton(
                 tooltip: strings.assistantConfigureTitle,
-                onPressed: () => context.push('/settings/assistant'),
+                onPressed: () async {
+                  await context.push('/settings/assistant');
+                  if (mounted) unawaited(_initialize());
+                },
                 icon: const Icon(Icons.settings_outlined),
               ),
             ),
@@ -132,15 +141,36 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                 spacing: 8,
                 runSpacing: 8,
                 children: <Widget>[
-                  _quick(strings.assistantQuickAttendance),
-                  _quick(strings.assistantQuickSchedule),
-                  _quick(strings.assistantQuickWage),
-                  _quick(strings.assistantQuickAlarm),
+                  _quick(
+                    strings.assistantQuickAttendance,
+                    enabled: _persona?.scopes.attendanceRead ?? false,
+                  ),
+                  _quick(
+                    strings.assistantQuickSchedule,
+                    enabled: _persona?.scopes.scheduleRead ?? false,
+                  ),
+                  _quick(
+                    strings.assistantQuickWage,
+                    enabled:
+                        (_persona?.scopes.attendanceRead ?? false) &&
+                        (_persona?.scopes.wageRead ?? false),
+                  ),
+                  _quick(
+                    strings.assistantQuickAlarm,
+                    enabled: _persona?.scopes.alarmRead ?? false,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
               ..._messages.map(_messageBubble),
-              if (_partial.isNotEmpty) _bubble(_partial, isUser: false),
+              if (_generating ||
+                  _partial.isNotEmpty ||
+                  _partialReasoning.isNotEmpty)
+                _assistantBubble(
+                  text: _partial,
+                  reasoning: _partialReasoning,
+                  streaming: _generating,
+                ),
               if (_proposalActionId != null) _proposalCard(strings),
               if (_undoActionId != null)
                 Card(
@@ -160,7 +190,7 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                     title: Text(_error!),
                     trailing: IconButton(
                       tooltip: strings.actionRetry,
-                      onPressed: _generating ? null : _send,
+                      onPressed: _generating ? null : _retry,
                       icon: const Icon(Icons.refresh),
                     ),
                   ),
@@ -183,7 +213,9 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
                       hintText: strings.assistantInputHint,
                       border: const OutlineInputBorder(),
                     ),
-                    onSubmitted: (_) => _generating ? null : _send(),
+                    onSubmitted: (_) {
+                      if (!_generating) _send();
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -202,18 +234,34 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
     );
   }
 
-  Widget _quick(String text) => ActionChip(
+  Widget _quick(String text, {required bool enabled}) => ActionChip(
+    avatar: enabled ? null : const Icon(Icons.lock_outline, size: 18),
     label: Text(text),
     onPressed: _generating
         ? null
         : () {
-            _input.text = text;
-            _send();
+            if (!enabled) {
+              AppMessage.show(
+                context,
+                AppLocalizations.of(context).assistantQuickPermissionRequired,
+                type: AppMessageType.warning,
+              );
+              return;
+            }
+            _startSending(text);
           },
   );
 
-  Widget _messageBubble(AssistantMessage message) =>
-      _bubble(message.content, isUser: message.role == LlmRole.user);
+  Widget _messageBubble(AssistantMessage message) {
+    if (message.role == LlmRole.user) {
+      return _bubble(message.content, isUser: true);
+    }
+    return _assistantBubble(
+      key: ValueKey<String>(message.id),
+      text: message.content,
+      reasoning: message.reasoningContent ?? '',
+    );
+  }
 
   Widget _bubble(String text, {required bool isUser}) => Align(
     alignment: isUser
@@ -232,6 +280,57 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
       child: SelectableText(text),
     ),
   );
+
+  Widget _assistantBubble({
+    Key? key,
+    required String text,
+    required String reasoning,
+    bool streaming = false,
+  }) {
+    final strings = AppLocalizations.of(context);
+    return Align(
+      key: key,
+      alignment: AlignmentDirectional.centerStart,
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 520),
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (reasoning.isNotEmpty)
+              _ReasoningPanel(
+                text: reasoning,
+                title: streaming
+                    ? strings.assistantThinkingInProgress
+                    : strings.assistantThinking,
+                initiallyExpanded: streaming,
+              ),
+            if (reasoning.isNotEmpty && text.isNotEmpty)
+              const SizedBox(height: 10),
+            if (text.isNotEmpty)
+              SelectableText(text)
+            else if (streaming && reasoning.isEmpty)
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const SizedBox.square(
+                    dimension: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(strings.assistantPreparingResponse),
+                ],
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _proposalCard(AppLocalizations strings) => Card(
     child: Padding(
@@ -268,28 +367,59 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
     ),
   );
 
-  void _send() {
+  void _send() => _startSending(_input.text);
+
+  void _startSending(
+    String rawText, {
+    bool saveUserMessage = true,
+    bool showOptimisticMessage = true,
+  }) {
     final conversation = _conversation;
-    if (conversation == null || _input.text.trim().isEmpty || _generating) {
+    final text = rawText.trim();
+    if (conversation == null || text.isEmpty || _generating) {
       return;
     }
+    final optimisticMessage = AssistantMessage(
+      id: 'optimistic-${DateTime.now().microsecondsSinceEpoch}',
+      conversationId: conversation.id,
+      role: LlmRole.user,
+      content: text,
+      contentType: 'text',
+      localOnly: false,
+      createdAtUtc: DateTime.now().toUtc(),
+    );
+    _input.clear();
     setState(() {
       _generating = true;
       _partial = '';
+      _partialReasoning = '';
+      _queuedText = '';
+      _queuedReasoning = '';
       _error = null;
+      _lastRequestText = text;
+      if (showOptimisticMessage) {
+        _messages = <AssistantMessage>[..._messages, optimisticMessage];
+      }
       _proposalActionId = null;
       _proposalToken = null;
       _proposalSummary = null;
     });
+    _scrollToBottom();
     _subscription = ref
         .read(conversationServiceProvider)
-        .send(conversationId: conversation.id, userText: _input.text)
+        .send(
+          conversationId: conversation.id,
+          userText: text,
+          saveUserMessage: saveUserMessage,
+        )
         .listen(
           (event) {
             if (!mounted) return;
             switch (event) {
               case ConversationTextDelta():
-                setState(() => _partial += event.text);
+                _queueStreamUpdate(text: event.text);
+              case ConversationReasoningDelta():
+                _queueStreamUpdate(reasoning: event.text);
               case ConversationProposal():
                 setState(() {
                   _proposalActionId = event.actionId;
@@ -302,13 +432,43 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
           },
           onError: (Object error) {
             if (mounted) {
+              final strings = AppLocalizations.of(context);
               setState(() {
                 _generating = false;
-                _error = error.toString();
+                _error = strings.assistantRequestFailed;
               });
+              AppMessage.show(
+                context,
+                strings.assistantRequestFailed,
+                type: AppMessageType.error,
+              );
             }
           },
         );
+  }
+
+  void _retry() {
+    final text = _lastRequestText;
+    if (text == null) return;
+    _startSending(text, saveUserMessage: false, showOptimisticMessage: false);
+  }
+
+  void _queueStreamUpdate({String text = '', String reasoning = ''}) {
+    _queuedText += text;
+    _queuedReasoning += reasoning;
+    if (_streamUpdateScheduled) return;
+    _streamUpdateScheduled = true;
+    WidgetsBinding.instance.scheduleFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _partial += _queuedText;
+        _partialReasoning += _queuedReasoning;
+        _queuedText = '';
+        _queuedReasoning = '';
+        _streamUpdateScheduled = false;
+      });
+      _scrollToBottom();
+    });
   }
 
   Future<void> _finish({required bool success}) async {
@@ -321,8 +481,14 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
       setState(() {
         _messages = messages;
         _partial = '';
+        _partialReasoning = '';
+        _queuedText = '';
+        _queuedReasoning = '';
         _generating = false;
-        if (success) _input.clear();
+        if (success) {
+          _lastRequestText = null;
+          _error = null;
+        }
       });
       _scrollToBottom();
     }
@@ -330,7 +496,13 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
 
   Future<void> _stop() async {
     await _subscription?.cancel();
-    if (mounted) setState(() => _generating = false);
+    if (mounted) {
+      setState(() {
+        _generating = false;
+        _queuedText = '';
+        _queuedReasoning = '';
+      });
+    }
   }
 
   void _cancelProposal() {
@@ -386,5 +558,81 @@ class _AssistantPageState extends ConsumerState<AssistantPage> {
         );
       }
     });
+  }
+}
+
+class _ReasoningPanel extends StatefulWidget {
+  const _ReasoningPanel({
+    required this.text,
+    required this.title,
+    required this.initiallyExpanded,
+  });
+
+  final String text;
+  final String title;
+  final bool initiallyExpanded;
+
+  @override
+  State<_ReasoningPanel> createState() => _ReasoningPanelState();
+}
+
+class _ReasoningPanelState extends State<_ReasoningPanel> {
+  late bool _expanded = widget.initiallyExpanded;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.surfaceContainer,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: colors.outlineVariant),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => setState(() => _expanded = !_expanded),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              child: Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.psychology_outlined,
+                    size: 18,
+                    color: colors.primary,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      widget.title,
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                  ),
+                  Icon(_expanded ? Icons.expand_less : Icons.expand_more),
+                ],
+              ),
+            ),
+          ),
+          AnimatedCrossFade(
+            firstChild: const SizedBox(width: double.infinity),
+            secondChild: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+              child: SelectableText(
+                widget.text,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: colors.onSurfaceVariant),
+              ),
+            ),
+            crossFadeState: _expanded
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            duration: const Duration(milliseconds: 180),
+          ),
+        ],
+      ),
+    );
   }
 }

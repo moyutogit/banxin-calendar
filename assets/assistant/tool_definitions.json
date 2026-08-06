@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "tools": [
     {
       "name": "get_app_capabilities",
@@ -13,10 +13,7 @@
         "type": "object",
         "required": ["range"],
         "properties": {
-          "range": {"$ref": "#/$defs/dateRange"}
-        },
-        "$defs": {
-          "dateRange": {
+          "range": {
             "type": "object",
             "required": ["start", "end"],
             "properties": {
@@ -35,7 +32,17 @@
       "parameters": {
         "type": "object",
         "required": ["range"],
-        "properties": {"range": {"type": "object"}},
+        "properties": {
+          "range": {
+            "type": "object",
+            "required": ["start", "end"],
+            "properties": {
+              "start": {"type": "string", "format": "date"},
+              "end": {"type": "string", "format": "date"}
+            },
+            "additionalProperties": false
+          }
+        },
         "additionalProperties": false
       }
     },
@@ -45,7 +52,17 @@
       "parameters": {
         "type": "object",
         "required": ["range"],
-        "properties": {"range": {"type": "object"}},
+        "properties": {
+          "range": {
+            "type": "object",
+            "required": ["start", "end"],
+            "properties": {
+              "start": {"type": "string", "format": "date"},
+              "end": {"type": "string", "format": "date"}
+            },
+            "additionalProperties": false
+          }
+        },
         "additionalProperties": false
       }
     },
@@ -61,7 +78,15 @@
         "type": "object",
         "required": ["range", "new_status", "sync_alarms"],
         "properties": {
-          "range": {"type": "object"},
+          "range": {
+            "type": "object",
+            "required": ["start", "end"],
+            "properties": {
+              "start": {"type": "string", "format": "date"},
+              "end": {"type": "string", "format": "date"}
+            },
+            "additionalProperties": false
+          },
           "new_status": {"type": "string", "enum": ["work", "rest"]},
           "shift_id": {"type": ["string", "null"]},
           "sync_alarms": {"type": "boolean"}

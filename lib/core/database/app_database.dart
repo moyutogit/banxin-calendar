@@ -123,6 +123,8 @@ class AppDatabase extends _$AppDatabase {
       await migrator.createTable(messages);
       await migrator.createTable(aiActions);
       await _createAssistantIndexes();
+    } else if (from < SchemaVersions.assistantReasoning) {
+      await migrator.addColumn(messages, messages.reasoningContent);
     }
   }
 

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
 import 'package:banxin_calendar/app/theme/app_theme.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/holiday/application/holiday_providers.dart';
 import 'package:banxin_calendar/features/holiday/application/holiday_update_service.dart';
 import 'package:banxin_calendar/features/holiday/domain/holiday_data_source.dart';
@@ -153,9 +154,11 @@ class _HolidaySettingsPageState extends ConsumerState<HolidaySettingsPage> {
     } on Object catch (error) {
       if (!mounted) return;
       setState(() => _loading = false);
-      ScaffoldMessenger.of(
+      AppMessage.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(_errorMessage(strings, error))));
+        _errorMessage(strings, error),
+        type: AppMessageType.error,
+      );
     }
   }
 

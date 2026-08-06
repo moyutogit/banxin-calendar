@@ -1,4 +1,5 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/alarm/application/alarm_application_service.dart';
 import 'package:banxin_calendar/features/alarm/application/alarm_providers.dart';
 import 'package:banxin_calendar/features/alarm/domain/alarm_entities.dart';
@@ -213,11 +214,17 @@ class _AlarmSettingsPageState extends ConsumerState<AlarmSettingsPage> {
       final text = result.succeeded
           ? strings.alarmSyncSuccess
           : strings.alarmSyncFailure;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+      AppMessage.show(
+        context,
+        text,
+        type: result.succeeded ? AppMessageType.success : AppMessageType.error,
+      );
       if (result.adjustedWithin24Hours) {
-        ScaffoldMessenger.of(
+        AppMessage.show(
           context,
-        ).showSnackBar(SnackBar(content: Text(strings.alarmAdjustedSoon)));
+          strings.alarmAdjustedSoon,
+          type: AppMessageType.warning,
+        );
       }
     } finally {
       if (mounted) {

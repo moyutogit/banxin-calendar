@@ -1,4 +1,5 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_providers.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
@@ -296,9 +297,11 @@ class _ScheduleSetupPageState extends ConsumerState<ScheduleSetupPage> {
   Future<void> _continue() async {
     final strings = AppLocalizations.of(context);
     if (!(_formKey.currentState?.validate() ?? false)) {
-      ScaffoldMessenger.of(
+      AppMessage.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(strings.invalidFormMessage)));
+        strings.invalidFormMessage,
+        type: AppMessageType.error,
+      );
       return;
     }
     if (_currentStep < 2) {
@@ -322,16 +325,20 @@ class _ScheduleSetupPageState extends ConsumerState<ScheduleSetupPage> {
       setState(() => _saving = true);
       await service.saveSetup(_draft());
       if (!mounted) return;
-      ScaffoldMessenger.of(
+      AppMessage.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(strings.setupSavedMessage)));
+        strings.setupSavedMessage,
+        type: AppMessageType.success,
+      );
       context.pop(true);
     } on Object {
       if (!mounted) return;
       setState(() => _saving = false);
-      ScaffoldMessenger.of(
+      AppMessage.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(strings.invalidFormMessage)));
+        strings.invalidFormMessage,
+        type: AppMessageType.error,
+      );
     }
   }
 

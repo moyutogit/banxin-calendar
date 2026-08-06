@@ -1,4 +1,5 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/attendance/application/attendance_application_service.dart';
 import 'package:banxin_calendar/features/attendance/domain/attendance_entities.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
@@ -145,9 +146,7 @@ class _AttendanceSectionState extends ConsumerState<AttendanceSection> {
       setState(_reload);
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(error.toString())));
+        AppMessage.show(context, error.toString(), type: AppMessageType.error);
       }
     }
   }
@@ -162,10 +161,10 @@ class _AttendanceSectionState extends ConsumerState<AttendanceSection> {
   }
 
   void _showPayrollWarning() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(AppLocalizations.of(context).payrollRecalculationWarning),
-      ),
+    AppMessage.show(
+      context,
+      AppLocalizations.of(context).payrollRecalculationWarning,
+      type: AppMessageType.warning,
     );
   }
 }

@@ -123,6 +123,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get assistantStop => '停止生成';
 
   @override
+  String get assistantThinking => '思考过程';
+
+  @override
+  String get assistantThinkingInProgress => '正在思考…';
+
+  @override
+  String get assistantPreparingResponse => '正在准备回复…';
+
+  @override
+  String get assistantRequestFailed => 'AI 请求失败，请检查模型连接后重试';
+
+  @override
   String get assistantQuickAttendance => '总结本月出勤';
 
   @override
@@ -133,6 +145,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get assistantQuickAlarm => '检查闹钟';
+
+  @override
+  String get assistantQuickPermissionRequired => '请先在助理设置中开启对应的数据读取权限';
 
   @override
   String get assistantProposalTitle => '待确认的修改';

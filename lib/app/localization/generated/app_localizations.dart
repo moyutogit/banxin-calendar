@@ -326,6 +326,30 @@ abstract class AppLocalizations {
   /// **'停止生成'**
   String get assistantStop;
 
+  /// No description provided for @assistantThinking.
+  ///
+  /// In zh, this message translates to:
+  /// **'思考过程'**
+  String get assistantThinking;
+
+  /// No description provided for @assistantThinkingInProgress.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在思考…'**
+  String get assistantThinkingInProgress;
+
+  /// No description provided for @assistantPreparingResponse.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在准备回复…'**
+  String get assistantPreparingResponse;
+
+  /// No description provided for @assistantRequestFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'AI 请求失败，请检查模型连接后重试'**
+  String get assistantRequestFailed;
+
   /// No description provided for @assistantQuickAttendance.
   ///
   /// In zh, this message translates to:
@@ -349,6 +373,12 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'检查闹钟'**
   String get assistantQuickAlarm;
+
+  /// No description provided for @assistantQuickPermissionRequired.
+  ///
+  /// In zh, this message translates to:
+  /// **'请先在助理设置中开启对应的数据读取权限'**
+  String get assistantQuickPermissionRequired;
 
   /// No description provided for @assistantProposalTitle.
   ///

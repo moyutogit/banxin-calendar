@@ -1,5 +1,6 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
 import 'package:banxin_calendar/app/theme/app_theme.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
 import 'package:banxin_calendar/features/schedule/application/schedule_providers.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_entities.dart';
@@ -113,9 +114,11 @@ class _ShiftTemplatesPageState extends ConsumerState<ShiftTemplatesPage> {
       if (mounted) setState(_reload);
     } on StateError {
       if (!mounted) return;
-      ScaffoldMessenger.of(
+      AppMessage.show(
         context,
-      ).showSnackBar(SnackBar(content: Text(strings.shiftDisableBlocked)));
+        strings.shiftDisableBlocked,
+        type: AppMessageType.warning,
+      );
     }
   }
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/attendance/domain/attendance_entities.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:banxin_calendar/features/statistics/application/workforce_providers.dart';
@@ -275,8 +276,10 @@ class _WageSettingsPageState extends ConsumerState<WageSettingsPage> {
         );
     if (mounted) {
       setState(() => _saving = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(AppLocalizations.of(context).wageRuleSaved)),
+      AppMessage.show(
+        context,
+        AppLocalizations.of(context).wageRuleSaved,
+        type: AppMessageType.success,
       );
     }
   }

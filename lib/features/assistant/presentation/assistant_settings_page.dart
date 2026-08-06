@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_providers.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_settings_service.dart';
 import 'package:banxin_calendar/features/assistant/domain/assistant_entities.dart';
@@ -371,10 +372,10 @@ class _AssistantSettingsPageState extends ConsumerState<AssistantSettingsPage> {
           );
       _apiKey.clear();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(AppLocalizations.of(context).assistantSettingsSaved),
-          ),
+        AppMessage.show(
+          context,
+          AppLocalizations.of(context).assistantSettingsSaved,
+          type: AppMessageType.success,
         );
       }
     } finally {

@@ -1,7 +1,7 @@
 name: banxin_calendar
 description: "班薪日历：本地优先的排班、出勤与工资管理应用。"
 publish_to: 'none'
-version: 0.1.1+2
+version: 0.1.2+3
 
 environment:
   sdk: ^3.12.2

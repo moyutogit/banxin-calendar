@@ -1,4 +1,5 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/home/application/home_application_service.dart';
 import 'package:banxin_calendar/features/home/application/home_providers.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_entities.dart';
@@ -70,12 +71,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     final result = await ref.read(homeApplicationServiceProvider).punchToday();
     if (!mounted) return;
     if (result.requiresPayrollRecalculation) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            AppLocalizations.of(context).payrollRecalculationWarning,
-          ),
-        ),
+      AppMessage.show(
+        context,
+        AppLocalizations.of(context).payrollRecalculationWarning,
+        type: AppMessageType.warning,
       );
     }
     setState(() {

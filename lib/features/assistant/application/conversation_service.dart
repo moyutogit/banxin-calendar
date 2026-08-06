@@ -9,6 +9,7 @@ import 'package:banxin_calendar/features/assistant/domain/assistant_repository.d
 import 'package:banxin_calendar/features/assistant/domain/assistant_safety_policy.dart';
 import 'package:banxin_calendar/features/assistant/domain/capability_knowledge_source.dart';
 import 'package:banxin_calendar/features/assistant/domain/llm_provider.dart';
+import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 
 sealed class ConversationEvent {
   const ConversationEvent();
@@ -16,6 +17,12 @@ sealed class ConversationEvent {
 
 final class ConversationTextDelta extends ConversationEvent {
   const ConversationTextDelta(this.text);
+
+  final String text;
+}
+
+final class ConversationReasoningDelta extends ConversationEvent {
+  const ConversationReasoningDelta(this.text);
 
   final String text;
 }
@@ -86,21 +93,24 @@ final class ConversationService {
   Stream<ConversationEvent> send({
     required String conversationId,
     required String userText,
+    bool saveUserMessage = true,
   }) async* {
     final trimmed = userText.trim();
     if (trimmed.isEmpty) return;
     final now = _clock.nowUtc();
-    await _repository.saveMessage(
-      AssistantMessage(
-        id: _idGenerator.generate(),
-        conversationId: conversationId,
-        role: LlmRole.user,
-        content: trimmed,
-        contentType: 'text',
-        localOnly: false,
-        createdAtUtc: now,
-      ),
-    );
+    if (saveUserMessage) {
+      await _repository.saveMessage(
+        AssistantMessage(
+          id: _idGenerator.generate(),
+          conversationId: conversationId,
+          role: LlmRole.user,
+          content: trimmed,
+          contentType: 'text',
+          localOnly: false,
+          createdAtUtc: now,
+        ),
+      );
+    }
     if (_safetyPolicy.mustRefuse(trimmed)) {
       const refusal = '该请求涉及跳过确认、读取密钥或执行代码，已按安全规则拒绝。';
       await _saveAssistant(conversationId, refusal, localOnly: true);
@@ -121,15 +131,22 @@ final class ConversationService {
       ...history
           .where((message) => !message.localOnly)
           .map(
-            (message) =>
-                LlmMessage(role: message.role, content: message.content),
+            (message) => LlmMessage(
+              role: message.role,
+              content: message.content,
+              reasoningContent: message.reasoningContent,
+              toolCallId: message.toolCallId,
+            ),
           ),
     ];
     final definitions = await _toolDefinitions();
-    final buffer = StringBuffer();
+    final responseBuffer = StringBuffer();
+    final reasoningBuffer = StringBuffer();
     var rounds = 0;
-    while (rounds++ < 3) {
-      LlmToolCall? toolCall;
+    while (rounds++ < 5) {
+      final roundText = StringBuffer();
+      final roundReasoning = StringBuffer();
+      final toolCalls = <LlmToolCall>[];
       await for (final event in _provider.chat(
         messages: messages,
         tools: definitions,
@@ -139,52 +156,113 @@ final class ConversationService {
       )) {
         switch (event) {
           case LlmTextDelta():
-            buffer.write(event.text);
+            roundText.write(event.text);
+            responseBuffer.write(event.text);
             yield ConversationTextDelta(event.text);
+          case LlmReasoningDelta():
+            if (roundReasoning.isEmpty && reasoningBuffer.isNotEmpty) {
+              reasoningBuffer.write('\n\n');
+              yield const ConversationReasoningDelta('\n\n');
+            }
+            roundReasoning.write(event.text);
+            reasoningBuffer.write(event.text);
+            yield ConversationReasoningDelta(event.text);
           case LlmToolCall():
-            toolCall = event;
+            toolCalls.add(event);
           case LlmCompleted():
             break;
         }
       }
-      if (toolCall == null) break;
-      final result = await _tools.execute(
-        name: toolCall.name,
-        arguments: toolCall.arguments,
-        persona: settings.persona,
-        conversationId: conversationId,
-      );
-      if (result['requiresConfirmation'] == true) {
-        final summary = result['summary']! as String;
-        await _saveAssistant(conversationId, summary, localOnly: true);
-        yield ConversationProposal(
-          actionId: result['actionId']! as String,
-          confirmationToken: result['confirmationToken']! as String,
-          summary: summary,
-        );
-        yield const ConversationFinished();
-        return;
-      }
+      if (toolCalls.isEmpty) break;
       messages.add(
         LlmMessage(
-          role: LlmRole.system,
-          content:
-              'Verified local tool result for ${toolCall.name}: ${jsonEncode(result)}',
+          role: LlmRole.assistant,
+          content: roundText.toString(),
+          reasoningContent: roundReasoning.toString(),
+          toolCalls: toolCalls,
         ),
       );
-      toolCall = null;
+      for (final toolCall in toolCalls) {
+        late final Map<String, Object?> result;
+        try {
+          result = await _tools.execute(
+            name: toolCall.name,
+            arguments: toolCall.arguments,
+            persona: settings.persona,
+            conversationId: conversationId,
+          );
+        } on ToolPermissionException catch (error) {
+          final response = _permissionMessage(error.scope);
+          await _saveAssistant(
+            conversationId,
+            response,
+            localOnly: true,
+            reasoningContent: reasoningBuffer.toString(),
+          );
+          yield ConversationTextDelta(response);
+          yield const ConversationFinished();
+          return;
+        } on FormatException {
+          result = <String, Object?>{
+            'succeeded': false,
+            'error': 'invalid_tool_arguments',
+            'guidance':
+                'Retry this tool with an explicit ISO date range containing start and end.',
+          };
+        }
+        if (result['requiresConfirmation'] == true) {
+          final summary = result['summary']! as String;
+          await _saveAssistant(
+            conversationId,
+            summary,
+            localOnly: true,
+            reasoningContent: reasoningBuffer.toString(),
+          );
+          yield ConversationProposal(
+            actionId: result['actionId']! as String,
+            confirmationToken: result['confirmationToken']! as String,
+            summary: summary,
+          );
+          yield const ConversationFinished();
+          return;
+        }
+        messages.add(
+          LlmMessage(
+            role: LlmRole.tool,
+            content: jsonEncode(result),
+            toolCallId: toolCall.id,
+          ),
+        );
+      }
     }
-    final response = buffer.toString();
-    if (response.isNotEmpty) await _saveAssistant(conversationId, response);
+    final response = responseBuffer.toString();
+    if (response.isNotEmpty) {
+      await _saveAssistant(
+        conversationId,
+        response,
+        reasoningContent: reasoningBuffer.toString(),
+      );
+    }
     yield const ConversationFinished();
   }
 
-  Future<String> _systemPrompt(AssistantPersona persona) async =>
-      'Current app capabilities:\n${await _knowledge.capabilities()}\n'
-      'Feature help:\n${await _knowledge.featureHelp()}\n'
-      'Safety rules:\n${await _knowledge.safetyRules()}\n'
-      'Persona: ${persona.preset.name}, reply length: ${persona.replyLength.name}. '
-      'Personality changes wording only, never facts, permissions, or tool parameters.';
+  Future<String> _systemPrompt(AssistantPersona persona) async {
+    final shanghaiNow = _clock.nowUtc().add(const Duration(hours: 8));
+    final currentDate = LocalDate(
+      shanghaiNow.year,
+      shanghaiNow.month,
+      shanghaiNow.day,
+    );
+    return 'Current application date (Asia/Shanghai): $currentDate. '
+        'Resolve relative dates such as today, this month, and the next 7 days '
+        'from this date and call the matching local read tool directly; do not '
+        'ask the user to provide today\'s date.\n'
+        'Current app capabilities:\n${await _knowledge.capabilities()}\n'
+        'Feature help:\n${await _knowledge.featureHelp()}\n'
+        'Safety rules:\n${await _knowledge.safetyRules()}\n'
+        'Persona: ${persona.preset.name}, reply length: ${persona.replyLength.name}. '
+        'Personality changes wording only, never facts, permissions, or tool parameters.';
+  }
 
   Future<List<ToolDefinition>> _toolDefinitions() async {
     final decoded =
@@ -200,10 +278,23 @@ final class ConversationService {
     }).toList();
   }
 
+  String _permissionMessage(String scope) {
+    final label = switch (scope) {
+      'schedule' => '排班',
+      'attendance' => '出勤',
+      'wage' => '工资',
+      'alarm' => '闹钟',
+      'notes' => '备注',
+      _ => '对应',
+    };
+    return '当前未授权读取$label数据。请先在“配置 AI 模型”的助理权限中开启后再试。';
+  }
+
   Future<void> _saveAssistant(
     String conversationId,
     String content, {
     bool localOnly = false,
+    String? reasoningContent,
   }) {
     return _repository.saveMessage(
       AssistantMessage(
@@ -211,6 +302,9 @@ final class ConversationService {
         conversationId: conversationId,
         role: LlmRole.assistant,
         content: content,
+        reasoningContent: reasoningContent?.isEmpty ?? true
+            ? null
+            : reasoningContent,
         contentType: 'text',
         localOnly: localOnly,
         createdAtUtc: _clock.nowUtc(),

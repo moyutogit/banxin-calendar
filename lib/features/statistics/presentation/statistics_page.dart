@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:banxin_calendar/features/statistics/application/workforce_providers.dart';
 import 'package:banxin_calendar/features/statistics/domain/statistics_entities.dart';
@@ -224,8 +225,10 @@ class _ReportBody extends ConsumerWidget {
                   .read(statisticsExportServiceProvider)
                   .export(report.range);
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('${strings.csvExported}: $path')),
+                AppMessage.show(
+                  context,
+                  '${strings.csvExported}: $path',
+                  type: AppMessageType.success,
                 );
               }
             },

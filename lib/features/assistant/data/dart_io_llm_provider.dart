@@ -28,10 +28,14 @@ final class DartIoLlmProvider implements LlmProvider {
     final client = HttpClient()
       ..connectionTimeout = Duration(seconds: config.timeoutSeconds);
     try {
+      final replayReasoning = _supportsDeepSeekReasoning(config);
       final request = await client
           .postUrl(config.endpoint)
           .timeout(Duration(seconds: config.timeoutSeconds));
       _applyHeaders(request, credential, customHeaders);
+      if (config.streamEnabled) {
+        request.headers.set(HttpHeaders.acceptHeader, 'text/event-stream');
+      }
       request.write(
         jsonEncode(<String, Object?>{
           'model': config.modelName,
@@ -40,6 +44,22 @@ final class DartIoLlmProvider implements LlmProvider {
               <String, Object?>{
                 'role': message.role.name,
                 'content': message.content,
+                'reasoning_content': ?(replayReasoning
+                    ? message.reasoningContent
+                    : null),
+                if (message.toolCalls.isNotEmpty)
+                  'tool_calls': <Object?>[
+                    for (final call in message.toolCalls)
+                      <String, Object?>{
+                        'id': call.id,
+                        'type': 'function',
+                        'function': <String, Object?>{
+                          'name': call.name,
+                          'arguments': jsonEncode(call.arguments),
+                        },
+                      },
+                  ],
+                'tool_call_id': ?message.toolCallId,
               },
           ],
           if (tools.isNotEmpty)
@@ -89,6 +109,10 @@ final class DartIoLlmProvider implements LlmProvider {
           if (choices == null || choices.isEmpty) continue;
           final choice = choices.first! as Map<String, Object?>;
           final delta = choice['delta'] as Map<String, Object?>?;
+          final reasoning = delta?['reasoning_content'] as String?;
+          if (reasoning != null && reasoning.isNotEmpty) {
+            yield LlmReasoningDelta(reasoning);
+          }
           final text = delta?['content'] as String?;
           if (text != null && text.isNotEmpty) yield LlmTextDelta(text);
           final fragments =
@@ -168,6 +192,10 @@ final class DartIoLlmProvider implements LlmProvider {
     final choice = choices.first! as Map<String, Object?>;
     final message = choice['message'] as Map<String, Object?>?;
     if (message == null) throw const FormatException();
+    final reasoning = message['reasoning_content'] as String?;
+    if (reasoning != null && reasoning.isNotEmpty) {
+      yield LlmReasoningDelta(reasoning);
+    }
     final content = message['content'] as String?;
     if (content != null && content.isNotEmpty) yield LlmTextDelta(content);
     final calls = message['tool_calls'] as List<Object?>? ?? const <Object?>[];
@@ -210,6 +238,14 @@ final class DartIoLlmProvider implements LlmProvider {
     429 => AiConnectionStatus.rateLimited,
     _ => AiConnectionStatus.networkFailure,
   };
+
+  bool _supportsDeepSeekReasoning(AiProviderConfig config) {
+    final host = config.baseUrl.host.toLowerCase();
+    final model = config.modelName.toLowerCase();
+    return host == 'api.deepseek.com' ||
+        host.endsWith('.deepseek.com') ||
+        model.startsWith('deepseek-');
+  }
 }
 
 final class _StreamingToolCall {

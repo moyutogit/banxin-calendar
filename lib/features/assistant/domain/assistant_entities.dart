@@ -129,6 +129,7 @@ final class AssistantMessage {
     required this.contentType,
     required this.localOnly,
     required this.createdAtUtc,
+    this.reasoningContent,
     this.toolCallId,
   });
 
@@ -136,6 +137,7 @@ final class AssistantMessage {
   final String conversationId;
   final LlmRole role;
   final String content;
+  final String? reasoningContent;
   final String contentType;
   final String? toolCallId;
   final bool localOnly;
@@ -143,10 +145,19 @@ final class AssistantMessage {
 }
 
 final class LlmMessage {
-  const LlmMessage({required this.role, required this.content});
+  const LlmMessage({
+    required this.role,
+    required this.content,
+    this.reasoningContent,
+    this.toolCalls = const <LlmToolCall>[],
+    this.toolCallId,
+  });
 
   final LlmRole role;
   final String content;
+  final String? reasoningContent;
+  final List<LlmToolCall> toolCalls;
+  final String? toolCallId;
 }
 
 final class ToolDefinition {
@@ -167,6 +178,12 @@ sealed class LlmEvent {
 
 final class LlmTextDelta extends LlmEvent {
   const LlmTextDelta(this.text);
+
+  final String text;
+}
+
+final class LlmReasoningDelta extends LlmEvent {
+  const LlmReasoningDelta(this.text);
 
   final String text;
 }

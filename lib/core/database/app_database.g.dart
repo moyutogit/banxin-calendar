@@ -12090,6 +12090,17 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _reasoningContentMeta = const VerificationMeta(
+    'reasoningContent',
+  );
+  @override
+  late final GeneratedColumn<String> reasoningContent = GeneratedColumn<String>(
+    'reasoning_content',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _contentTypeMeta = const VerificationMeta(
     'contentType',
   );
@@ -12140,6 +12151,7 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
     conversationId,
     role,
     content,
+    reasoningContent,
     contentType,
     toolCallId,
     localOnly,
@@ -12188,6 +12200,15 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
       );
     } else if (isInserting) {
       context.missing(_contentMeta);
+    }
+    if (data.containsKey('reasoning_content')) {
+      context.handle(
+        _reasoningContentMeta,
+        reasoningContent.isAcceptableOrUnknown(
+          data['reasoning_content']!,
+          _reasoningContentMeta,
+        ),
+      );
     }
     if (data.containsKey('content_type')) {
       context.handle(
@@ -12250,6 +12271,10 @@ class $MessagesTable extends Messages with TableInfo<$MessagesTable, Message> {
         DriftSqlType.string,
         data['${effectivePrefix}content'],
       )!,
+      reasoningContent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}reasoning_content'],
+      ),
       contentType: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}content_type'],
@@ -12280,6 +12305,7 @@ class Message extends DataClass implements Insertable<Message> {
   final String conversationId;
   final String role;
   final String content;
+  final String? reasoningContent;
   final String contentType;
   final String? toolCallId;
   final int localOnly;
@@ -12289,6 +12315,7 @@ class Message extends DataClass implements Insertable<Message> {
     required this.conversationId,
     required this.role,
     required this.content,
+    this.reasoningContent,
     required this.contentType,
     this.toolCallId,
     required this.localOnly,
@@ -12301,6 +12328,9 @@ class Message extends DataClass implements Insertable<Message> {
     map['conversation_id'] = Variable<String>(conversationId);
     map['role'] = Variable<String>(role);
     map['content'] = Variable<String>(content);
+    if (!nullToAbsent || reasoningContent != null) {
+      map['reasoning_content'] = Variable<String>(reasoningContent);
+    }
     map['content_type'] = Variable<String>(contentType);
     if (!nullToAbsent || toolCallId != null) {
       map['tool_call_id'] = Variable<String>(toolCallId);
@@ -12316,6 +12346,9 @@ class Message extends DataClass implements Insertable<Message> {
       conversationId: Value(conversationId),
       role: Value(role),
       content: Value(content),
+      reasoningContent: reasoningContent == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reasoningContent),
       contentType: Value(contentType),
       toolCallId: toolCallId == null && nullToAbsent
           ? const Value.absent()
@@ -12335,6 +12368,7 @@ class Message extends DataClass implements Insertable<Message> {
       conversationId: serializer.fromJson<String>(json['conversationId']),
       role: serializer.fromJson<String>(json['role']),
       content: serializer.fromJson<String>(json['content']),
+      reasoningContent: serializer.fromJson<String?>(json['reasoningContent']),
       contentType: serializer.fromJson<String>(json['contentType']),
       toolCallId: serializer.fromJson<String?>(json['toolCallId']),
       localOnly: serializer.fromJson<int>(json['localOnly']),
@@ -12349,6 +12383,7 @@ class Message extends DataClass implements Insertable<Message> {
       'conversationId': serializer.toJson<String>(conversationId),
       'role': serializer.toJson<String>(role),
       'content': serializer.toJson<String>(content),
+      'reasoningContent': serializer.toJson<String?>(reasoningContent),
       'contentType': serializer.toJson<String>(contentType),
       'toolCallId': serializer.toJson<String?>(toolCallId),
       'localOnly': serializer.toJson<int>(localOnly),
@@ -12361,6 +12396,7 @@ class Message extends DataClass implements Insertable<Message> {
     String? conversationId,
     String? role,
     String? content,
+    Value<String?> reasoningContent = const Value.absent(),
     String? contentType,
     Value<String?> toolCallId = const Value.absent(),
     int? localOnly,
@@ -12370,6 +12406,9 @@ class Message extends DataClass implements Insertable<Message> {
     conversationId: conversationId ?? this.conversationId,
     role: role ?? this.role,
     content: content ?? this.content,
+    reasoningContent: reasoningContent.present
+        ? reasoningContent.value
+        : this.reasoningContent,
     contentType: contentType ?? this.contentType,
     toolCallId: toolCallId.present ? toolCallId.value : this.toolCallId,
     localOnly: localOnly ?? this.localOnly,
@@ -12383,6 +12422,9 @@ class Message extends DataClass implements Insertable<Message> {
           : this.conversationId,
       role: data.role.present ? data.role.value : this.role,
       content: data.content.present ? data.content.value : this.content,
+      reasoningContent: data.reasoningContent.present
+          ? data.reasoningContent.value
+          : this.reasoningContent,
       contentType: data.contentType.present
           ? data.contentType.value
           : this.contentType,
@@ -12401,6 +12443,7 @@ class Message extends DataClass implements Insertable<Message> {
           ..write('conversationId: $conversationId, ')
           ..write('role: $role, ')
           ..write('content: $content, ')
+          ..write('reasoningContent: $reasoningContent, ')
           ..write('contentType: $contentType, ')
           ..write('toolCallId: $toolCallId, ')
           ..write('localOnly: $localOnly, ')
@@ -12415,6 +12458,7 @@ class Message extends DataClass implements Insertable<Message> {
     conversationId,
     role,
     content,
+    reasoningContent,
     contentType,
     toolCallId,
     localOnly,
@@ -12428,6 +12472,7 @@ class Message extends DataClass implements Insertable<Message> {
           other.conversationId == this.conversationId &&
           other.role == this.role &&
           other.content == this.content &&
+          other.reasoningContent == this.reasoningContent &&
           other.contentType == this.contentType &&
           other.toolCallId == this.toolCallId &&
           other.localOnly == this.localOnly &&
@@ -12439,6 +12484,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
   final Value<String> conversationId;
   final Value<String> role;
   final Value<String> content;
+  final Value<String?> reasoningContent;
   final Value<String> contentType;
   final Value<String?> toolCallId;
   final Value<int> localOnly;
@@ -12449,6 +12495,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     this.conversationId = const Value.absent(),
     this.role = const Value.absent(),
     this.content = const Value.absent(),
+    this.reasoningContent = const Value.absent(),
     this.contentType = const Value.absent(),
     this.toolCallId = const Value.absent(),
     this.localOnly = const Value.absent(),
@@ -12460,6 +12507,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     required String conversationId,
     required String role,
     required String content,
+    this.reasoningContent = const Value.absent(),
     required String contentType,
     this.toolCallId = const Value.absent(),
     required int localOnly,
@@ -12477,6 +12525,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     Expression<String>? conversationId,
     Expression<String>? role,
     Expression<String>? content,
+    Expression<String>? reasoningContent,
     Expression<String>? contentType,
     Expression<String>? toolCallId,
     Expression<int>? localOnly,
@@ -12488,6 +12537,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       if (conversationId != null) 'conversation_id': conversationId,
       if (role != null) 'role': role,
       if (content != null) 'content': content,
+      if (reasoningContent != null) 'reasoning_content': reasoningContent,
       if (contentType != null) 'content_type': contentType,
       if (toolCallId != null) 'tool_call_id': toolCallId,
       if (localOnly != null) 'local_only': localOnly,
@@ -12501,6 +12551,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     Value<String>? conversationId,
     Value<String>? role,
     Value<String>? content,
+    Value<String?>? reasoningContent,
     Value<String>? contentType,
     Value<String?>? toolCallId,
     Value<int>? localOnly,
@@ -12512,6 +12563,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
       conversationId: conversationId ?? this.conversationId,
       role: role ?? this.role,
       content: content ?? this.content,
+      reasoningContent: reasoningContent ?? this.reasoningContent,
       contentType: contentType ?? this.contentType,
       toolCallId: toolCallId ?? this.toolCallId,
       localOnly: localOnly ?? this.localOnly,
@@ -12534,6 +12586,9 @@ class MessagesCompanion extends UpdateCompanion<Message> {
     }
     if (content.present) {
       map['content'] = Variable<String>(content.value);
+    }
+    if (reasoningContent.present) {
+      map['reasoning_content'] = Variable<String>(reasoningContent.value);
     }
     if (contentType.present) {
       map['content_type'] = Variable<String>(contentType.value);
@@ -12560,6 +12615,7 @@ class MessagesCompanion extends UpdateCompanion<Message> {
           ..write('conversationId: $conversationId, ')
           ..write('role: $role, ')
           ..write('content: $content, ')
+          ..write('reasoningContent: $reasoningContent, ')
           ..write('contentType: $contentType, ')
           ..write('toolCallId: $toolCallId, ')
           ..write('localOnly: $localOnly, ')
@@ -20599,6 +20655,7 @@ typedef $$MessagesTableCreateCompanionBuilder =
       required String conversationId,
       required String role,
       required String content,
+      Value<String?> reasoningContent,
       required String contentType,
       Value<String?> toolCallId,
       required int localOnly,
@@ -20611,6 +20668,7 @@ typedef $$MessagesTableUpdateCompanionBuilder =
       Value<String> conversationId,
       Value<String> role,
       Value<String> content,
+      Value<String?> reasoningContent,
       Value<String> contentType,
       Value<String?> toolCallId,
       Value<int> localOnly,
@@ -20662,6 +20720,11 @@ class $$MessagesTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
     column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get reasoningContent => $composableBuilder(
+    column: $table.reasoningContent,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -20733,6 +20796,11 @@ class $$MessagesTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get reasoningContent => $composableBuilder(
+    column: $table.reasoningContent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get contentType => $composableBuilder(
     column: $table.contentType,
     builder: (column) => ColumnOrderings(column),
@@ -20794,6 +20862,11 @@ class $$MessagesTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<String> get reasoningContent => $composableBuilder(
+    column: $table.reasoningContent,
+    builder: (column) => column,
+  );
 
   GeneratedColumn<String> get contentType => $composableBuilder(
     column: $table.contentType,
@@ -20867,6 +20940,7 @@ class $$MessagesTableTableManager
                 Value<String> conversationId = const Value.absent(),
                 Value<String> role = const Value.absent(),
                 Value<String> content = const Value.absent(),
+                Value<String?> reasoningContent = const Value.absent(),
                 Value<String> contentType = const Value.absent(),
                 Value<String?> toolCallId = const Value.absent(),
                 Value<int> localOnly = const Value.absent(),
@@ -20877,6 +20951,7 @@ class $$MessagesTableTableManager
                 conversationId: conversationId,
                 role: role,
                 content: content,
+                reasoningContent: reasoningContent,
                 contentType: contentType,
                 toolCallId: toolCallId,
                 localOnly: localOnly,
@@ -20889,6 +20964,7 @@ class $$MessagesTableTableManager
                 required String conversationId,
                 required String role,
                 required String content,
+                Value<String?> reasoningContent = const Value.absent(),
                 required String contentType,
                 Value<String?> toolCallId = const Value.absent(),
                 required int localOnly,
@@ -20899,6 +20975,7 @@ class $$MessagesTableTableManager
                 conversationId: conversationId,
                 role: role,
                 content: content,
+                reasoningContent: reasoningContent,
                 contentType: contentType,
                 toolCallId: toolCallId,
                 localOnly: localOnly,

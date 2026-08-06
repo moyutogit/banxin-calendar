@@ -318,6 +318,56 @@ void main() {
       expect(schemaText, isNot(contains('authorization_header')));
     });
 
+    test(
+      'migrates v6 messages to persisted reasoning without data loss',
+      () async {
+        final file = File(path.join(tempDirectory.path, 'legacy_v6.sqlite'));
+        final legacy = sqlite.sqlite3.open(file.path);
+        legacy.execute('''
+        CREATE TABLE conversations (
+          id TEXT NOT NULL PRIMARY KEY,
+          title TEXT NOT NULL,
+          model_snapshot_json TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL,
+          archived_at INTEGER
+        );
+        CREATE TABLE messages (
+          id TEXT NOT NULL PRIMARY KEY,
+          conversation_id TEXT NOT NULL REFERENCES conversations(id),
+          role TEXT NOT NULL,
+          content TEXT NOT NULL,
+          content_type TEXT NOT NULL,
+          tool_call_id TEXT,
+          local_only INTEGER NOT NULL,
+          created_at INTEGER NOT NULL
+        );
+        INSERT INTO conversations VALUES (
+          'conversation', '保留的会话', '{}', 1, 1, NULL
+        );
+        INSERT INTO messages VALUES (
+          'message', 'conversation', 'assistant', '保留的回复',
+          'text', NULL, 0, 1
+        );
+        PRAGMA user_version = 6;
+      ''');
+        legacy.close();
+
+        final database = AppDatabase(NativeDatabase(file));
+        addTearDown(database.close);
+        await database.ensureReady();
+
+        final message = await database.select(database.messages).getSingle();
+        final version = await database
+            .customSelect('PRAGMA user_version')
+            .getSingle();
+
+        expect(version.data.values.single, SchemaVersions.current);
+        expect(message.content, '保留的回复');
+        expect(message.reasoningContent, isNull);
+      },
+    );
+
     test('allows only one active override per date', () async {
       final database = AppDatabase.inMemory();
       addTearDown(database.close);

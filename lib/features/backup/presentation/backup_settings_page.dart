@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
 import 'package:banxin_calendar/core/diagnostics/app_error_reporter.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/backup/application/backup_application_service.dart';
 import 'package:banxin_calendar/features/backup/application/backup_providers.dart';
 import 'package:banxin_calendar/features/backup/domain/backup_entities.dart';
@@ -332,8 +333,6 @@ class _BackupSettingsPageState extends ConsumerState<BackupSettingsPage> {
   }
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
+    AppMessage.show(context, message);
   }
 }
