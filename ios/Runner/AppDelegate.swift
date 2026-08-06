@@ -12,8 +12,10 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-    AlarmBridge.register(
-      with: engineBridge.pluginRegistry.registrar(forPlugin: "AlarmBridge")
-    )
+    if let registrar = engineBridge.pluginRegistry.registrar(
+      forPlugin: "AlarmBridge"
+    ) {
+      AlarmBridge.register(with: registrar)
+    }
   }
 }
