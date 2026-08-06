@@ -84,6 +84,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get assistantName => '助理名称';
 
   @override
+  String get assistantPersonaStyle => '性格与说话风格';
+
+  @override
   String get assistantPersonaGentle => '温柔陪伴';
 
   @override
@@ -93,7 +96,25 @@ class AppLocalizationsZh extends AppLocalizations {
   String get assistantPersonaLively => '活泼有趣';
 
   @override
+  String get assistantPersonaHumorous => '幽默风趣';
+
+  @override
+  String get assistantPersonaSarcastic => '吐槽毒舌';
+
+  @override
+  String get assistantPersonaCalm => '冷静克制';
+
+  @override
   String get assistantReplyLength => '回复长度';
+
+  @override
+  String get assistantReplyShort => '精炼';
+
+  @override
+  String get assistantReplyMedium => '适中';
+
+  @override
+  String get assistantReplyLong => '详细啰嗦';
 
   @override
   String get assistantScopeSchedule => '允许读取排班';
@@ -109,6 +130,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get assistantScopeNotes => '允许读取备注（默认关闭）';
+
+  @override
+  String get assistantScopeMemory => '允许读取和管理本地智能体记忆';
 
   @override
   String get assistantNotConfigured => 'AI 尚未配置；排班、打卡、工资和闹钟不受影响。';
@@ -171,6 +195,18 @@ class AppLocalizationsZh extends AppLocalizations {
   String get assistantSafetyRefusal => '该请求已按安全规则拒绝';
 
   @override
+  String get assistantConversations => '对话列表';
+
+  @override
+  String get assistantNewConversation => '开启新对话';
+
+  @override
+  String get assistantCurrentConversation => '当前对话';
+
+  @override
+  String get assistantEmptyConversation => '新对话已开启，问我任何排班、出勤、工资或闹钟问题吧。';
+
+  @override
   String onboardingProgress(int current, int total) {
     return '开始设置 $current/$total';
   }
@@ -187,7 +223,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get onboardingPrivacyBody =>
-      '排班、打卡、工资和对话保存在本地。API 密钥只进入系统 Keychain/Keystore；只有获得相应数据权限时，AI 才能读取最小范围摘要。';
+      '排班、打卡、工资、对话和智能体记忆保存在本地。API 密钥只进入系统 Keychain/Keystore；只有获得相应数据权限时，AI 才能读取最小范围摘要。';
 
   @override
   String get onboardingScheduleTitle => '先配置排班';
@@ -933,7 +969,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get clearConversations => '清除对话';
 
   @override
-  String get clearConversationsDescription => '删除消息和对话内容，保留独立的 AI 操作审计记录。';
+  String get clearConversationsDescription => '删除消息、对话和智能体记忆，保留独立的 AI 操作审计记录。';
 
   @override
   String get clearAssistantActions => '清除 AI 操作历史';

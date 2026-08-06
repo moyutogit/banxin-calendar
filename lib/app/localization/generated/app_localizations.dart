@@ -248,6 +248,12 @@ abstract class AppLocalizations {
   /// **'助理名称'**
   String get assistantName;
 
+  /// No description provided for @assistantPersonaStyle.
+  ///
+  /// In zh, this message translates to:
+  /// **'性格与说话风格'**
+  String get assistantPersonaStyle;
+
   /// No description provided for @assistantPersonaGentle.
   ///
   /// In zh, this message translates to:
@@ -266,11 +272,47 @@ abstract class AppLocalizations {
   /// **'活泼有趣'**
   String get assistantPersonaLively;
 
+  /// No description provided for @assistantPersonaHumorous.
+  ///
+  /// In zh, this message translates to:
+  /// **'幽默风趣'**
+  String get assistantPersonaHumorous;
+
+  /// No description provided for @assistantPersonaSarcastic.
+  ///
+  /// In zh, this message translates to:
+  /// **'吐槽毒舌'**
+  String get assistantPersonaSarcastic;
+
+  /// No description provided for @assistantPersonaCalm.
+  ///
+  /// In zh, this message translates to:
+  /// **'冷静克制'**
+  String get assistantPersonaCalm;
+
   /// No description provided for @assistantReplyLength.
   ///
   /// In zh, this message translates to:
   /// **'回复长度'**
   String get assistantReplyLength;
+
+  /// No description provided for @assistantReplyShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'精炼'**
+  String get assistantReplyShort;
+
+  /// No description provided for @assistantReplyMedium.
+  ///
+  /// In zh, this message translates to:
+  /// **'适中'**
+  String get assistantReplyMedium;
+
+  /// No description provided for @assistantReplyLong.
+  ///
+  /// In zh, this message translates to:
+  /// **'详细啰嗦'**
+  String get assistantReplyLong;
 
   /// No description provided for @assistantScopeSchedule.
   ///
@@ -301,6 +343,12 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'允许读取备注（默认关闭）'**
   String get assistantScopeNotes;
+
+  /// No description provided for @assistantScopeMemory.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许读取和管理本地智能体记忆'**
+  String get assistantScopeMemory;
 
   /// No description provided for @assistantNotConfigured.
   ///
@@ -422,6 +470,30 @@ abstract class AppLocalizations {
   /// **'该请求已按安全规则拒绝'**
   String get assistantSafetyRefusal;
 
+  /// No description provided for @assistantConversations.
+  ///
+  /// In zh, this message translates to:
+  /// **'对话列表'**
+  String get assistantConversations;
+
+  /// No description provided for @assistantNewConversation.
+  ///
+  /// In zh, this message translates to:
+  /// **'开启新对话'**
+  String get assistantNewConversation;
+
+  /// No description provided for @assistantCurrentConversation.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前对话'**
+  String get assistantCurrentConversation;
+
+  /// No description provided for @assistantEmptyConversation.
+  ///
+  /// In zh, this message translates to:
+  /// **'新对话已开启，问我任何排班、出勤、工资或闹钟问题吧。'**
+  String get assistantEmptyConversation;
+
   /// No description provided for @onboardingProgress.
   ///
   /// In zh, this message translates to:
@@ -449,7 +521,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingPrivacyBody.
   ///
   /// In zh, this message translates to:
-  /// **'排班、打卡、工资和对话保存在本地。API 密钥只进入系统 Keychain/Keystore；只有获得相应数据权限时，AI 才能读取最小范围摘要。'**
+  /// **'排班、打卡、工资、对话和智能体记忆保存在本地。API 密钥只进入系统 Keychain/Keystore；只有获得相应数据权限时，AI 才能读取最小范围摘要。'**
   String get onboardingPrivacyBody;
 
   /// No description provided for @onboardingScheduleTitle.
@@ -1913,7 +1985,7 @@ abstract class AppLocalizations {
   /// No description provided for @clearConversationsDescription.
   ///
   /// In zh, this message translates to:
-  /// **'删除消息和对话内容，保留独立的 AI 操作审计记录。'**
+  /// **'删除消息、对话和智能体记忆，保留独立的 AI 操作审计记录。'**
   String get clearConversationsDescription;
 
   /// No description provided for @clearAssistantActions.

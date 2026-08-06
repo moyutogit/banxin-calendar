@@ -10,7 +10,7 @@
 | F-ALM | `features/alarm`、Kotlin/Swift bridge、Schema v4 | 工作/休息生成、AlarmClock 级精确调度、持续响铃、触发回执、差异同步、幂等、失败重试状态、CI 双端编译 | 代码完成；真机发布验收待设备 |
 | F-ATT | `features/attendance`、Schema v5 | 多段重叠、缺卡、跨夜、24h 上限、已结算提示、自然日拆分 | 已实现 |
 | F-WAGE | `features/wage`、`features/statistics` | 时/日/月薪、三类加班、补贴扣款、结算快照、实发差额、CSV 同源 | 已实现 |
-| F-AI | `features/assistant`、`assets/assistant`、Schema v7 | HTTPS/密钥隔离、权限最小化、即时发送、正文/思考流式与折叠持久化、DeepSeek 工具调用回放、一次性 HMAC token、过期/版本校验、排班与闹钟确认/撤销 | 已实现 |
+| F-AI | `features/assistant`、`assets/assistant`、Schema v8 | HTTPS/密钥隔离、权限最小化、多会话、即时发送、正文/思考流式与折叠持久化、Asia/Shanghai 相对日期工具、智能体画像、显式意图门禁的本地记忆、DeepSeek 工具调用回放、一次性 HMAC token、过期/版本校验、排班与闹钟确认/撤销 | 已实现 |
 | 数据/隐私 | `features/backup`、`docs/privacy.md` | 一致性快照、凭据排除、checksum、临时迁移、原子恢复、7 份保留、二次确认清理 | 已实现 |
 
 ## 发布前仍需外部条件

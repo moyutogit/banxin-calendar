@@ -10921,6 +10921,18 @@ class $AssistantPersonasTable extends AssistantPersonas
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _memoryReadMeta = const VerificationMeta(
+    'memoryRead',
+  );
+  @override
+  late final GeneratedColumn<int> memoryRead = GeneratedColumn<int>(
+    'memory_read',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant<int>(1),
+  );
   static const VerificationMeta _updatedAtMeta = const VerificationMeta(
     'updatedAt',
   );
@@ -10947,6 +10959,7 @@ class $AssistantPersonasTable extends AssistantPersonas
     wageRead,
     alarmRead,
     notesRead,
+    memoryRead,
     updatedAt,
   ];
   @override
@@ -11081,6 +11094,12 @@ class $AssistantPersonasTable extends AssistantPersonas
     } else if (isInserting) {
       context.missing(_notesReadMeta);
     }
+    if (data.containsKey('memory_read')) {
+      context.handle(
+        _memoryReadMeta,
+        memoryRead.isAcceptableOrUnknown(data['memory_read']!, _memoryReadMeta),
+      );
+    }
     if (data.containsKey('updated_at')) {
       context.handle(
         _updatedAtMeta,
@@ -11150,6 +11169,10 @@ class $AssistantPersonasTable extends AssistantPersonas
         DriftSqlType.int,
         data['${effectivePrefix}notes_read'],
       )!,
+      memoryRead: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}memory_read'],
+      )!,
       updatedAt: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}updated_at'],
@@ -11178,6 +11201,7 @@ class AssistantPersona extends DataClass
   final int wageRead;
   final int alarmRead;
   final int notesRead;
+  final int memoryRead;
   final int updatedAt;
   const AssistantPersona({
     required this.id,
@@ -11193,6 +11217,7 @@ class AssistantPersona extends DataClass
     required this.wageRead,
     required this.alarmRead,
     required this.notesRead,
+    required this.memoryRead,
     required this.updatedAt,
   });
   @override
@@ -11213,6 +11238,7 @@ class AssistantPersona extends DataClass
     map['wage_read'] = Variable<int>(wageRead);
     map['alarm_read'] = Variable<int>(alarmRead);
     map['notes_read'] = Variable<int>(notesRead);
+    map['memory_read'] = Variable<int>(memoryRead);
     map['updated_at'] = Variable<int>(updatedAt);
     return map;
   }
@@ -11234,6 +11260,7 @@ class AssistantPersona extends DataClass
       wageRead: Value(wageRead),
       alarmRead: Value(alarmRead),
       notesRead: Value(notesRead),
+      memoryRead: Value(memoryRead),
       updatedAt: Value(updatedAt),
     );
   }
@@ -11259,6 +11286,7 @@ class AssistantPersona extends DataClass
       wageRead: serializer.fromJson<int>(json['wageRead']),
       alarmRead: serializer.fromJson<int>(json['alarmRead']),
       notesRead: serializer.fromJson<int>(json['notesRead']),
+      memoryRead: serializer.fromJson<int>(json['memoryRead']),
       updatedAt: serializer.fromJson<int>(json['updatedAt']),
     );
   }
@@ -11279,6 +11307,7 @@ class AssistantPersona extends DataClass
       'wageRead': serializer.toJson<int>(wageRead),
       'alarmRead': serializer.toJson<int>(alarmRead),
       'notesRead': serializer.toJson<int>(notesRead),
+      'memoryRead': serializer.toJson<int>(memoryRead),
       'updatedAt': serializer.toJson<int>(updatedAt),
     };
   }
@@ -11297,6 +11326,7 @@ class AssistantPersona extends DataClass
     int? wageRead,
     int? alarmRead,
     int? notesRead,
+    int? memoryRead,
     int? updatedAt,
   }) => AssistantPersona(
     id: id ?? this.id,
@@ -11314,6 +11344,7 @@ class AssistantPersona extends DataClass
     wageRead: wageRead ?? this.wageRead,
     alarmRead: alarmRead ?? this.alarmRead,
     notesRead: notesRead ?? this.notesRead,
+    memoryRead: memoryRead ?? this.memoryRead,
     updatedAt: updatedAt ?? this.updatedAt,
   );
   AssistantPersona copyWithCompanion(AssistantPersonasCompanion data) {
@@ -11349,6 +11380,9 @@ class AssistantPersona extends DataClass
       wageRead: data.wageRead.present ? data.wageRead.value : this.wageRead,
       alarmRead: data.alarmRead.present ? data.alarmRead.value : this.alarmRead,
       notesRead: data.notesRead.present ? data.notesRead.value : this.notesRead,
+      memoryRead: data.memoryRead.present
+          ? data.memoryRead.value
+          : this.memoryRead,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
     );
   }
@@ -11369,6 +11403,7 @@ class AssistantPersona extends DataClass
           ..write('wageRead: $wageRead, ')
           ..write('alarmRead: $alarmRead, ')
           ..write('notesRead: $notesRead, ')
+          ..write('memoryRead: $memoryRead, ')
           ..write('updatedAt: $updatedAt')
           ..write(')'))
         .toString();
@@ -11389,6 +11424,7 @@ class AssistantPersona extends DataClass
     wageRead,
     alarmRead,
     notesRead,
+    memoryRead,
     updatedAt,
   );
   @override
@@ -11408,6 +11444,7 @@ class AssistantPersona extends DataClass
           other.wageRead == this.wageRead &&
           other.alarmRead == this.alarmRead &&
           other.notesRead == this.notesRead &&
+          other.memoryRead == this.memoryRead &&
           other.updatedAt == this.updatedAt);
 }
 
@@ -11425,6 +11462,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
   final Value<int> wageRead;
   final Value<int> alarmRead;
   final Value<int> notesRead;
+  final Value<int> memoryRead;
   final Value<int> updatedAt;
   final Value<int> rowid;
   const AssistantPersonasCompanion({
@@ -11441,6 +11479,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
     this.wageRead = const Value.absent(),
     this.alarmRead = const Value.absent(),
     this.notesRead = const Value.absent(),
+    this.memoryRead = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
@@ -11458,6 +11497,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
     required int wageRead,
     required int alarmRead,
     required int notesRead,
+    this.memoryRead = const Value.absent(),
     required int updatedAt,
     this.rowid = const Value.absent(),
   }) : id = Value(id),
@@ -11487,6 +11527,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
     Expression<int>? wageRead,
     Expression<int>? alarmRead,
     Expression<int>? notesRead,
+    Expression<int>? memoryRead,
     Expression<int>? updatedAt,
     Expression<int>? rowid,
   }) {
@@ -11504,6 +11545,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
       if (wageRead != null) 'wage_read': wageRead,
       if (alarmRead != null) 'alarm_read': alarmRead,
       if (notesRead != null) 'notes_read': notesRead,
+      if (memoryRead != null) 'memory_read': memoryRead,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (rowid != null) 'rowid': rowid,
     });
@@ -11523,6 +11565,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
     Value<int>? wageRead,
     Value<int>? alarmRead,
     Value<int>? notesRead,
+    Value<int>? memoryRead,
     Value<int>? updatedAt,
     Value<int>? rowid,
   }) {
@@ -11540,6 +11583,7 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
       wageRead: wageRead ?? this.wageRead,
       alarmRead: alarmRead ?? this.alarmRead,
       notesRead: notesRead ?? this.notesRead,
+      memoryRead: memoryRead ?? this.memoryRead,
       updatedAt: updatedAt ?? this.updatedAt,
       rowid: rowid ?? this.rowid,
     );
@@ -11587,6 +11631,9 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
     if (notesRead.present) {
       map['notes_read'] = Variable<int>(notesRead.value);
     }
+    if (memoryRead.present) {
+      map['memory_read'] = Variable<int>(memoryRead.value);
+    }
     if (updatedAt.present) {
       map['updated_at'] = Variable<int>(updatedAt.value);
     }
@@ -11612,7 +11659,486 @@ class AssistantPersonasCompanion extends UpdateCompanion<AssistantPersona> {
           ..write('wageRead: $wageRead, ')
           ..write('alarmRead: $alarmRead, ')
           ..write('notesRead: $notesRead, ')
+          ..write('memoryRead: $memoryRead, ')
           ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AssistantMemoriesTable extends AssistantMemories
+    with TableInfo<$AssistantMemoriesTable, AssistantMemory> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AssistantMemoriesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentMeta = const VerificationMeta(
+    'content',
+  );
+  @override
+  late final GeneratedColumn<String> content = GeneratedColumn<String>(
+    'content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sourceConversationIdMeta =
+      const VerificationMeta('sourceConversationId');
+  @override
+  late final GeneratedColumn<String> sourceConversationId =
+      GeneratedColumn<String>(
+        'source_conversation_id',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    content,
+    category,
+    sourceConversationId,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'assistant_memories';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AssistantMemory> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('content')) {
+      context.handle(
+        _contentMeta,
+        content.isAcceptableOrUnknown(data['content']!, _contentMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_contentMeta);
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_categoryMeta);
+    }
+    if (data.containsKey('source_conversation_id')) {
+      context.handle(
+        _sourceConversationIdMeta,
+        sourceConversationId.isAcceptableOrUnknown(
+          data['source_conversation_id']!,
+          _sourceConversationIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AssistantMemory map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AssistantMemory(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      content: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content'],
+      )!,
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      )!,
+      sourceConversationId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_conversation_id'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $AssistantMemoriesTable createAlias(String alias) {
+    return $AssistantMemoriesTable(attachedDatabase, alias);
+  }
+}
+
+class AssistantMemory extends DataClass implements Insertable<AssistantMemory> {
+  final String id;
+  final String content;
+  final String category;
+  final String? sourceConversationId;
+  final int createdAt;
+  final int updatedAt;
+  final int? deletedAt;
+  const AssistantMemory({
+    required this.id,
+    required this.content,
+    required this.category,
+    this.sourceConversationId,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['content'] = Variable<String>(content);
+    map['category'] = Variable<String>(category);
+    if (!nullToAbsent || sourceConversationId != null) {
+      map['source_conversation_id'] = Variable<String>(sourceConversationId);
+    }
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<int>(deletedAt);
+    }
+    return map;
+  }
+
+  AssistantMemoriesCompanion toCompanion(bool nullToAbsent) {
+    return AssistantMemoriesCompanion(
+      id: Value(id),
+      content: Value(content),
+      category: Value(category),
+      sourceConversationId: sourceConversationId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceConversationId),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory AssistantMemory.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AssistantMemory(
+      id: serializer.fromJson<String>(json['id']),
+      content: serializer.fromJson<String>(json['content']),
+      category: serializer.fromJson<String>(json['category']),
+      sourceConversationId: serializer.fromJson<String?>(
+        json['sourceConversationId'],
+      ),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deletedAt: serializer.fromJson<int?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'content': serializer.toJson<String>(content),
+      'category': serializer.toJson<String>(category),
+      'sourceConversationId': serializer.toJson<String?>(sourceConversationId),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deletedAt': serializer.toJson<int?>(deletedAt),
+    };
+  }
+
+  AssistantMemory copyWith({
+    String? id,
+    String? content,
+    String? category,
+    Value<String?> sourceConversationId = const Value.absent(),
+    int? createdAt,
+    int? updatedAt,
+    Value<int?> deletedAt = const Value.absent(),
+  }) => AssistantMemory(
+    id: id ?? this.id,
+    content: content ?? this.content,
+    category: category ?? this.category,
+    sourceConversationId: sourceConversationId.present
+        ? sourceConversationId.value
+        : this.sourceConversationId,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  AssistantMemory copyWithCompanion(AssistantMemoriesCompanion data) {
+    return AssistantMemory(
+      id: data.id.present ? data.id.value : this.id,
+      content: data.content.present ? data.content.value : this.content,
+      category: data.category.present ? data.category.value : this.category,
+      sourceConversationId: data.sourceConversationId.present
+          ? data.sourceConversationId.value
+          : this.sourceConversationId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AssistantMemory(')
+          ..write('id: $id, ')
+          ..write('content: $content, ')
+          ..write('category: $category, ')
+          ..write('sourceConversationId: $sourceConversationId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    content,
+    category,
+    sourceConversationId,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AssistantMemory &&
+          other.id == this.id &&
+          other.content == this.content &&
+          other.category == this.category &&
+          other.sourceConversationId == this.sourceConversationId &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class AssistantMemoriesCompanion extends UpdateCompanion<AssistantMemory> {
+  final Value<String> id;
+  final Value<String> content;
+  final Value<String> category;
+  final Value<String?> sourceConversationId;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int?> deletedAt;
+  final Value<int> rowid;
+  const AssistantMemoriesCompanion({
+    this.id = const Value.absent(),
+    this.content = const Value.absent(),
+    this.category = const Value.absent(),
+    this.sourceConversationId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AssistantMemoriesCompanion.insert({
+    required String id,
+    required String content,
+    required String category,
+    this.sourceConversationId = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       content = Value(content),
+       category = Value(category),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<AssistantMemory> custom({
+    Expression<String>? id,
+    Expression<String>? content,
+    Expression<String>? category,
+    Expression<String>? sourceConversationId,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (content != null) 'content': content,
+      if (category != null) 'category': category,
+      if (sourceConversationId != null)
+        'source_conversation_id': sourceConversationId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AssistantMemoriesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? content,
+    Value<String>? category,
+    Value<String?>? sourceConversationId,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return AssistantMemoriesCompanion(
+      id: id ?? this.id,
+      content: content ?? this.content,
+      category: category ?? this.category,
+      sourceConversationId: sourceConversationId ?? this.sourceConversationId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (content.present) {
+      map['content'] = Variable<String>(content.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (sourceConversationId.present) {
+      map['source_conversation_id'] = Variable<String>(
+        sourceConversationId.value,
+      );
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<int>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AssistantMemoriesCompanion(')
+          ..write('id: $id, ')
+          ..write('content: $content, ')
+          ..write('category: $category, ')
+          ..write('sourceConversationId: $sourceConversationId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -13726,6 +14252,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
       $AiProviderConfigsTable(this);
   late final $AssistantPersonasTable assistantPersonas =
       $AssistantPersonasTable(this);
+  late final $AssistantMemoriesTable assistantMemories =
+      $AssistantMemoriesTable(this);
   late final $ConversationsTable conversations = $ConversationsTable(this);
   late final $MessagesTable messages = $MessagesTable(this);
   late final $AiActionsTable aiActions = $AiActionsTable(this);
@@ -13751,6 +14279,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     payrollPeriods,
     aiProviderConfigs,
     assistantPersonas,
+    assistantMemories,
     conversations,
     messages,
     aiActions,
@@ -19838,6 +20367,7 @@ typedef $$AssistantPersonasTableCreateCompanionBuilder =
       required int wageRead,
       required int alarmRead,
       required int notesRead,
+      Value<int> memoryRead,
       required int updatedAt,
       Value<int> rowid,
     });
@@ -19856,6 +20386,7 @@ typedef $$AssistantPersonasTableUpdateCompanionBuilder =
       Value<int> wageRead,
       Value<int> alarmRead,
       Value<int> notesRead,
+      Value<int> memoryRead,
       Value<int> updatedAt,
       Value<int> rowid,
     });
@@ -19931,6 +20462,11 @@ class $$AssistantPersonasTableFilterComposer
 
   ColumnFilters<int> get notesRead => $composableBuilder(
     column: $table.notesRead,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get memoryRead => $composableBuilder(
+    column: $table.memoryRead,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -20014,6 +20550,11 @@ class $$AssistantPersonasTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get memoryRead => $composableBuilder(
+    column: $table.memoryRead,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<int> get updatedAt => $composableBuilder(
     column: $table.updatedAt,
     builder: (column) => ColumnOrderings(column),
@@ -20086,6 +20627,11 @@ class $$AssistantPersonasTableAnnotationComposer
   GeneratedColumn<int> get notesRead =>
       $composableBuilder(column: $table.notesRead, builder: (column) => column);
 
+  GeneratedColumn<int> get memoryRead => $composableBuilder(
+    column: $table.memoryRead,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<int> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 }
@@ -20143,6 +20689,7 @@ class $$AssistantPersonasTableTableManager
                 Value<int> wageRead = const Value.absent(),
                 Value<int> alarmRead = const Value.absent(),
                 Value<int> notesRead = const Value.absent(),
+                Value<int> memoryRead = const Value.absent(),
                 Value<int> updatedAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => AssistantPersonasCompanion(
@@ -20159,6 +20706,7 @@ class $$AssistantPersonasTableTableManager
                 wageRead: wageRead,
                 alarmRead: alarmRead,
                 notesRead: notesRead,
+                memoryRead: memoryRead,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
@@ -20177,6 +20725,7 @@ class $$AssistantPersonasTableTableManager
                 required int wageRead,
                 required int alarmRead,
                 required int notesRead,
+                Value<int> memoryRead = const Value.absent(),
                 required int updatedAt,
                 Value<int> rowid = const Value.absent(),
               }) => AssistantPersonasCompanion.insert(
@@ -20193,6 +20742,7 @@ class $$AssistantPersonasTableTableManager
                 wageRead: wageRead,
                 alarmRead: alarmRead,
                 notesRead: notesRead,
+                memoryRead: memoryRead,
                 updatedAt: updatedAt,
                 rowid: rowid,
               ),
@@ -20223,6 +20773,255 @@ typedef $$AssistantPersonasTableProcessedTableManager =
         >,
       ),
       AssistantPersona,
+      PrefetchHooks Function()
+    >;
+typedef $$AssistantMemoriesTableCreateCompanionBuilder =
+    AssistantMemoriesCompanion Function({
+      required String id,
+      required String content,
+      required String category,
+      Value<String?> sourceConversationId,
+      required int createdAt,
+      required int updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$AssistantMemoriesTableUpdateCompanionBuilder =
+    AssistantMemoriesCompanion Function({
+      Value<String> id,
+      Value<String> content,
+      Value<String> category,
+      Value<String?> sourceConversationId,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+
+class $$AssistantMemoriesTableFilterComposer
+    extends Composer<_$AppDatabase, $AssistantMemoriesTable> {
+  $$AssistantMemoriesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceConversationId => $composableBuilder(
+    column: $table.sourceConversationId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$AssistantMemoriesTableOrderingComposer
+    extends Composer<_$AppDatabase, $AssistantMemoriesTable> {
+  $$AssistantMemoriesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get content => $composableBuilder(
+    column: $table.content,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sourceConversationId => $composableBuilder(
+    column: $table.sourceConversationId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AssistantMemoriesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AssistantMemoriesTable> {
+  $$AssistantMemoriesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceConversationId => $composableBuilder(
+    column: $table.sourceConversationId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+}
+
+class $$AssistantMemoriesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AssistantMemoriesTable,
+          AssistantMemory,
+          $$AssistantMemoriesTableFilterComposer,
+          $$AssistantMemoriesTableOrderingComposer,
+          $$AssistantMemoriesTableAnnotationComposer,
+          $$AssistantMemoriesTableCreateCompanionBuilder,
+          $$AssistantMemoriesTableUpdateCompanionBuilder,
+          (
+            AssistantMemory,
+            BaseReferences<
+              _$AppDatabase,
+              $AssistantMemoriesTable,
+              AssistantMemory
+            >,
+          ),
+          AssistantMemory,
+          PrefetchHooks Function()
+        > {
+  $$AssistantMemoriesTableTableManager(
+    _$AppDatabase db,
+    $AssistantMemoriesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AssistantMemoriesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AssistantMemoriesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AssistantMemoriesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> content = const Value.absent(),
+                Value<String> category = const Value.absent(),
+                Value<String?> sourceConversationId = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AssistantMemoriesCompanion(
+                id: id,
+                content: content,
+                category: category,
+                sourceConversationId: sourceConversationId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String content,
+                required String category,
+                Value<String?> sourceConversationId = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AssistantMemoriesCompanion.insert(
+                id: id,
+                content: content,
+                category: category,
+                sourceConversationId: sourceConversationId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$AssistantMemoriesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AssistantMemoriesTable,
+      AssistantMemory,
+      $$AssistantMemoriesTableFilterComposer,
+      $$AssistantMemoriesTableOrderingComposer,
+      $$AssistantMemoriesTableAnnotationComposer,
+      $$AssistantMemoriesTableCreateCompanionBuilder,
+      $$AssistantMemoriesTableUpdateCompanionBuilder,
+      (
+        AssistantMemory,
+        BaseReferences<_$AppDatabase, $AssistantMemoriesTable, AssistantMemory>,
+      ),
+      AssistantMemory,
       PrefetchHooks Function()
     >;
 typedef $$ConversationsTableCreateCompanionBuilder =
@@ -21672,6 +22471,8 @@ class $AppDatabaseManager {
       $$AiProviderConfigsTableTableManager(_db, _db.aiProviderConfigs);
   $$AssistantPersonasTableTableManager get assistantPersonas =>
       $$AssistantPersonasTableTableManager(_db, _db.assistantPersonas);
+  $$AssistantMemoriesTableTableManager get assistantMemories =>
+      $$AssistantMemoriesTableTableManager(_db, _db.assistantMemories);
   $$ConversationsTableTableManager get conversations =>
       $$ConversationsTableTableManager(_db, _db.conversations);
   $$MessagesTableTableManager get messages =>

@@ -9,13 +9,24 @@ abstract interface class AssistantRepository {
 
   Future<void> savePersona(AssistantPersona persona);
 
-  Future<Conversation> createConversation(Conversation conversation);
+  Future<Conversation> createConversation(
+    Conversation conversation, {
+    AssistantMessage? initialMessage,
+  });
 
   Future<List<Conversation>> loadConversations();
 
   Future<List<AssistantMessage>> loadMessages(String conversationId);
 
   Future<void> saveMessage(AssistantMessage message);
+
+  Future<void> updateConversationTitle(String id, String title);
+
+  Future<List<AssistantMemory>> loadMemories({String? query});
+
+  Future<void> saveMemory(AssistantMemory memory);
+
+  Future<void> deleteMemory(String id, DateTime deletedAtUtc);
 
   Future<AiAction?> loadAction(String id);
 

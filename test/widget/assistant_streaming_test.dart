@@ -16,6 +16,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets(
+    'shows first-agent onboarding and switches between conversations',
+    (tester) async {
+      final fixture = await _AssistantFixture.create();
+      addTearDown(fixture.dispose);
+      await tester.pumpWidget(fixture.app);
+      await tester.pumpAndSettle();
+
+      expect(find.textContaining('你希望我叫什么'), findsOneWidget);
+      await tester.tap(find.byTooltip('开启新对话'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('新对话已开启'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('对话列表'));
+      await tester.pumpAndSettle();
+      expect(find.text('认识一下'), findsOneWidget);
+      expect(find.text('新对话'), findsOneWidget);
+
+      await tester.tap(find.text('认识一下'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('你希望我叫什么'), findsOneWidget);
+    },
+  );
+
   testWidgets('sends optimistically and streams collapsible reasoning', (
     tester,
   ) async {
@@ -114,7 +138,7 @@ void main() {
       final finalResponse = await fixture.provider.nextResponse(tester);
       final replay = fixture.provider.requests[1];
       final assistant = replay.firstWhere(
-        (message) => message.role == LlmRole.assistant,
+        (message) => message.toolCalls.isNotEmpty,
       );
       final tool = replay.firstWhere((message) => message.role == LlmRole.tool);
       expect(assistant.reasoningContent, '需要读取本地闹钟。');

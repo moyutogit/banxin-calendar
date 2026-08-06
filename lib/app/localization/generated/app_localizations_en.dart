@@ -85,6 +85,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantName => 'Assistant name';
 
   @override
+  String get assistantPersonaStyle => 'Personality and conversation style';
+
+  @override
   String get assistantPersonaGentle => 'Gentle companion';
 
   @override
@@ -94,7 +97,25 @@ class AppLocalizationsEn extends AppLocalizations {
   String get assistantPersonaLively => 'Lively and fun';
 
   @override
+  String get assistantPersonaHumorous => 'Humorous';
+
+  @override
+  String get assistantPersonaSarcastic => 'Witty and sarcastic';
+
+  @override
+  String get assistantPersonaCalm => 'Calm and measured';
+
+  @override
   String get assistantReplyLength => 'Reply length';
+
+  @override
+  String get assistantReplyShort => 'Concise';
+
+  @override
+  String get assistantReplyMedium => 'Balanced';
+
+  @override
+  String get assistantReplyLong => 'Detailed';
 
   @override
   String get assistantScopeSchedule => 'Allow schedule summaries';
@@ -110,6 +131,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get assistantScopeNotes => 'Allow notes (off by default)';
+
+  @override
+  String get assistantScopeMemory =>
+      'Allow reading and managing local agent memory';
 
   @override
   String get assistantNotConfigured =>
@@ -177,6 +202,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'The request was refused by the safety policy';
 
   @override
+  String get assistantConversations => 'Conversations';
+
+  @override
+  String get assistantNewConversation => 'Start new conversation';
+
+  @override
+  String get assistantCurrentConversation => 'Current conversation';
+
+  @override
+  String get assistantEmptyConversation =>
+      'A new conversation is ready. Ask me about schedules, attendance, wages, or alarms.';
+
+  @override
   String onboardingProgress(int current, int total) {
     return 'Set up $current/$total';
   }
@@ -193,7 +231,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingPrivacyBody =>
-      'Schedules, punches, wages, and conversations stay on this device. API keys only enter Keychain/Keystore, and AI receives only the minimum authorized summaries.';
+      'Schedules, punches, wages, conversations, and agent memories stay on this device. API keys only enter Keychain/Keystore, and AI receives only the minimum authorized summaries.';
 
   @override
   String get onboardingScheduleTitle => 'Configure your schedule first';
@@ -960,7 +998,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get clearConversationsDescription =>
-      'Deletes messages and conversation content while retaining independent AI action audit records.';
+      'Deletes messages, conversations, and agent memories while retaining independent AI action audit records.';
 
   @override
   String get clearAssistantActions => 'Clear AI action history';

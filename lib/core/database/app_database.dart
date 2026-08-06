@@ -5,6 +5,7 @@ import 'package:banxin_calendar/core/database/tables/ai_actions.dart';
 import 'package:banxin_calendar/core/database/tables/ai_provider_configs.dart';
 import 'package:banxin_calendar/core/database/tables/alarm_instances.dart';
 import 'package:banxin_calendar/core/database/tables/alarm_templates.dart';
+import 'package:banxin_calendar/core/database/tables/assistant_memories.dart';
 import 'package:banxin_calendar/core/database/tables/assistant_personas.dart';
 import 'package:banxin_calendar/core/database/tables/attendance_records.dart';
 import 'package:banxin_calendar/core/database/tables/calendar_day_cache.dart';
@@ -47,6 +48,7 @@ part 'app_database.g.dart';
     PayrollPeriods,
     AiProviderConfigs,
     AssistantPersonas,
+    AssistantMemories,
     Conversations,
     Messages,
     AiActions,
@@ -119,12 +121,31 @@ class AppDatabase extends _$AppDatabase {
     if (from < SchemaVersions.assistantFoundation) {
       await migrator.createTable(aiProviderConfigs);
       await migrator.createTable(assistantPersonas);
+      await migrator.createTable(assistantMemories);
       await migrator.createTable(conversations);
       await migrator.createTable(messages);
       await migrator.createTable(aiActions);
       await _createAssistantIndexes();
-    } else if (from < SchemaVersions.assistantReasoning) {
-      await migrator.addColumn(messages, messages.reasoningContent);
+    } else {
+      if (from < SchemaVersions.assistantReasoning) {
+        await migrator.addColumn(messages, messages.reasoningContent);
+      }
+      if (from < SchemaVersions.assistantAgentMemory) {
+        if (await _tableExists('assistant_personas')) {
+          if (!await _columnExists('assistant_personas', 'memory_read')) {
+            await migrator.addColumn(
+              assistantPersonas,
+              assistantPersonas.memoryRead,
+            );
+          }
+        } else {
+          await migrator.createTable(assistantPersonas);
+        }
+        if (!await _tableExists('assistant_memories')) {
+          await migrator.createTable(assistantMemories);
+        }
+        await _createAssistantMemoryIndexes();
+      }
     }
   }
 
@@ -188,6 +209,30 @@ class AppDatabase extends _$AppDatabase {
       CREATE INDEX IF NOT EXISTS idx_ai_actions_status_created
       ON ai_actions(status, created_at)
     ''');
+    await _createAssistantMemoryIndexes();
+  }
+
+  Future<void> _createAssistantMemoryIndexes() async {
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_assistant_memories_active_updated
+      ON assistant_memories(deleted_at, updated_at)
+    ''');
+  }
+
+  Future<bool> _tableExists(String name) async {
+    final row = await customSelect(
+      'SELECT 1 FROM sqlite_master WHERE type = ? AND name = ? LIMIT 1',
+      variables: <Variable<Object>>[
+        const Variable<String>('table'),
+        Variable<String>(name),
+      ],
+    ).getSingleOrNull();
+    return row != null;
+  }
+
+  Future<bool> _columnExists(String table, String column) async {
+    final rows = await customSelect('PRAGMA table_info($table)').get();
+    return rows.any((row) => row.read<String>('name') == column);
   }
 }
 

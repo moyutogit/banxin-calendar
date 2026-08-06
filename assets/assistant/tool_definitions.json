@@ -1,9 +1,14 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "tools": [
     {
       "name": "get_app_capabilities",
       "description": "Return the versioned list of capabilities actually implemented by this app build.",
+      "parameters": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "get_time_context",
+      "description": "Return the current Asia/Shanghai date-time and exact ISO dates for yesterday, today, tomorrow, and the day after tomorrow. Call this before every relative-date schedule, attendance, wage, or alarm request.",
       "parameters": {"type": "object", "properties": {}, "additionalProperties": false}
     },
     {
@@ -70,6 +75,55 @@
       "name": "get_alarm_summary",
       "description": "Read a minimal alarm status summary without platform identifiers.",
       "parameters": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "get_memories",
+      "description": "Read a minimal list of locally saved agent memories when they are relevant to the current request and memory permission is enabled.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {"type": "string", "maxLength": 100}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "save_memory",
+      "description": "Save one durable memory locally. Call only when the latest user message explicitly asks the agent to remember something; never call merely because information seems useful.",
+      "parameters": {
+        "type": "object",
+        "required": ["content", "category"],
+        "properties": {
+          "content": {"type": "string", "minLength": 1, "maxLength": 500},
+          "category": {"type": "string", "enum": ["preference", "personalFact", "reminderContext", "other"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "delete_memory",
+      "description": "Soft-delete a locally saved memory. Call only after the latest user message explicitly asks the agent to forget or delete it.",
+      "parameters": {
+        "type": "object",
+        "required": ["memory_id"],
+        "properties": {"memory_id": {"type": "string"}},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "update_agent_profile",
+      "description": "Persist the agent name, personality, and response style locally after the user explicitly provides or changes those preferences.",
+      "parameters": {
+        "type": "object",
+        "minProperties": 1,
+        "properties": {
+          "display_name": {"type": "string", "minLength": 1, "maxLength": 30},
+          "persona": {"type": "string", "enum": ["gentle", "professional", "lively", "humorous", "sarcastic", "calm"]},
+          "reply_length": {"type": "string", "enum": ["short", "medium", "long"]},
+          "custom_instruction": {"type": "string", "maxLength": 200}
+        },
+        "additionalProperties": false
+      }
     },
     {
       "name": "propose_schedule_change",
