@@ -1,6 +1,6 @@
 {
   "schema_version": 5,
-  "app_version": "0.1.4",
+  "app_version": "0.1.5",
   "implemented": [
     "单休、双休、大小周、自定义周期和临时排班",
     "中国大陆节假日更新、月历、日期详情和批量覆盖",

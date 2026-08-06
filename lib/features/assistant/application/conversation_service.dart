@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:banxin_calendar/core/ids/stable_id_generator.dart';
 import 'package:banxin_calendar/core/time/app_clock.dart';
+import 'package:banxin_calendar/features/assistant/application/assistant_action_gateway.dart';
 import 'package:banxin_calendar/features/assistant/application/assistant_settings_service.dart';
 import 'package:banxin_calendar/features/assistant/application/tool_gateway.dart';
 import 'package:banxin_calendar/features/assistant/domain/assistant_entities.dart';
@@ -163,6 +164,7 @@ final class ConversationService {
     final definitions = await _toolDefinitions();
     final responseBuffer = StringBuffer();
     final reasoningBuffer = StringBuffer();
+    String? lastToolErrorCode;
     var rounds = 0;
     while (rounds++ < 5) {
       final roundText = StringBuffer();
@@ -224,10 +226,25 @@ final class ConversationService {
           yield const ConversationFinished();
           return;
         } on FormatException catch (error) {
+          lastToolErrorCode = 'invalid_tool_arguments';
           result = <String, Object?>{
             'succeeded': false,
-            'error': 'invalid_tool_arguments',
+            'error': lastToolErrorCode,
             'guidance': error.message.toString(),
+          };
+        } on AssistantActionException catch (error) {
+          lastToolErrorCode = error.code;
+          result = <String, Object?>{
+            'succeeded': false,
+            'error': error.code,
+            'guidance': _toolErrorGuidance(error.code),
+          };
+        } on ArgumentError catch (error) {
+          lastToolErrorCode = 'invalid_tool_arguments';
+          result = <String, Object?>{
+            'succeeded': false,
+            'error': lastToolErrorCode,
+            'guidance': error.message?.toString() ?? 'Invalid tool arguments.',
           };
         }
         if (result['requiresConfirmation'] == true) {
@@ -255,14 +272,21 @@ final class ConversationService {
         );
       }
     }
-    final response = responseBuffer.toString();
-    if (response.isNotEmpty) {
-      await _saveAssistant(
-        conversationId,
-        response,
-        reasoningContent: reasoningBuffer.toString(),
+    var response = responseBuffer.toString().trim();
+    final localFallback = response.isEmpty;
+    if (localFallback) {
+      response = _emptyResponseFallback(
+        userText: trimmed,
+        toolErrorCode: lastToolErrorCode,
       );
+      yield ConversationTextDelta(response);
     }
+    await _saveAssistant(
+      conversationId,
+      response,
+      localOnly: localFallback,
+      reasoningContent: reasoningBuffer.toString(),
+    );
     yield const ConversationFinished();
   }
 
@@ -273,6 +297,10 @@ final class ConversationService {
         'or the next N days), first call get_time_context. Use only the returned '
         'Asia/Shanghai ISO dates to construct the range for the matching local '
         'read tool. Never guess the current date and never ask the user for it.\n'
+        'propose_schedule_change creates temporary overrides for explicit dates '
+        'only. It cannot change recurring rule presets such as 双休, 单休, 大小周, '
+        'or custom cycles. For such requests, do not call that tool; clearly say '
+        'the rule was not changed and direct the user to the schedule rule page.\n'
         'The first assistant welcome asks for the agent name, personality, and '
         'response style. When the user answers that question or later explicitly '
         'changes those preferences, call update_agent_profile before replying.\n'
@@ -314,6 +342,34 @@ final class ConversationService {
       _ => '对应',
     };
     return '当前未授权读取$label数据。请先在“配置 AI 模型”的助理权限中开启后再试。';
+  }
+
+  String _toolErrorGuidance(String code) => switch (code) {
+    'invalid_range' => 'Use an explicit valid ISO date range.',
+    'range_too_large' => 'Use a date range no longer than 365 days.',
+    'invalid_status' => 'new_status must be work or rest.',
+    'invalid_shift' =>
+      'A workday change needs an existing shift id. Recurring schedule rule presets cannot be changed with this tool.',
+    'unsupported_action_type' => 'This action type is not supported.',
+    _ =>
+      'The local tool rejected the request. Explain that no data changed and ask for corrected details.',
+  };
+
+  String _emptyResponseFallback({
+    required String userText,
+    required String? toolErrorCode,
+  }) {
+    final recurringRuleRequest = RegExp(
+      r'双休|单休|大小周|自定义周期|循环排班|排班规则',
+    ).hasMatch(userText);
+    if (recurringRuleRequest) {
+      return '我没有修改排班。当前 AI 工具只支持按具体日期预览改单，暂不能直接修改“双休、单休、大小周”'
+          '等循环排班规则。请进入“我的 → 排班规则”手动修改；现有排班保持不变。';
+    }
+    if (toolErrorCode != null) {
+      return '我没有修改任何数据。本次请求未通过本地工具校验（$toolErrorCode）。请补充具体日期、班次或操作内容后重试。';
+    }
+    return '抱歉，这次模型只返回了思考过程，没有生成可显示的答复。你的消息已经保留，请重试或换一种说法。';
   }
 
   Future<void> _saveAssistant(
