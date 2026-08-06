@@ -14,6 +14,8 @@ abstract interface class AlarmRepository {
 
   Future<List<AlarmInstance>> loadUpcomingInstances(DateTime nowUtc);
 
+  Future<void> markInstancesTriggered(Set<String> platformAlarmIds);
+
   Future<void> saveSyncChanges({
     required List<AlarmInstance> upserted,
     required Set<String> canceledPlatformIds,

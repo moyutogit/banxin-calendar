@@ -5,9 +5,37 @@ import 'package:flutter/material.dart';
 
 enum AppMessageType { info, success, warning, error }
 
+/// Places application messages above the navigator so route and dialog
+/// transitions cannot absorb taps intended for the close button.
+class AppMessageHost extends StatefulWidget {
+  const AppMessageHost({required this.child, super.key});
+
+  final Widget child;
+
+  @override
+  State<AppMessageHost> createState() => _AppMessageHostState();
+}
+
+class _AppMessageHostState extends State<AppMessageHost> {
+  late final OverlayEntry _content = OverlayEntry(
+    builder: (context) => widget.child,
+  );
+
+  @override
+  void didUpdateWidget(covariant AppMessageHost oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _content.markNeedsBuild();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      Overlay(initialEntries: <OverlayEntry>[_content]);
+}
+
 abstract final class AppMessage {
   static final Queue<_MessageRequest> _queue = Queue<_MessageRequest>();
   static OverlayEntry? _currentEntry;
+  static _MessageRequest? _currentRequest;
 
   static void show(
     BuildContext context,
@@ -17,13 +45,26 @@ abstract final class AppMessage {
   }) {
     final overlay = Overlay.maybeOf(context, rootOverlay: true);
     if (overlay == null || message.trim().isEmpty) return;
-    if (_currentEntry case final current? when !current.mounted) {
+    final currentOverlay = _currentRequest?.overlay;
+    if (_currentEntry != null && !identical(currentOverlay, overlay)) {
       _currentEntry = null;
+      _currentRequest = null;
+      _queue.clear();
     }
+    final normalizedMessage = message.trim();
+    final currentRequest = _currentRequest;
+    final duplicateCurrent =
+        currentRequest != null &&
+        currentRequest.message == normalizedMessage &&
+        currentRequest.type == type;
+    final duplicatePending = _queue.any(
+      (request) => request.message == normalizedMessage && request.type == type,
+    );
+    if (duplicateCurrent || duplicatePending) return;
     _queue.add(
       _MessageRequest(
         overlay: overlay,
-        message: message.trim(),
+        message: normalizedMessage,
         type: type,
         duration: duration,
       ),
@@ -32,9 +73,6 @@ abstract final class AppMessage {
   }
 
   static void _showNext() {
-    if (_currentEntry case final current? when !current.mounted) {
-      _currentEntry = null;
-    }
     if (_currentEntry != null || _queue.isEmpty) return;
     final request = _queue.removeFirst();
     if (!request.overlay.mounted) {
@@ -47,18 +85,22 @@ abstract final class AppMessage {
         message: request.message,
         type: request.type,
         duration: request.duration,
-        onDismiss: _dismissCurrent,
+        onTimeout: () => _dismiss(entry),
+        onClose: () => _dismiss(entry, clearPending: true),
       ),
     );
     _currentEntry = entry;
+    _currentRequest = request;
     request.overlay.insert(entry);
   }
 
-  static void _dismissCurrent() {
-    final entry = _currentEntry;
+  static void _dismiss(OverlayEntry entry, {bool clearPending = false}) {
+    if (!identical(_currentEntry, entry)) return;
     _currentEntry = null;
-    if (entry?.mounted ?? false) entry!.remove();
-    scheduleMicrotask(_showNext);
+    _currentRequest = null;
+    if (clearPending) _queue.clear();
+    if (entry.mounted) entry.remove();
+    if (!clearPending) scheduleMicrotask(_showNext);
   }
 }
 
@@ -81,13 +123,15 @@ class _TopMessage extends StatefulWidget {
     required this.message,
     required this.type,
     required this.duration,
-    required this.onDismiss,
+    required this.onTimeout,
+    required this.onClose,
   });
 
   final String message;
   final AppMessageType type;
   final Duration duration;
-  final VoidCallback onDismiss;
+  final VoidCallback onTimeout;
+  final VoidCallback onClose;
 
   @override
   State<_TopMessage> createState() => _TopMessageState();
@@ -103,7 +147,7 @@ class _TopMessageState extends State<_TopMessage>
     _lifetime = AnimationController(vsync: this, duration: widget.duration)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          scheduleMicrotask(widget.onDismiss);
+          scheduleMicrotask(widget.onTimeout);
         }
       });
     unawaited(_lifetime.forward());
@@ -194,7 +238,7 @@ class _TopMessageState extends State<_TopMessage>
                       tooltip: MaterialLocalizations.of(
                         context,
                       ).closeButtonTooltip,
-                      onPressed: widget.onDismiss,
+                      onPressed: widget.onClose,
                       color: foreground,
                       visualDensity: VisualDensity.compact,
                       icon: const Icon(Icons.close),

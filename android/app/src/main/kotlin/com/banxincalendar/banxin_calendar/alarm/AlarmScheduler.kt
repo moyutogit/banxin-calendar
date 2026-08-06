@@ -5,11 +5,13 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.banxincalendar.banxin_calendar.MainActivity
 import org.json.JSONObject
 
 object AlarmScheduler {
     private const val preferencesName = "banxin_managed_alarms"
     private const val managedIdsKey = "managed_ids"
+    private const val triggeredIdsKey = "triggered_ids"
 
     fun schedule(
         context: Context,
@@ -39,9 +41,15 @@ object AlarmScheduler {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || manager.canScheduleExactAlarms()) {
-            manager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                triggerAtEpochMillis,
+            val showIntent = PendingIntent.getActivity(
+                context,
+                platformAlarmId.hashCode(),
+                Intent(context, MainActivity::class.java)
+                    .setAction("$platformAlarmId.show"),
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+            manager.setAlarmClock(
+                AlarmManager.AlarmClockInfo(triggerAtEpochMillis, showIntent),
                 pendingIntent,
             )
         } else {
@@ -83,6 +91,16 @@ object AlarmScheduler {
     fun listManagedAlarmIds(context: Context): Set<String> =
         preferences(context).getStringSet(managedIdsKey, emptySet())?.toSet() ?: emptySet()
 
+    @Synchronized
+    fun consumeTriggeredAlarmIds(context: Context): Set<String> {
+        val preferences = preferences(context)
+        val ids = preferences.getStringSet(triggeredIdsKey, emptySet())?.toSet() ?: emptySet()
+        if (ids.isNotEmpty()) {
+            preferences.edit().remove(triggeredIdsKey).commit()
+        }
+        return ids
+    }
+
     fun restore(context: Context) {
         val preferences = preferences(context)
         val ids = listManagedAlarmIds(context)
@@ -111,8 +129,21 @@ object AlarmScheduler {
         }
     }
 
+    @Synchronized
     fun markTriggered(context: Context, platformAlarmId: String) {
-        remove(context, platformAlarmId)
+        val preferences = preferences(context)
+        val managedIds = listManagedAlarmIds(context).toMutableSet().apply {
+            remove(platformAlarmId)
+        }
+        val triggeredIds = preferences.getStringSet(triggeredIdsKey, emptySet())
+            ?.toMutableSet()
+            ?.apply { add(platformAlarmId) }
+            ?: mutableSetOf(platformAlarmId)
+        preferences.edit()
+            .remove(platformAlarmId)
+            .putStringSet(managedIdsKey, managedIds)
+            .putStringSet(triggeredIdsKey, triggeredIds)
+            .commit()
     }
 
     private fun alarmIntent(
@@ -133,13 +164,13 @@ object AlarmScheduler {
     private fun persist(context: Context, id: String, record: JSONObject) {
         val preferences = preferences(context)
         val ids = listManagedAlarmIds(context).toMutableSet().apply { add(id) }
-        preferences.edit().putString(id, record.toString()).putStringSet(managedIdsKey, ids).apply()
+        preferences.edit().putString(id, record.toString()).putStringSet(managedIdsKey, ids).commit()
     }
 
     private fun remove(context: Context, id: String) {
         val preferences = preferences(context)
         val ids = listManagedAlarmIds(context).toMutableSet().apply { remove(id) }
-        preferences.edit().remove(id).putStringSet(managedIdsKey, ids).apply()
+        preferences.edit().remove(id).putStringSet(managedIdsKey, ids).commit()
     }
 
     private fun preferences(context: Context) =

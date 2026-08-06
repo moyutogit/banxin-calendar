@@ -3,4 +3,6 @@
     <string name="app_name">班薪日历</string>
     <string name="alarm_channel_name">排班闹钟</string>
     <string name="alarm_channel_description">根据排班生成的上班提醒</string>
+    <string name="alarm_stop">停止响铃</string>
+    <string name="alarm_ringing">闹钟正在响铃</string>
 </resources>

@@ -42,12 +42,18 @@ class _AppShellState extends ConsumerState<AppShell>
   }
 
   Future<void> _selfCheckAlarms() async {
+    final alarmService = ref.read(alarmApplicationServiceProvider);
+    try {
+      await alarmService.reconcileTriggered();
+    } catch (_) {
+      // A later resume or the settings self-check retries trigger receipts.
+    }
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     if (_lastAlarmSelfCheckDate == today) return;
     _lastAlarmSelfCheckDate = today;
     try {
-      await ref.read(alarmApplicationServiceProvider).syncRollingWindow();
+      await alarmService.syncRollingWindow();
     } catch (_) {
       // The settings page exposes the persisted failure state and retry entry.
     }

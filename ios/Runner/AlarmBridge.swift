@@ -42,6 +42,11 @@ final class AlarmBridge: NSObject, FlutterPlugin {
           .filter { $0.hasPrefix(Self.identifierPrefix) }
         DispatchQueue.main.async { result(identifiers) }
       }
+    case "consumeTriggeredAlarmIds":
+      // UNUserNotificationCenter does not expose delivery receipts for notifications
+      // while the app is terminated. Keep the cross-platform bridge total and let the
+      // pending-request reconciliation handle iOS delivery state.
+      result([String]())
     default:
       result(FlutterMethodNotImplemented)
     }

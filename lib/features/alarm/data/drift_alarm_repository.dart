@@ -170,9 +170,10 @@ final class DriftAlarmRepository implements AlarmRepository {
                   table.scheduleDate.isSmallerOrEqualValue(
                     range.end.toString(),
                   ) &
-                  table.status.isNotValue(
-                    _encodeStatus(AlarmInstanceStatus.canceled),
-                  ),
+                  table.status.isIn(<String>[
+                    _encodeStatus(AlarmInstanceStatus.scheduled),
+                    _encodeStatus(AlarmInstanceStatus.failed),
+                  ]),
             ))
             .get();
     return List<AlarmInstance>.unmodifiable(rows.map(_mapInstance));
@@ -186,12 +187,28 @@ final class DriftAlarmRepository implements AlarmRepository {
                   table.triggerAt.isBiggerOrEqualValue(
                     nowUtc.millisecondsSinceEpoch,
                   ) &
-                  table.status.isNotValue(
-                    _encodeStatus(AlarmInstanceStatus.canceled),
-                  ),
+                  table.status.isIn(<String>[
+                    _encodeStatus(AlarmInstanceStatus.scheduled),
+                    _encodeStatus(AlarmInstanceStatus.failed),
+                  ]),
             ))
             .get();
     return List<AlarmInstance>.unmodifiable(rows.map(_mapInstance));
+  }
+
+  @override
+  Future<void> markInstancesTriggered(Set<String> platformAlarmIds) async {
+    if (platformAlarmIds.isEmpty) return;
+    final now = _now;
+    await (_database.update(
+      _database.alarmInstances,
+    )..where((table) => table.platformAlarmId.isIn(platformAlarmIds))).write(
+      database.AlarmInstancesCompanion(
+        status: Value<String>(_encodeStatus(AlarmInstanceStatus.triggered)),
+        lastSyncedAt: Value<int>(now),
+        updatedAt: Value<int>(now),
+      ),
+    );
   }
 
   @override

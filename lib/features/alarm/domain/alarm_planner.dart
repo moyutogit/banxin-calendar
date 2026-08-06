@@ -44,6 +44,7 @@ final class AlarmPlanner {
         final platformId = 'banxin_${_fnv1a(identity)}';
         final payloadHash = _fnv1a(
           jsonEncode(<String, Object?>{
+            'deliveryVersion': 2,
             'title': template.name,
             'body': '${shift.name} ${day.date}',
             'vibrate': template.vibrate,

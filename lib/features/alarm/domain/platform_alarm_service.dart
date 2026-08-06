@@ -10,4 +10,6 @@ abstract interface class PlatformAlarmService {
   Future<void> cancel(String platformAlarmId);
 
   Future<Set<String>> listManagedAlarmIds();
+
+  Future<Set<String>> consumeTriggeredAlarmIds();
 }

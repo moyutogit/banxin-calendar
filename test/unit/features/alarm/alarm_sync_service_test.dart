@@ -23,6 +23,7 @@ void main() {
     late AlarmRepository alarmRepository;
     late _FakePlatformAlarmService platform;
     late AlarmSyncService syncService;
+    late _MutableClock syncClock;
 
     setUp(() async {
       database = AppDatabase.inMemory();
@@ -43,11 +44,12 @@ void main() {
         idGenerator: _SequenceIdGenerator('link'),
       );
       platform = _FakePlatformAlarmService();
+      syncClock = _MutableClock(DateTime.utc(2026, 8, 6));
       syncService = AlarmSyncService(
         alarmRepository,
         platform,
         scheduleService,
-        clock: const _FixedClock(),
+        clock: syncClock,
       );
       await scheduleService.saveSetup(_scheduleDraft());
       await alarmRepository.saveTemplate(_template());
@@ -120,6 +122,24 @@ void main() {
         );
       },
     );
+
+    test('reconciles platform trigger receipts before planning', () async {
+      final range = DateRange(
+        start: LocalDate.parse('2026-08-10'),
+        end: LocalDate.parse('2026-08-10'),
+      );
+      await syncService.sync(range);
+      final scheduled = (await alarmRepository.loadInstances(range)).single;
+      platform.triggeredIds.add(scheduled.platformAlarmId);
+      platform.managedIds.remove(scheduled.platformAlarmId);
+      syncClock.value = DateTime.utc(2026, 8, 10, 1);
+
+      await syncService.sync(range);
+
+      final rows = await database.select(database.alarmInstances).get();
+      expect(rows.single.status, AlarmInstanceStatus.triggered.name);
+      expect(platform.triggeredIds, isEmpty);
+    });
   });
 }
 
@@ -154,6 +174,7 @@ AlarmTemplate _template() => AlarmTemplate(
 final class _FakePlatformAlarmService implements PlatformAlarmService {
   AlarmCapability currentCapability = AlarmCapability.available;
   final Set<String> managedIds = <String>{};
+  final Set<String> triggeredIds = <String>{};
   var scheduleCalls = 0;
   var cancelCalls = 0;
 
@@ -177,6 +198,13 @@ final class _FakePlatformAlarmService implements PlatformAlarmService {
 
   @override
   Future<Set<String>> listManagedAlarmIds() async => Set<String>.of(managedIds);
+
+  @override
+  Future<Set<String>> consumeTriggeredAlarmIds() async {
+    final result = Set<String>.of(triggeredIds);
+    triggeredIds.clear();
+    return result;
+  }
 }
 
 final class _FixedClock implements AppClock {
@@ -184,6 +212,15 @@ final class _FixedClock implements AppClock {
 
   @override
   DateTime nowUtc() => DateTime.utc(2026, 8, 6);
+}
+
+final class _MutableClock implements AppClock {
+  _MutableClock(this.value);
+
+  DateTime value;
+
+  @override
+  DateTime nowUtc() => value;
 }
 
 final class _SequenceIdGenerator implements StableIdGenerator {

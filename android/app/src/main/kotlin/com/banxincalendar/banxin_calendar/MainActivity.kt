@@ -2,6 +2,7 @@ package com.banxincalendar.banxin_calendar
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,6 +12,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.banxincalendar.banxin_calendar.alarm.AlarmScheduler
+import com.banxincalendar.banxin_calendar.alarm.AlarmRingingService
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -55,6 +57,9 @@ class MainActivity : FlutterActivity() {
                     "listManagedAlarmIds" -> result.success(
                         AlarmScheduler.listManagedAlarmIds(this).toList(),
                     )
+                    "consumeTriggeredAlarmIds" -> result.success(
+                        AlarmScheduler.consumeTriggeredAlarmIds(this).toList(),
+                    )
                     else -> result.notImplemented()
                 }
             }
@@ -70,6 +75,13 @@ class MainActivity : FlutterActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (!manager.canScheduleExactAlarms()) return "permissionRequired"
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notifications = getSystemService(NotificationManager::class.java)
+            val channel = notifications.getNotificationChannel(AlarmRingingService.channelId)
+            if (channel != null && channel.importance == NotificationManager.IMPORTANCE_NONE) {
+                return "permissionRequired"
+            }
         }
         return "available"
     }
@@ -94,6 +106,18 @@ class MainActivity : FlutterActivity() {
                         Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM,
                         Uri.parse("package:$packageName"),
                     ),
+                )
+                return
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notifications = getSystemService(NotificationManager::class.java)
+            val channel = notifications.getNotificationChannel(AlarmRingingService.channelId)
+            if (channel != null && channel.importance == NotificationManager.IMPORTANCE_NONE) {
+                startActivity(
+                    Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+                        .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                        .putExtra(Settings.EXTRA_CHANNEL_ID, AlarmRingingService.channelId),
                 )
             }
         }

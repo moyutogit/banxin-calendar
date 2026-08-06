@@ -63,6 +63,7 @@ final class AlarmApplicationService {
   final AppClock _clock;
 
   Future<AlarmSettingsView> loadSettings() async {
+    await _syncService.reconcileTriggered();
     final rulesView = await _scheduleService.loadRulesView();
     return AlarmSettingsView(
       capability: await _syncService.capability(),
@@ -88,6 +89,8 @@ final class AlarmApplicationService {
   Future<AlarmCapability> requestCapability() {
     return _syncService.requestCapability();
   }
+
+  Future<void> reconcileTriggered() => _syncService.reconcileTriggered();
 
   Future<AlarmSyncResult> deleteTemplate(String id) async {
     await _repository.deleteTemplate(id);

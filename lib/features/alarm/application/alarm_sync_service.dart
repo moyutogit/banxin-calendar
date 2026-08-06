@@ -23,6 +23,7 @@ final class AlarmSyncService {
 
   Future<AlarmSyncResult> sync(DateRange range) async {
     final now = _clock.nowUtc();
+    await reconcileTriggered();
     final templates = await _repository.loadTemplates(enabledOnly: true);
     final calendar = await _scheduleService.loadCalendar(range);
     final desired = _planner.build(
@@ -138,6 +139,11 @@ final class AlarmSyncService {
 
   Future<AlarmCapability> requestCapability() => _platform.requestCapability();
 
+  Future<void> reconcileTriggered() async {
+    final triggeredIds = await _safeTriggeredIds();
+    await _repository.markInstancesTriggered(triggeredIds);
+  }
+
   Future<AlarmCapability> _safeCapability() async {
     try {
       return await _platform.capability();
@@ -149,6 +155,14 @@ final class AlarmSyncService {
   Future<Set<String>> _safeManagedIds() async {
     try {
       return await _platform.listManagedAlarmIds();
+    } catch (_) {
+      return const <String>{};
+    }
+  }
+
+  Future<Set<String>> _safeTriggeredIds() async {
+    try {
+      return await _platform.consumeTriggeredAlarmIds();
     } catch (_) {
       return const <String>{};
     }

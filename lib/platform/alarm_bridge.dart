@@ -48,6 +48,14 @@ final class MethodChannelAlarmBridge implements PlatformAlarmService {
     return (values ?? const <String>[]).toSet();
   }
 
+  @override
+  Future<Set<String>> consumeTriggeredAlarmIds() async {
+    final values = await _channel.invokeListMethod<String>(
+      'consumeTriggeredAlarmIds',
+    );
+    return (values ?? const <String>[]).toSet();
+  }
+
   AlarmCapability _decodeCapability(String? value) => switch (value) {
     'available' => AlarmCapability.available,
     'permissionRequired' => AlarmCapability.permissionRequired,

@@ -1,6 +1,7 @@
 import 'package:banxin_calendar/app/localization/generated/app_localizations.dart';
 import 'package:banxin_calendar/app/router.dart';
 import 'package:banxin_calendar/app/theme/app_theme.dart';
+import 'package:banxin_calendar/core/presentation/app_message.dart';
 import 'package:banxin_calendar/features/backup/application/backup_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,6 +29,8 @@ class BanxinCalendarApp extends ConsumerWidget {
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
       themeMode: ThemeMode.system,
+      builder: (context, child) =>
+          AppMessageHost(child: child ?? const SizedBox.shrink()),
       routerConfig: router,
     );
   }
