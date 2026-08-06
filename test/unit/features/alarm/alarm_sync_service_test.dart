@@ -132,7 +132,7 @@ void main() {
       final scheduled = (await alarmRepository.loadInstances(range)).single;
       platform.triggeredIds.add(scheduled.platformAlarmId);
       platform.managedIds.remove(scheduled.platformAlarmId);
-      syncClock.value = DateTime.utc(2026, 8, 10, 1);
+      syncClock.value = scheduled.triggerAtUtc.add(const Duration(minutes: 1));
 
       await syncService.sync(range);
 
