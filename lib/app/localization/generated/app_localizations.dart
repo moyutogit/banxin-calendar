@@ -98,6 +98,162 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
+  /// No description provided for @alarmSettingsTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'智能闹钟'**
+  String get alarmSettingsTitle;
+
+  /// No description provided for @alarmCapabilityAvailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'提醒能力正常'**
+  String get alarmCapabilityAvailable;
+
+  /// No description provided for @alarmCapabilityPermissionRequired.
+  ///
+  /// In zh, this message translates to:
+  /// **'需要通知或精确闹钟权限'**
+  String get alarmCapabilityPermissionRequired;
+
+  /// No description provided for @alarmCapabilityUnavailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'当前设备无法提供提醒能力'**
+  String get alarmCapabilityUnavailable;
+
+  /// No description provided for @alarmPermissionAction.
+  ///
+  /// In zh, this message translates to:
+  /// **'检查并授权'**
+  String get alarmPermissionAction;
+
+  /// No description provided for @alarmSyncAction.
+  ///
+  /// In zh, this message translates to:
+  /// **'立即自检'**
+  String get alarmSyncAction;
+
+  /// No description provided for @alarmSyncSuccess.
+  ///
+  /// In zh, this message translates to:
+  /// **'闹钟已同步'**
+  String get alarmSyncSuccess;
+
+  /// No description provided for @alarmSyncFailure.
+  ///
+  /// In zh, this message translates to:
+  /// **'部分闹钟同步失败，可稍后重试'**
+  String get alarmSyncFailure;
+
+  /// No description provided for @alarmAdjustedSoon.
+  ///
+  /// In zh, this message translates to:
+  /// **'未来 24 小时内的闹钟已调整'**
+  String get alarmAdjustedSoon;
+
+  /// No description provided for @alarmTemplateNew.
+  ///
+  /// In zh, this message translates to:
+  /// **'新增闹钟模板'**
+  String get alarmTemplateNew;
+
+  /// No description provided for @alarmTemplateEdit.
+  ///
+  /// In zh, this message translates to:
+  /// **'编辑闹钟模板'**
+  String get alarmTemplateEdit;
+
+  /// No description provided for @alarmTemplateName.
+  ///
+  /// In zh, this message translates to:
+  /// **'名称'**
+  String get alarmTemplateName;
+
+  /// No description provided for @alarmModeFixed.
+  ///
+  /// In zh, this message translates to:
+  /// **'固定时间'**
+  String get alarmModeFixed;
+
+  /// No description provided for @alarmModeRelative.
+  ///
+  /// In zh, this message translates to:
+  /// **'班次开始前'**
+  String get alarmModeRelative;
+
+  /// No description provided for @alarmTime.
+  ///
+  /// In zh, this message translates to:
+  /// **'提醒时间'**
+  String get alarmTime;
+
+  /// No description provided for @alarmOffsetMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'提前分钟数'**
+  String get alarmOffsetMinutes;
+
+  /// No description provided for @alarmLinkedShifts.
+  ///
+  /// In zh, this message translates to:
+  /// **'关联班次（最多 5 个）'**
+  String get alarmLinkedShifts;
+
+  /// No description provided for @alarmVibrate.
+  ///
+  /// In zh, this message translates to:
+  /// **'振动'**
+  String get alarmVibrate;
+
+  /// No description provided for @alarmVolumeRamp.
+  ///
+  /// In zh, this message translates to:
+  /// **'音量渐强'**
+  String get alarmVolumeRamp;
+
+  /// No description provided for @alarmSnoozeMinutes.
+  ///
+  /// In zh, this message translates to:
+  /// **'稍后提醒分钟数'**
+  String get alarmSnoozeMinutes;
+
+  /// No description provided for @alarmMaxSnooze.
+  ///
+  /// In zh, this message translates to:
+  /// **'最大稍后次数'**
+  String get alarmMaxSnooze;
+
+  /// No description provided for @alarmUpcoming.
+  ///
+  /// In zh, this message translates to:
+  /// **'未来闹钟'**
+  String get alarmUpcoming;
+
+  /// No description provided for @alarmNoTemplates.
+  ///
+  /// In zh, this message translates to:
+  /// **'尚未创建闹钟模板'**
+  String get alarmNoTemplates;
+
+  /// No description provided for @alarmNoUpcoming.
+  ///
+  /// In zh, this message translates to:
+  /// **'未来 30 天没有排班闹钟'**
+  String get alarmNoUpcoming;
+
+  /// No description provided for @alarmPlatformDisclaimer.
+  ///
+  /// In zh, this message translates to:
+  /// **'Android 精确提醒受系统权限和厂商后台策略影响；iOS 使用本地通知，静音和专注模式可能影响提醒。'**
+  String get alarmPlatformDisclaimer;
+
+  /// No description provided for @alarmSaveDidNotBlock.
+  ///
+  /// In zh, this message translates to:
+  /// **'模板已保存，但闹钟同步失败，请检查权限后重试。'**
+  String get alarmSaveDidNotBlock;
+
   /// No description provided for @appTitle.
   ///
   /// In zh, this message translates to:

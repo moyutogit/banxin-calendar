@@ -1,12 +1,15 @@
 import 'dart:io';
 
 import 'package:banxin_calendar/core/database/migrations/schema_versions.dart';
+import 'package:banxin_calendar/core/database/tables/alarm_instances.dart';
+import 'package:banxin_calendar/core/database/tables/alarm_templates.dart';
 import 'package:banxin_calendar/core/database/tables/calendar_day_cache.dart';
 import 'package:banxin_calendar/core/database/tables/change_log.dart';
 import 'package:banxin_calendar/core/database/tables/database_metadata.dart';
 import 'package:banxin_calendar/core/database/tables/day_overrides.dart';
 import 'package:banxin_calendar/core/database/tables/holiday_records.dart';
 import 'package:banxin_calendar/core/database/tables/schedule_rules.dart';
+import 'package:banxin_calendar/core/database/tables/shift_alarm_templates.dart';
 import 'package:banxin_calendar/core/database/tables/shift_templates.dart';
 import 'package:banxin_calendar/core/database/tables/user_settings.dart';
 import 'package:drift/drift.dart';
@@ -26,6 +29,9 @@ part 'app_database.g.dart';
     HolidayRecords,
     CalendarDayCache,
     ChangeLog,
+    AlarmTemplates,
+    ShiftAlarmTemplates,
+    AlarmInstances,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -41,6 +47,7 @@ class AppDatabase extends _$AppDatabase {
     onCreate: (migrator) async {
       await migrator.createAll();
       await _createScheduleIndexes();
+      await _createAlarmIndexes();
     },
     onUpgrade: _upgrade,
     beforeOpen: (details) async {
@@ -73,6 +80,13 @@ class AppDatabase extends _$AppDatabase {
       await migrator.createTable(changeLog);
       await _createScheduleIndexes();
     }
+
+    if (from < SchemaVersions.alarmFoundation) {
+      await migrator.createTable(alarmTemplates);
+      await migrator.createTable(shiftAlarmTemplates);
+      await migrator.createTable(alarmInstances);
+      await _createAlarmIndexes();
+    }
   }
 
   Future<void> _createScheduleIndexes() async {
@@ -92,6 +106,22 @@ class AppDatabase extends _$AppDatabase {
     await customStatement('''
       CREATE INDEX IF NOT EXISTS idx_schedule_rules_effective
       ON schedule_rules(effective_start, effective_end, enabled)
+    ''');
+  }
+
+  Future<void> _createAlarmIndexes() async {
+    await customStatement('''
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_shift_alarm_templates_active
+      ON shift_alarm_templates(shift_template_id, alarm_template_id)
+      WHERE deleted_at IS NULL
+    ''');
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_alarm_instances_trigger_status
+      ON alarm_instances(trigger_at, status)
+    ''');
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_alarm_instances_schedule_date
+      ON alarm_instances(schedule_date)
     ''');
   }
 }

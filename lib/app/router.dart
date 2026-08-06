@@ -1,4 +1,5 @@
 import 'package:banxin_calendar/app/shell/app_shell.dart';
+import 'package:banxin_calendar/features/alarm/presentation/alarm_settings_page.dart';
 import 'package:banxin_calendar/features/assistant/presentation/assistant_page.dart';
 import 'package:banxin_calendar/features/calendar/presentation/calendar_page.dart';
 import 'package:banxin_calendar/features/calendar/presentation/day_details_page.dart';
@@ -88,6 +89,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/settings/holiday',
         builder: (_, _) => const HolidaySettingsPage(),
+      ),
+      GoRoute(
+        path: '/settings/alarm',
+        builder: (_, _) => const AlarmSettingsPage(),
       ),
     ],
   );

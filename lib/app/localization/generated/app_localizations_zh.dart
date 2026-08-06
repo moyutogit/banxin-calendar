@@ -9,6 +9,85 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get alarmSettingsTitle => '智能闹钟';
+
+  @override
+  String get alarmCapabilityAvailable => '提醒能力正常';
+
+  @override
+  String get alarmCapabilityPermissionRequired => '需要通知或精确闹钟权限';
+
+  @override
+  String get alarmCapabilityUnavailable => '当前设备无法提供提醒能力';
+
+  @override
+  String get alarmPermissionAction => '检查并授权';
+
+  @override
+  String get alarmSyncAction => '立即自检';
+
+  @override
+  String get alarmSyncSuccess => '闹钟已同步';
+
+  @override
+  String get alarmSyncFailure => '部分闹钟同步失败，可稍后重试';
+
+  @override
+  String get alarmAdjustedSoon => '未来 24 小时内的闹钟已调整';
+
+  @override
+  String get alarmTemplateNew => '新增闹钟模板';
+
+  @override
+  String get alarmTemplateEdit => '编辑闹钟模板';
+
+  @override
+  String get alarmTemplateName => '名称';
+
+  @override
+  String get alarmModeFixed => '固定时间';
+
+  @override
+  String get alarmModeRelative => '班次开始前';
+
+  @override
+  String get alarmTime => '提醒时间';
+
+  @override
+  String get alarmOffsetMinutes => '提前分钟数';
+
+  @override
+  String get alarmLinkedShifts => '关联班次（最多 5 个）';
+
+  @override
+  String get alarmVibrate => '振动';
+
+  @override
+  String get alarmVolumeRamp => '音量渐强';
+
+  @override
+  String get alarmSnoozeMinutes => '稍后提醒分钟数';
+
+  @override
+  String get alarmMaxSnooze => '最大稍后次数';
+
+  @override
+  String get alarmUpcoming => '未来闹钟';
+
+  @override
+  String get alarmNoTemplates => '尚未创建闹钟模板';
+
+  @override
+  String get alarmNoUpcoming => '未来 30 天没有排班闹钟';
+
+  @override
+  String get alarmPlatformDisclaimer =>
+      'Android 精确提醒受系统权限和厂商后台策略影响；iOS 使用本地通知，静音和专注模式可能影响提醒。';
+
+  @override
+  String get alarmSaveDidNotBlock => '模板已保存，但闹钟同步失败，请检查权限后重试。';
+
+  @override
   String get appTitle => '班薪日历';
 
   @override

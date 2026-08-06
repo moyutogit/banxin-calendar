@@ -4821,6 +4821,2141 @@ class ChangeLogCompanion extends UpdateCompanion<ChangeLogData> {
   }
 }
 
+class $AlarmTemplatesTable extends AlarmTemplates
+    with TableInfo<$AlarmTemplatesTable, AlarmTemplate> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AlarmTemplatesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _modeMeta = const VerificationMeta('mode');
+  @override
+  late final GeneratedColumn<String> mode = GeneratedColumn<String>(
+    'mode',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _fixedMinuteMeta = const VerificationMeta(
+    'fixedMinute',
+  );
+  @override
+  late final GeneratedColumn<int> fixedMinute = GeneratedColumn<int>(
+    'fixed_minute',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _offsetMinutesMeta = const VerificationMeta(
+    'offsetMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> offsetMinutes = GeneratedColumn<int>(
+    'offset_minutes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _soundIdMeta = const VerificationMeta(
+    'soundId',
+  );
+  @override
+  late final GeneratedColumn<String> soundId = GeneratedColumn<String>(
+    'sound_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _vibrateMeta = const VerificationMeta(
+    'vibrate',
+  );
+  @override
+  late final GeneratedColumn<int> vibrate = GeneratedColumn<int>(
+    'vibrate',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _volumeRampMeta = const VerificationMeta(
+    'volumeRamp',
+  );
+  @override
+  late final GeneratedColumn<int> volumeRamp = GeneratedColumn<int>(
+    'volume_ramp',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant<int>(0),
+  );
+  static const VerificationMeta _snoozeMinutesMeta = const VerificationMeta(
+    'snoozeMinutes',
+  );
+  @override
+  late final GeneratedColumn<int> snoozeMinutes = GeneratedColumn<int>(
+    'snooze_minutes',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxSnoozeCountMeta = const VerificationMeta(
+    'maxSnoozeCount',
+  );
+  @override
+  late final GeneratedColumn<int> maxSnoozeCount = GeneratedColumn<int>(
+    'max_snooze_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _enabledMeta = const VerificationMeta(
+    'enabled',
+  );
+  @override
+  late final GeneratedColumn<int> enabled = GeneratedColumn<int>(
+    'enabled',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    name,
+    mode,
+    fixedMinute,
+    offsetMinutes,
+    soundId,
+    vibrate,
+    volumeRamp,
+    snoozeMinutes,
+    maxSnoozeCount,
+    enabled,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'alarm_templates';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AlarmTemplate> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('mode')) {
+      context.handle(
+        _modeMeta,
+        mode.isAcceptableOrUnknown(data['mode']!, _modeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_modeMeta);
+    }
+    if (data.containsKey('fixed_minute')) {
+      context.handle(
+        _fixedMinuteMeta,
+        fixedMinute.isAcceptableOrUnknown(
+          data['fixed_minute']!,
+          _fixedMinuteMeta,
+        ),
+      );
+    }
+    if (data.containsKey('offset_minutes')) {
+      context.handle(
+        _offsetMinutesMeta,
+        offsetMinutes.isAcceptableOrUnknown(
+          data['offset_minutes']!,
+          _offsetMinutesMeta,
+        ),
+      );
+    }
+    if (data.containsKey('sound_id')) {
+      context.handle(
+        _soundIdMeta,
+        soundId.isAcceptableOrUnknown(data['sound_id']!, _soundIdMeta),
+      );
+    }
+    if (data.containsKey('vibrate')) {
+      context.handle(
+        _vibrateMeta,
+        vibrate.isAcceptableOrUnknown(data['vibrate']!, _vibrateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_vibrateMeta);
+    }
+    if (data.containsKey('volume_ramp')) {
+      context.handle(
+        _volumeRampMeta,
+        volumeRamp.isAcceptableOrUnknown(data['volume_ramp']!, _volumeRampMeta),
+      );
+    }
+    if (data.containsKey('snooze_minutes')) {
+      context.handle(
+        _snoozeMinutesMeta,
+        snoozeMinutes.isAcceptableOrUnknown(
+          data['snooze_minutes']!,
+          _snoozeMinutesMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_snoozeMinutesMeta);
+    }
+    if (data.containsKey('max_snooze_count')) {
+      context.handle(
+        _maxSnoozeCountMeta,
+        maxSnoozeCount.isAcceptableOrUnknown(
+          data['max_snooze_count']!,
+          _maxSnoozeCountMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_maxSnoozeCountMeta);
+    }
+    if (data.containsKey('enabled')) {
+      context.handle(
+        _enabledMeta,
+        enabled.isAcceptableOrUnknown(data['enabled']!, _enabledMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_enabledMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AlarmTemplate map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AlarmTemplate(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      mode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}mode'],
+      )!,
+      fixedMinute: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}fixed_minute'],
+      ),
+      offsetMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}offset_minutes'],
+      ),
+      soundId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sound_id'],
+      ),
+      vibrate: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}vibrate'],
+      )!,
+      volumeRamp: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}volume_ramp'],
+      )!,
+      snoozeMinutes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}snooze_minutes'],
+      )!,
+      maxSnoozeCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}max_snooze_count'],
+      )!,
+      enabled: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}enabled'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $AlarmTemplatesTable createAlias(String alias) {
+    return $AlarmTemplatesTable(attachedDatabase, alias);
+  }
+}
+
+class AlarmTemplate extends DataClass implements Insertable<AlarmTemplate> {
+  final String id;
+  final String name;
+  final String mode;
+  final int? fixedMinute;
+  final int? offsetMinutes;
+  final String? soundId;
+  final int vibrate;
+  final int volumeRamp;
+  final int snoozeMinutes;
+  final int maxSnoozeCount;
+  final int enabled;
+  final int createdAt;
+  final int updatedAt;
+  final int? deletedAt;
+  const AlarmTemplate({
+    required this.id,
+    required this.name,
+    required this.mode,
+    this.fixedMinute,
+    this.offsetMinutes,
+    this.soundId,
+    required this.vibrate,
+    required this.volumeRamp,
+    required this.snoozeMinutes,
+    required this.maxSnoozeCount,
+    required this.enabled,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['name'] = Variable<String>(name);
+    map['mode'] = Variable<String>(mode);
+    if (!nullToAbsent || fixedMinute != null) {
+      map['fixed_minute'] = Variable<int>(fixedMinute);
+    }
+    if (!nullToAbsent || offsetMinutes != null) {
+      map['offset_minutes'] = Variable<int>(offsetMinutes);
+    }
+    if (!nullToAbsent || soundId != null) {
+      map['sound_id'] = Variable<String>(soundId);
+    }
+    map['vibrate'] = Variable<int>(vibrate);
+    map['volume_ramp'] = Variable<int>(volumeRamp);
+    map['snooze_minutes'] = Variable<int>(snoozeMinutes);
+    map['max_snooze_count'] = Variable<int>(maxSnoozeCount);
+    map['enabled'] = Variable<int>(enabled);
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<int>(deletedAt);
+    }
+    return map;
+  }
+
+  AlarmTemplatesCompanion toCompanion(bool nullToAbsent) {
+    return AlarmTemplatesCompanion(
+      id: Value(id),
+      name: Value(name),
+      mode: Value(mode),
+      fixedMinute: fixedMinute == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fixedMinute),
+      offsetMinutes: offsetMinutes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(offsetMinutes),
+      soundId: soundId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(soundId),
+      vibrate: Value(vibrate),
+      volumeRamp: Value(volumeRamp),
+      snoozeMinutes: Value(snoozeMinutes),
+      maxSnoozeCount: Value(maxSnoozeCount),
+      enabled: Value(enabled),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory AlarmTemplate.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AlarmTemplate(
+      id: serializer.fromJson<String>(json['id']),
+      name: serializer.fromJson<String>(json['name']),
+      mode: serializer.fromJson<String>(json['mode']),
+      fixedMinute: serializer.fromJson<int?>(json['fixedMinute']),
+      offsetMinutes: serializer.fromJson<int?>(json['offsetMinutes']),
+      soundId: serializer.fromJson<String?>(json['soundId']),
+      vibrate: serializer.fromJson<int>(json['vibrate']),
+      volumeRamp: serializer.fromJson<int>(json['volumeRamp']),
+      snoozeMinutes: serializer.fromJson<int>(json['snoozeMinutes']),
+      maxSnoozeCount: serializer.fromJson<int>(json['maxSnoozeCount']),
+      enabled: serializer.fromJson<int>(json['enabled']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deletedAt: serializer.fromJson<int?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'name': serializer.toJson<String>(name),
+      'mode': serializer.toJson<String>(mode),
+      'fixedMinute': serializer.toJson<int?>(fixedMinute),
+      'offsetMinutes': serializer.toJson<int?>(offsetMinutes),
+      'soundId': serializer.toJson<String?>(soundId),
+      'vibrate': serializer.toJson<int>(vibrate),
+      'volumeRamp': serializer.toJson<int>(volumeRamp),
+      'snoozeMinutes': serializer.toJson<int>(snoozeMinutes),
+      'maxSnoozeCount': serializer.toJson<int>(maxSnoozeCount),
+      'enabled': serializer.toJson<int>(enabled),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deletedAt': serializer.toJson<int?>(deletedAt),
+    };
+  }
+
+  AlarmTemplate copyWith({
+    String? id,
+    String? name,
+    String? mode,
+    Value<int?> fixedMinute = const Value.absent(),
+    Value<int?> offsetMinutes = const Value.absent(),
+    Value<String?> soundId = const Value.absent(),
+    int? vibrate,
+    int? volumeRamp,
+    int? snoozeMinutes,
+    int? maxSnoozeCount,
+    int? enabled,
+    int? createdAt,
+    int? updatedAt,
+    Value<int?> deletedAt = const Value.absent(),
+  }) => AlarmTemplate(
+    id: id ?? this.id,
+    name: name ?? this.name,
+    mode: mode ?? this.mode,
+    fixedMinute: fixedMinute.present ? fixedMinute.value : this.fixedMinute,
+    offsetMinutes: offsetMinutes.present
+        ? offsetMinutes.value
+        : this.offsetMinutes,
+    soundId: soundId.present ? soundId.value : this.soundId,
+    vibrate: vibrate ?? this.vibrate,
+    volumeRamp: volumeRamp ?? this.volumeRamp,
+    snoozeMinutes: snoozeMinutes ?? this.snoozeMinutes,
+    maxSnoozeCount: maxSnoozeCount ?? this.maxSnoozeCount,
+    enabled: enabled ?? this.enabled,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  AlarmTemplate copyWithCompanion(AlarmTemplatesCompanion data) {
+    return AlarmTemplate(
+      id: data.id.present ? data.id.value : this.id,
+      name: data.name.present ? data.name.value : this.name,
+      mode: data.mode.present ? data.mode.value : this.mode,
+      fixedMinute: data.fixedMinute.present
+          ? data.fixedMinute.value
+          : this.fixedMinute,
+      offsetMinutes: data.offsetMinutes.present
+          ? data.offsetMinutes.value
+          : this.offsetMinutes,
+      soundId: data.soundId.present ? data.soundId.value : this.soundId,
+      vibrate: data.vibrate.present ? data.vibrate.value : this.vibrate,
+      volumeRamp: data.volumeRamp.present
+          ? data.volumeRamp.value
+          : this.volumeRamp,
+      snoozeMinutes: data.snoozeMinutes.present
+          ? data.snoozeMinutes.value
+          : this.snoozeMinutes,
+      maxSnoozeCount: data.maxSnoozeCount.present
+          ? data.maxSnoozeCount.value
+          : this.maxSnoozeCount,
+      enabled: data.enabled.present ? data.enabled.value : this.enabled,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AlarmTemplate(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('mode: $mode, ')
+          ..write('fixedMinute: $fixedMinute, ')
+          ..write('offsetMinutes: $offsetMinutes, ')
+          ..write('soundId: $soundId, ')
+          ..write('vibrate: $vibrate, ')
+          ..write('volumeRamp: $volumeRamp, ')
+          ..write('snoozeMinutes: $snoozeMinutes, ')
+          ..write('maxSnoozeCount: $maxSnoozeCount, ')
+          ..write('enabled: $enabled, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    mode,
+    fixedMinute,
+    offsetMinutes,
+    soundId,
+    vibrate,
+    volumeRamp,
+    snoozeMinutes,
+    maxSnoozeCount,
+    enabled,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AlarmTemplate &&
+          other.id == this.id &&
+          other.name == this.name &&
+          other.mode == this.mode &&
+          other.fixedMinute == this.fixedMinute &&
+          other.offsetMinutes == this.offsetMinutes &&
+          other.soundId == this.soundId &&
+          other.vibrate == this.vibrate &&
+          other.volumeRamp == this.volumeRamp &&
+          other.snoozeMinutes == this.snoozeMinutes &&
+          other.maxSnoozeCount == this.maxSnoozeCount &&
+          other.enabled == this.enabled &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class AlarmTemplatesCompanion extends UpdateCompanion<AlarmTemplate> {
+  final Value<String> id;
+  final Value<String> name;
+  final Value<String> mode;
+  final Value<int?> fixedMinute;
+  final Value<int?> offsetMinutes;
+  final Value<String?> soundId;
+  final Value<int> vibrate;
+  final Value<int> volumeRamp;
+  final Value<int> snoozeMinutes;
+  final Value<int> maxSnoozeCount;
+  final Value<int> enabled;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int?> deletedAt;
+  final Value<int> rowid;
+  const AlarmTemplatesCompanion({
+    this.id = const Value.absent(),
+    this.name = const Value.absent(),
+    this.mode = const Value.absent(),
+    this.fixedMinute = const Value.absent(),
+    this.offsetMinutes = const Value.absent(),
+    this.soundId = const Value.absent(),
+    this.vibrate = const Value.absent(),
+    this.volumeRamp = const Value.absent(),
+    this.snoozeMinutes = const Value.absent(),
+    this.maxSnoozeCount = const Value.absent(),
+    this.enabled = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AlarmTemplatesCompanion.insert({
+    required String id,
+    required String name,
+    required String mode,
+    this.fixedMinute = const Value.absent(),
+    this.offsetMinutes = const Value.absent(),
+    this.soundId = const Value.absent(),
+    required int vibrate,
+    this.volumeRamp = const Value.absent(),
+    required int snoozeMinutes,
+    required int maxSnoozeCount,
+    required int enabled,
+    required int createdAt,
+    required int updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       name = Value(name),
+       mode = Value(mode),
+       vibrate = Value(vibrate),
+       snoozeMinutes = Value(snoozeMinutes),
+       maxSnoozeCount = Value(maxSnoozeCount),
+       enabled = Value(enabled),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<AlarmTemplate> custom({
+    Expression<String>? id,
+    Expression<String>? name,
+    Expression<String>? mode,
+    Expression<int>? fixedMinute,
+    Expression<int>? offsetMinutes,
+    Expression<String>? soundId,
+    Expression<int>? vibrate,
+    Expression<int>? volumeRamp,
+    Expression<int>? snoozeMinutes,
+    Expression<int>? maxSnoozeCount,
+    Expression<int>? enabled,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (mode != null) 'mode': mode,
+      if (fixedMinute != null) 'fixed_minute': fixedMinute,
+      if (offsetMinutes != null) 'offset_minutes': offsetMinutes,
+      if (soundId != null) 'sound_id': soundId,
+      if (vibrate != null) 'vibrate': vibrate,
+      if (volumeRamp != null) 'volume_ramp': volumeRamp,
+      if (snoozeMinutes != null) 'snooze_minutes': snoozeMinutes,
+      if (maxSnoozeCount != null) 'max_snooze_count': maxSnoozeCount,
+      if (enabled != null) 'enabled': enabled,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AlarmTemplatesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? name,
+    Value<String>? mode,
+    Value<int?>? fixedMinute,
+    Value<int?>? offsetMinutes,
+    Value<String?>? soundId,
+    Value<int>? vibrate,
+    Value<int>? volumeRamp,
+    Value<int>? snoozeMinutes,
+    Value<int>? maxSnoozeCount,
+    Value<int>? enabled,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return AlarmTemplatesCompanion(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      mode: mode ?? this.mode,
+      fixedMinute: fixedMinute ?? this.fixedMinute,
+      offsetMinutes: offsetMinutes ?? this.offsetMinutes,
+      soundId: soundId ?? this.soundId,
+      vibrate: vibrate ?? this.vibrate,
+      volumeRamp: volumeRamp ?? this.volumeRamp,
+      snoozeMinutes: snoozeMinutes ?? this.snoozeMinutes,
+      maxSnoozeCount: maxSnoozeCount ?? this.maxSnoozeCount,
+      enabled: enabled ?? this.enabled,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (mode.present) {
+      map['mode'] = Variable<String>(mode.value);
+    }
+    if (fixedMinute.present) {
+      map['fixed_minute'] = Variable<int>(fixedMinute.value);
+    }
+    if (offsetMinutes.present) {
+      map['offset_minutes'] = Variable<int>(offsetMinutes.value);
+    }
+    if (soundId.present) {
+      map['sound_id'] = Variable<String>(soundId.value);
+    }
+    if (vibrate.present) {
+      map['vibrate'] = Variable<int>(vibrate.value);
+    }
+    if (volumeRamp.present) {
+      map['volume_ramp'] = Variable<int>(volumeRamp.value);
+    }
+    if (snoozeMinutes.present) {
+      map['snooze_minutes'] = Variable<int>(snoozeMinutes.value);
+    }
+    if (maxSnoozeCount.present) {
+      map['max_snooze_count'] = Variable<int>(maxSnoozeCount.value);
+    }
+    if (enabled.present) {
+      map['enabled'] = Variable<int>(enabled.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<int>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AlarmTemplatesCompanion(')
+          ..write('id: $id, ')
+          ..write('name: $name, ')
+          ..write('mode: $mode, ')
+          ..write('fixedMinute: $fixedMinute, ')
+          ..write('offsetMinutes: $offsetMinutes, ')
+          ..write('soundId: $soundId, ')
+          ..write('vibrate: $vibrate, ')
+          ..write('volumeRamp: $volumeRamp, ')
+          ..write('snoozeMinutes: $snoozeMinutes, ')
+          ..write('maxSnoozeCount: $maxSnoozeCount, ')
+          ..write('enabled: $enabled, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ShiftAlarmTemplatesTable extends ShiftAlarmTemplates
+    with TableInfo<$ShiftAlarmTemplatesTable, ShiftAlarmTemplate> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ShiftAlarmTemplatesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _shiftTemplateIdMeta = const VerificationMeta(
+    'shiftTemplateId',
+  );
+  @override
+  late final GeneratedColumn<String> shiftTemplateId = GeneratedColumn<String>(
+    'shift_template_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES shift_templates (id)',
+    ),
+  );
+  static const VerificationMeta _alarmTemplateIdMeta = const VerificationMeta(
+    'alarmTemplateId',
+  );
+  @override
+  late final GeneratedColumn<String> alarmTemplateId = GeneratedColumn<String>(
+    'alarm_template_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES alarm_templates (id)',
+    ),
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletedAtMeta = const VerificationMeta(
+    'deletedAt',
+  );
+  @override
+  late final GeneratedColumn<int> deletedAt = GeneratedColumn<int>(
+    'deleted_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    shiftTemplateId,
+    alarmTemplateId,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'shift_alarm_templates';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ShiftAlarmTemplate> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('shift_template_id')) {
+      context.handle(
+        _shiftTemplateIdMeta,
+        shiftTemplateId.isAcceptableOrUnknown(
+          data['shift_template_id']!,
+          _shiftTemplateIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_shiftTemplateIdMeta);
+    }
+    if (data.containsKey('alarm_template_id')) {
+      context.handle(
+        _alarmTemplateIdMeta,
+        alarmTemplateId.isAcceptableOrUnknown(
+          data['alarm_template_id']!,
+          _alarmTemplateIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_alarmTemplateIdMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    if (data.containsKey('deleted_at')) {
+      context.handle(
+        _deletedAtMeta,
+        deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ShiftAlarmTemplate map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ShiftAlarmTemplate(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      shiftTemplateId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}shift_template_id'],
+      )!,
+      alarmTemplateId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}alarm_template_id'],
+      )!,
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+      deletedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}deleted_at'],
+      ),
+    );
+  }
+
+  @override
+  $ShiftAlarmTemplatesTable createAlias(String alias) {
+    return $ShiftAlarmTemplatesTable(attachedDatabase, alias);
+  }
+}
+
+class ShiftAlarmTemplate extends DataClass
+    implements Insertable<ShiftAlarmTemplate> {
+  final String id;
+  final String shiftTemplateId;
+  final String alarmTemplateId;
+  final int createdAt;
+  final int updatedAt;
+  final int? deletedAt;
+  const ShiftAlarmTemplate({
+    required this.id,
+    required this.shiftTemplateId,
+    required this.alarmTemplateId,
+    required this.createdAt,
+    required this.updatedAt,
+    this.deletedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['shift_template_id'] = Variable<String>(shiftTemplateId);
+    map['alarm_template_id'] = Variable<String>(alarmTemplateId);
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    if (!nullToAbsent || deletedAt != null) {
+      map['deleted_at'] = Variable<int>(deletedAt);
+    }
+    return map;
+  }
+
+  ShiftAlarmTemplatesCompanion toCompanion(bool nullToAbsent) {
+    return ShiftAlarmTemplatesCompanion(
+      id: Value(id),
+      shiftTemplateId: Value(shiftTemplateId),
+      alarmTemplateId: Value(alarmTemplateId),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+      deletedAt: deletedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(deletedAt),
+    );
+  }
+
+  factory ShiftAlarmTemplate.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ShiftAlarmTemplate(
+      id: serializer.fromJson<String>(json['id']),
+      shiftTemplateId: serializer.fromJson<String>(json['shiftTemplateId']),
+      alarmTemplateId: serializer.fromJson<String>(json['alarmTemplateId']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+      deletedAt: serializer.fromJson<int?>(json['deletedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'shiftTemplateId': serializer.toJson<String>(shiftTemplateId),
+      'alarmTemplateId': serializer.toJson<String>(alarmTemplateId),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+      'deletedAt': serializer.toJson<int?>(deletedAt),
+    };
+  }
+
+  ShiftAlarmTemplate copyWith({
+    String? id,
+    String? shiftTemplateId,
+    String? alarmTemplateId,
+    int? createdAt,
+    int? updatedAt,
+    Value<int?> deletedAt = const Value.absent(),
+  }) => ShiftAlarmTemplate(
+    id: id ?? this.id,
+    shiftTemplateId: shiftTemplateId ?? this.shiftTemplateId,
+    alarmTemplateId: alarmTemplateId ?? this.alarmTemplateId,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+  );
+  ShiftAlarmTemplate copyWithCompanion(ShiftAlarmTemplatesCompanion data) {
+    return ShiftAlarmTemplate(
+      id: data.id.present ? data.id.value : this.id,
+      shiftTemplateId: data.shiftTemplateId.present
+          ? data.shiftTemplateId.value
+          : this.shiftTemplateId,
+      alarmTemplateId: data.alarmTemplateId.present
+          ? data.alarmTemplateId.value
+          : this.alarmTemplateId,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+      deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShiftAlarmTemplate(')
+          ..write('id: $id, ')
+          ..write('shiftTemplateId: $shiftTemplateId, ')
+          ..write('alarmTemplateId: $alarmTemplateId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    shiftTemplateId,
+    alarmTemplateId,
+    createdAt,
+    updatedAt,
+    deletedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ShiftAlarmTemplate &&
+          other.id == this.id &&
+          other.shiftTemplateId == this.shiftTemplateId &&
+          other.alarmTemplateId == this.alarmTemplateId &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt &&
+          other.deletedAt == this.deletedAt);
+}
+
+class ShiftAlarmTemplatesCompanion extends UpdateCompanion<ShiftAlarmTemplate> {
+  final Value<String> id;
+  final Value<String> shiftTemplateId;
+  final Value<String> alarmTemplateId;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int?> deletedAt;
+  final Value<int> rowid;
+  const ShiftAlarmTemplatesCompanion({
+    this.id = const Value.absent(),
+    this.shiftTemplateId = const Value.absent(),
+    this.alarmTemplateId = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ShiftAlarmTemplatesCompanion.insert({
+    required String id,
+    required String shiftTemplateId,
+    required String alarmTemplateId,
+    required int createdAt,
+    required int updatedAt,
+    this.deletedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       shiftTemplateId = Value(shiftTemplateId),
+       alarmTemplateId = Value(alarmTemplateId),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<ShiftAlarmTemplate> custom({
+    Expression<String>? id,
+    Expression<String>? shiftTemplateId,
+    Expression<String>? alarmTemplateId,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? deletedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (shiftTemplateId != null) 'shift_template_id': shiftTemplateId,
+      if (alarmTemplateId != null) 'alarm_template_id': alarmTemplateId,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (deletedAt != null) 'deleted_at': deletedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ShiftAlarmTemplatesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? shiftTemplateId,
+    Value<String>? alarmTemplateId,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int?>? deletedAt,
+    Value<int>? rowid,
+  }) {
+    return ShiftAlarmTemplatesCompanion(
+      id: id ?? this.id,
+      shiftTemplateId: shiftTemplateId ?? this.shiftTemplateId,
+      alarmTemplateId: alarmTemplateId ?? this.alarmTemplateId,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      deletedAt: deletedAt ?? this.deletedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (shiftTemplateId.present) {
+      map['shift_template_id'] = Variable<String>(shiftTemplateId.value);
+    }
+    if (alarmTemplateId.present) {
+      map['alarm_template_id'] = Variable<String>(alarmTemplateId.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (deletedAt.present) {
+      map['deleted_at'] = Variable<int>(deletedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ShiftAlarmTemplatesCompanion(')
+          ..write('id: $id, ')
+          ..write('shiftTemplateId: $shiftTemplateId, ')
+          ..write('alarmTemplateId: $alarmTemplateId, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('deletedAt: $deletedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $AlarmInstancesTable extends AlarmInstances
+    with TableInfo<$AlarmInstancesTable, AlarmInstance> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AlarmInstancesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _templateIdMeta = const VerificationMeta(
+    'templateId',
+  );
+  @override
+  late final GeneratedColumn<String> templateId = GeneratedColumn<String>(
+    'template_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES alarm_templates (id)',
+    ),
+  );
+  static const VerificationMeta _scheduleDateMeta = const VerificationMeta(
+    'scheduleDate',
+  );
+  @override
+  late final GeneratedColumn<String> scheduleDate = GeneratedColumn<String>(
+    'schedule_date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _triggerAtMeta = const VerificationMeta(
+    'triggerAt',
+  );
+  @override
+  late final GeneratedColumn<int> triggerAt = GeneratedColumn<int>(
+    'trigger_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _shiftIdMeta = const VerificationMeta(
+    'shiftId',
+  );
+  @override
+  late final GeneratedColumn<String> shiftId = GeneratedColumn<String>(
+    'shift_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lockedMeta = const VerificationMeta('locked');
+  @override
+  late final GeneratedColumn<int> locked = GeneratedColumn<int>(
+    'locked',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _platformAlarmIdMeta = const VerificationMeta(
+    'platformAlarmId',
+  );
+  @override
+  late final GeneratedColumn<String> platformAlarmId = GeneratedColumn<String>(
+    'platform_alarm_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _payloadHashMeta = const VerificationMeta(
+    'payloadHash',
+  );
+  @override
+  late final GeneratedColumn<String> payloadHash = GeneratedColumn<String>(
+    'payload_hash',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _errorCodeMeta = const VerificationMeta(
+    'errorCode',
+  );
+  @override
+  late final GeneratedColumn<String> errorCode = GeneratedColumn<String>(
+    'error_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _retryCountMeta = const VerificationMeta(
+    'retryCount',
+  );
+  @override
+  late final GeneratedColumn<int> retryCount = GeneratedColumn<int>(
+    'retry_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant<int>(0),
+  );
+  static const VerificationMeta _nextRetryAtMeta = const VerificationMeta(
+    'nextRetryAt',
+  );
+  @override
+  late final GeneratedColumn<int> nextRetryAt = GeneratedColumn<int>(
+    'next_retry_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastSyncedAtMeta = const VerificationMeta(
+    'lastSyncedAt',
+  );
+  @override
+  late final GeneratedColumn<int> lastSyncedAt = GeneratedColumn<int>(
+    'last_synced_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<int> createdAt = GeneratedColumn<int>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<int> updatedAt = GeneratedColumn<int>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    templateId,
+    scheduleDate,
+    triggerAt,
+    shiftId,
+    locked,
+    platformAlarmId,
+    status,
+    payloadHash,
+    errorCode,
+    retryCount,
+    nextRetryAt,
+    lastSyncedAt,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'alarm_instances';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<AlarmInstance> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('template_id')) {
+      context.handle(
+        _templateIdMeta,
+        templateId.isAcceptableOrUnknown(data['template_id']!, _templateIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_templateIdMeta);
+    }
+    if (data.containsKey('schedule_date')) {
+      context.handle(
+        _scheduleDateMeta,
+        scheduleDate.isAcceptableOrUnknown(
+          data['schedule_date']!,
+          _scheduleDateMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_scheduleDateMeta);
+    }
+    if (data.containsKey('trigger_at')) {
+      context.handle(
+        _triggerAtMeta,
+        triggerAt.isAcceptableOrUnknown(data['trigger_at']!, _triggerAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_triggerAtMeta);
+    }
+    if (data.containsKey('shift_id')) {
+      context.handle(
+        _shiftIdMeta,
+        shiftId.isAcceptableOrUnknown(data['shift_id']!, _shiftIdMeta),
+      );
+    }
+    if (data.containsKey('locked')) {
+      context.handle(
+        _lockedMeta,
+        locked.isAcceptableOrUnknown(data['locked']!, _lockedMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_lockedMeta);
+    }
+    if (data.containsKey('platform_alarm_id')) {
+      context.handle(
+        _platformAlarmIdMeta,
+        platformAlarmId.isAcceptableOrUnknown(
+          data['platform_alarm_id']!,
+          _platformAlarmIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_platformAlarmIdMeta);
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_statusMeta);
+    }
+    if (data.containsKey('payload_hash')) {
+      context.handle(
+        _payloadHashMeta,
+        payloadHash.isAcceptableOrUnknown(
+          data['payload_hash']!,
+          _payloadHashMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_payloadHashMeta);
+    }
+    if (data.containsKey('error_code')) {
+      context.handle(
+        _errorCodeMeta,
+        errorCode.isAcceptableOrUnknown(data['error_code']!, _errorCodeMeta),
+      );
+    }
+    if (data.containsKey('retry_count')) {
+      context.handle(
+        _retryCountMeta,
+        retryCount.isAcceptableOrUnknown(data['retry_count']!, _retryCountMeta),
+      );
+    }
+    if (data.containsKey('next_retry_at')) {
+      context.handle(
+        _nextRetryAtMeta,
+        nextRetryAt.isAcceptableOrUnknown(
+          data['next_retry_at']!,
+          _nextRetryAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_synced_at')) {
+      context.handle(
+        _lastSyncedAtMeta,
+        lastSyncedAt.isAcceptableOrUnknown(
+          data['last_synced_at']!,
+          _lastSyncedAtMeta,
+        ),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  AlarmInstance map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AlarmInstance(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      templateId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}template_id'],
+      )!,
+      scheduleDate: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}schedule_date'],
+      )!,
+      triggerAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}trigger_at'],
+      )!,
+      shiftId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}shift_id'],
+      ),
+      locked: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}locked'],
+      )!,
+      platformAlarmId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}platform_alarm_id'],
+      )!,
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      payloadHash: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}payload_hash'],
+      )!,
+      errorCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}error_code'],
+      ),
+      retryCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}retry_count'],
+      )!,
+      nextRetryAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}next_retry_at'],
+      ),
+      lastSyncedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}last_synced_at'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $AlarmInstancesTable createAlias(String alias) {
+    return $AlarmInstancesTable(attachedDatabase, alias);
+  }
+}
+
+class AlarmInstance extends DataClass implements Insertable<AlarmInstance> {
+  final String id;
+  final String templateId;
+  final String scheduleDate;
+  final int triggerAt;
+  final String? shiftId;
+  final int locked;
+  final String platformAlarmId;
+  final String status;
+  final String payloadHash;
+  final String? errorCode;
+  final int retryCount;
+  final int? nextRetryAt;
+  final int? lastSyncedAt;
+  final int createdAt;
+  final int updatedAt;
+  const AlarmInstance({
+    required this.id,
+    required this.templateId,
+    required this.scheduleDate,
+    required this.triggerAt,
+    this.shiftId,
+    required this.locked,
+    required this.platformAlarmId,
+    required this.status,
+    required this.payloadHash,
+    this.errorCode,
+    required this.retryCount,
+    this.nextRetryAt,
+    this.lastSyncedAt,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['template_id'] = Variable<String>(templateId);
+    map['schedule_date'] = Variable<String>(scheduleDate);
+    map['trigger_at'] = Variable<int>(triggerAt);
+    if (!nullToAbsent || shiftId != null) {
+      map['shift_id'] = Variable<String>(shiftId);
+    }
+    map['locked'] = Variable<int>(locked);
+    map['platform_alarm_id'] = Variable<String>(platformAlarmId);
+    map['status'] = Variable<String>(status);
+    map['payload_hash'] = Variable<String>(payloadHash);
+    if (!nullToAbsent || errorCode != null) {
+      map['error_code'] = Variable<String>(errorCode);
+    }
+    map['retry_count'] = Variable<int>(retryCount);
+    if (!nullToAbsent || nextRetryAt != null) {
+      map['next_retry_at'] = Variable<int>(nextRetryAt);
+    }
+    if (!nullToAbsent || lastSyncedAt != null) {
+      map['last_synced_at'] = Variable<int>(lastSyncedAt);
+    }
+    map['created_at'] = Variable<int>(createdAt);
+    map['updated_at'] = Variable<int>(updatedAt);
+    return map;
+  }
+
+  AlarmInstancesCompanion toCompanion(bool nullToAbsent) {
+    return AlarmInstancesCompanion(
+      id: Value(id),
+      templateId: Value(templateId),
+      scheduleDate: Value(scheduleDate),
+      triggerAt: Value(triggerAt),
+      shiftId: shiftId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(shiftId),
+      locked: Value(locked),
+      platformAlarmId: Value(platformAlarmId),
+      status: Value(status),
+      payloadHash: Value(payloadHash),
+      errorCode: errorCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(errorCode),
+      retryCount: Value(retryCount),
+      nextRetryAt: nextRetryAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(nextRetryAt),
+      lastSyncedAt: lastSyncedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastSyncedAt),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory AlarmInstance.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AlarmInstance(
+      id: serializer.fromJson<String>(json['id']),
+      templateId: serializer.fromJson<String>(json['templateId']),
+      scheduleDate: serializer.fromJson<String>(json['scheduleDate']),
+      triggerAt: serializer.fromJson<int>(json['triggerAt']),
+      shiftId: serializer.fromJson<String?>(json['shiftId']),
+      locked: serializer.fromJson<int>(json['locked']),
+      platformAlarmId: serializer.fromJson<String>(json['platformAlarmId']),
+      status: serializer.fromJson<String>(json['status']),
+      payloadHash: serializer.fromJson<String>(json['payloadHash']),
+      errorCode: serializer.fromJson<String?>(json['errorCode']),
+      retryCount: serializer.fromJson<int>(json['retryCount']),
+      nextRetryAt: serializer.fromJson<int?>(json['nextRetryAt']),
+      lastSyncedAt: serializer.fromJson<int?>(json['lastSyncedAt']),
+      createdAt: serializer.fromJson<int>(json['createdAt']),
+      updatedAt: serializer.fromJson<int>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'templateId': serializer.toJson<String>(templateId),
+      'scheduleDate': serializer.toJson<String>(scheduleDate),
+      'triggerAt': serializer.toJson<int>(triggerAt),
+      'shiftId': serializer.toJson<String?>(shiftId),
+      'locked': serializer.toJson<int>(locked),
+      'platformAlarmId': serializer.toJson<String>(platformAlarmId),
+      'status': serializer.toJson<String>(status),
+      'payloadHash': serializer.toJson<String>(payloadHash),
+      'errorCode': serializer.toJson<String?>(errorCode),
+      'retryCount': serializer.toJson<int>(retryCount),
+      'nextRetryAt': serializer.toJson<int?>(nextRetryAt),
+      'lastSyncedAt': serializer.toJson<int?>(lastSyncedAt),
+      'createdAt': serializer.toJson<int>(createdAt),
+      'updatedAt': serializer.toJson<int>(updatedAt),
+    };
+  }
+
+  AlarmInstance copyWith({
+    String? id,
+    String? templateId,
+    String? scheduleDate,
+    int? triggerAt,
+    Value<String?> shiftId = const Value.absent(),
+    int? locked,
+    String? platformAlarmId,
+    String? status,
+    String? payloadHash,
+    Value<String?> errorCode = const Value.absent(),
+    int? retryCount,
+    Value<int?> nextRetryAt = const Value.absent(),
+    Value<int?> lastSyncedAt = const Value.absent(),
+    int? createdAt,
+    int? updatedAt,
+  }) => AlarmInstance(
+    id: id ?? this.id,
+    templateId: templateId ?? this.templateId,
+    scheduleDate: scheduleDate ?? this.scheduleDate,
+    triggerAt: triggerAt ?? this.triggerAt,
+    shiftId: shiftId.present ? shiftId.value : this.shiftId,
+    locked: locked ?? this.locked,
+    platformAlarmId: platformAlarmId ?? this.platformAlarmId,
+    status: status ?? this.status,
+    payloadHash: payloadHash ?? this.payloadHash,
+    errorCode: errorCode.present ? errorCode.value : this.errorCode,
+    retryCount: retryCount ?? this.retryCount,
+    nextRetryAt: nextRetryAt.present ? nextRetryAt.value : this.nextRetryAt,
+    lastSyncedAt: lastSyncedAt.present ? lastSyncedAt.value : this.lastSyncedAt,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  AlarmInstance copyWithCompanion(AlarmInstancesCompanion data) {
+    return AlarmInstance(
+      id: data.id.present ? data.id.value : this.id,
+      templateId: data.templateId.present
+          ? data.templateId.value
+          : this.templateId,
+      scheduleDate: data.scheduleDate.present
+          ? data.scheduleDate.value
+          : this.scheduleDate,
+      triggerAt: data.triggerAt.present ? data.triggerAt.value : this.triggerAt,
+      shiftId: data.shiftId.present ? data.shiftId.value : this.shiftId,
+      locked: data.locked.present ? data.locked.value : this.locked,
+      platformAlarmId: data.platformAlarmId.present
+          ? data.platformAlarmId.value
+          : this.platformAlarmId,
+      status: data.status.present ? data.status.value : this.status,
+      payloadHash: data.payloadHash.present
+          ? data.payloadHash.value
+          : this.payloadHash,
+      errorCode: data.errorCode.present ? data.errorCode.value : this.errorCode,
+      retryCount: data.retryCount.present
+          ? data.retryCount.value
+          : this.retryCount,
+      nextRetryAt: data.nextRetryAt.present
+          ? data.nextRetryAt.value
+          : this.nextRetryAt,
+      lastSyncedAt: data.lastSyncedAt.present
+          ? data.lastSyncedAt.value
+          : this.lastSyncedAt,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AlarmInstance(')
+          ..write('id: $id, ')
+          ..write('templateId: $templateId, ')
+          ..write('scheduleDate: $scheduleDate, ')
+          ..write('triggerAt: $triggerAt, ')
+          ..write('shiftId: $shiftId, ')
+          ..write('locked: $locked, ')
+          ..write('platformAlarmId: $platformAlarmId, ')
+          ..write('status: $status, ')
+          ..write('payloadHash: $payloadHash, ')
+          ..write('errorCode: $errorCode, ')
+          ..write('retryCount: $retryCount, ')
+          ..write('nextRetryAt: $nextRetryAt, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    templateId,
+    scheduleDate,
+    triggerAt,
+    shiftId,
+    locked,
+    platformAlarmId,
+    status,
+    payloadHash,
+    errorCode,
+    retryCount,
+    nextRetryAt,
+    lastSyncedAt,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AlarmInstance &&
+          other.id == this.id &&
+          other.templateId == this.templateId &&
+          other.scheduleDate == this.scheduleDate &&
+          other.triggerAt == this.triggerAt &&
+          other.shiftId == this.shiftId &&
+          other.locked == this.locked &&
+          other.platformAlarmId == this.platformAlarmId &&
+          other.status == this.status &&
+          other.payloadHash == this.payloadHash &&
+          other.errorCode == this.errorCode &&
+          other.retryCount == this.retryCount &&
+          other.nextRetryAt == this.nextRetryAt &&
+          other.lastSyncedAt == this.lastSyncedAt &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class AlarmInstancesCompanion extends UpdateCompanion<AlarmInstance> {
+  final Value<String> id;
+  final Value<String> templateId;
+  final Value<String> scheduleDate;
+  final Value<int> triggerAt;
+  final Value<String?> shiftId;
+  final Value<int> locked;
+  final Value<String> platformAlarmId;
+  final Value<String> status;
+  final Value<String> payloadHash;
+  final Value<String?> errorCode;
+  final Value<int> retryCount;
+  final Value<int?> nextRetryAt;
+  final Value<int?> lastSyncedAt;
+  final Value<int> createdAt;
+  final Value<int> updatedAt;
+  final Value<int> rowid;
+  const AlarmInstancesCompanion({
+    this.id = const Value.absent(),
+    this.templateId = const Value.absent(),
+    this.scheduleDate = const Value.absent(),
+    this.triggerAt = const Value.absent(),
+    this.shiftId = const Value.absent(),
+    this.locked = const Value.absent(),
+    this.platformAlarmId = const Value.absent(),
+    this.status = const Value.absent(),
+    this.payloadHash = const Value.absent(),
+    this.errorCode = const Value.absent(),
+    this.retryCount = const Value.absent(),
+    this.nextRetryAt = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  AlarmInstancesCompanion.insert({
+    required String id,
+    required String templateId,
+    required String scheduleDate,
+    required int triggerAt,
+    this.shiftId = const Value.absent(),
+    required int locked,
+    required String platformAlarmId,
+    required String status,
+    required String payloadHash,
+    this.errorCode = const Value.absent(),
+    this.retryCount = const Value.absent(),
+    this.nextRetryAt = const Value.absent(),
+    this.lastSyncedAt = const Value.absent(),
+    required int createdAt,
+    required int updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       templateId = Value(templateId),
+       scheduleDate = Value(scheduleDate),
+       triggerAt = Value(triggerAt),
+       locked = Value(locked),
+       platformAlarmId = Value(platformAlarmId),
+       status = Value(status),
+       payloadHash = Value(payloadHash),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<AlarmInstance> custom({
+    Expression<String>? id,
+    Expression<String>? templateId,
+    Expression<String>? scheduleDate,
+    Expression<int>? triggerAt,
+    Expression<String>? shiftId,
+    Expression<int>? locked,
+    Expression<String>? platformAlarmId,
+    Expression<String>? status,
+    Expression<String>? payloadHash,
+    Expression<String>? errorCode,
+    Expression<int>? retryCount,
+    Expression<int>? nextRetryAt,
+    Expression<int>? lastSyncedAt,
+    Expression<int>? createdAt,
+    Expression<int>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (templateId != null) 'template_id': templateId,
+      if (scheduleDate != null) 'schedule_date': scheduleDate,
+      if (triggerAt != null) 'trigger_at': triggerAt,
+      if (shiftId != null) 'shift_id': shiftId,
+      if (locked != null) 'locked': locked,
+      if (platformAlarmId != null) 'platform_alarm_id': platformAlarmId,
+      if (status != null) 'status': status,
+      if (payloadHash != null) 'payload_hash': payloadHash,
+      if (errorCode != null) 'error_code': errorCode,
+      if (retryCount != null) 'retry_count': retryCount,
+      if (nextRetryAt != null) 'next_retry_at': nextRetryAt,
+      if (lastSyncedAt != null) 'last_synced_at': lastSyncedAt,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  AlarmInstancesCompanion copyWith({
+    Value<String>? id,
+    Value<String>? templateId,
+    Value<String>? scheduleDate,
+    Value<int>? triggerAt,
+    Value<String?>? shiftId,
+    Value<int>? locked,
+    Value<String>? platformAlarmId,
+    Value<String>? status,
+    Value<String>? payloadHash,
+    Value<String?>? errorCode,
+    Value<int>? retryCount,
+    Value<int?>? nextRetryAt,
+    Value<int?>? lastSyncedAt,
+    Value<int>? createdAt,
+    Value<int>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return AlarmInstancesCompanion(
+      id: id ?? this.id,
+      templateId: templateId ?? this.templateId,
+      scheduleDate: scheduleDate ?? this.scheduleDate,
+      triggerAt: triggerAt ?? this.triggerAt,
+      shiftId: shiftId ?? this.shiftId,
+      locked: locked ?? this.locked,
+      platformAlarmId: platformAlarmId ?? this.platformAlarmId,
+      status: status ?? this.status,
+      payloadHash: payloadHash ?? this.payloadHash,
+      errorCode: errorCode ?? this.errorCode,
+      retryCount: retryCount ?? this.retryCount,
+      nextRetryAt: nextRetryAt ?? this.nextRetryAt,
+      lastSyncedAt: lastSyncedAt ?? this.lastSyncedAt,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (templateId.present) {
+      map['template_id'] = Variable<String>(templateId.value);
+    }
+    if (scheduleDate.present) {
+      map['schedule_date'] = Variable<String>(scheduleDate.value);
+    }
+    if (triggerAt.present) {
+      map['trigger_at'] = Variable<int>(triggerAt.value);
+    }
+    if (shiftId.present) {
+      map['shift_id'] = Variable<String>(shiftId.value);
+    }
+    if (locked.present) {
+      map['locked'] = Variable<int>(locked.value);
+    }
+    if (platformAlarmId.present) {
+      map['platform_alarm_id'] = Variable<String>(platformAlarmId.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (payloadHash.present) {
+      map['payload_hash'] = Variable<String>(payloadHash.value);
+    }
+    if (errorCode.present) {
+      map['error_code'] = Variable<String>(errorCode.value);
+    }
+    if (retryCount.present) {
+      map['retry_count'] = Variable<int>(retryCount.value);
+    }
+    if (nextRetryAt.present) {
+      map['next_retry_at'] = Variable<int>(nextRetryAt.value);
+    }
+    if (lastSyncedAt.present) {
+      map['last_synced_at'] = Variable<int>(lastSyncedAt.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<int>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<int>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AlarmInstancesCompanion(')
+          ..write('id: $id, ')
+          ..write('templateId: $templateId, ')
+          ..write('scheduleDate: $scheduleDate, ')
+          ..write('triggerAt: $triggerAt, ')
+          ..write('shiftId: $shiftId, ')
+          ..write('locked: $locked, ')
+          ..write('platformAlarmId: $platformAlarmId, ')
+          ..write('status: $status, ')
+          ..write('payloadHash: $payloadHash, ')
+          ..write('errorCode: $errorCode, ')
+          ..write('retryCount: $retryCount, ')
+          ..write('nextRetryAt: $nextRetryAt, ')
+          ..write('lastSyncedAt: $lastSyncedAt, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -4836,6 +6971,10 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     this,
   );
   late final $ChangeLogTable changeLog = $ChangeLogTable(this);
+  late final $AlarmTemplatesTable alarmTemplates = $AlarmTemplatesTable(this);
+  late final $ShiftAlarmTemplatesTable shiftAlarmTemplates =
+      $ShiftAlarmTemplatesTable(this);
+  late final $AlarmInstancesTable alarmInstances = $AlarmInstancesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4849,6 +6988,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     holidayRecords,
     calendarDayCache,
     changeLog,
+    alarmTemplates,
+    shiftAlarmTemplates,
+    alarmInstances,
   ];
 }
 
@@ -5404,6 +7546,34 @@ final class $$ShiftTemplatesTableReferences
       manager.$state.copyWith(prefetchedData: cache),
     );
   }
+
+  static MultiTypedResultKey<
+    $ShiftAlarmTemplatesTable,
+    List<ShiftAlarmTemplate>
+  >
+  _shiftAlarmTemplatesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.shiftAlarmTemplates,
+        aliasName:
+            'shift_templates__id__shift_alarm_templates__shift_template_id',
+      );
+
+  $$ShiftAlarmTemplatesTableProcessedTableManager get shiftAlarmTemplatesRefs {
+    final manager =
+        $$ShiftAlarmTemplatesTableTableManager(
+          $_db,
+          $_db.shiftAlarmTemplates,
+        ).filter(
+          (f) => f.shiftTemplateId.id.sqlEquals($_itemColumn<String>('id')!),
+        );
+
+    final cache = $_typedResult.readTableOrNull(
+      _shiftAlarmTemplatesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
 }
 
 class $$ShiftTemplatesTableFilterComposer
@@ -5501,6 +7671,31 @@ class $$ShiftTemplatesTableFilterComposer
           }) => $$DayOverridesTableFilterComposer(
             $db: $db,
             $table: $db.dayOverrides,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> shiftAlarmTemplatesRefs(
+    Expression<bool> Function($$ShiftAlarmTemplatesTableFilterComposer f) f,
+  ) {
+    final $$ShiftAlarmTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shiftAlarmTemplates,
+      getReferencedColumn: (t) => t.shiftTemplateId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShiftAlarmTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.shiftAlarmTemplates,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -5672,6 +7867,32 @@ class $$ShiftTemplatesTableAnnotationComposer
     );
     return f(composer);
   }
+
+  Expression<T> shiftAlarmTemplatesRefs<T extends Object>(
+    Expression<T> Function($$ShiftAlarmTemplatesTableAnnotationComposer a) f,
+  ) {
+    final $$ShiftAlarmTemplatesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shiftAlarmTemplates,
+          getReferencedColumn: (t) => t.shiftTemplateId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShiftAlarmTemplatesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shiftAlarmTemplates,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
 }
 
 class $$ShiftTemplatesTableTableManager
@@ -5687,7 +7908,10 @@ class $$ShiftTemplatesTableTableManager
           $$ShiftTemplatesTableUpdateCompanionBuilder,
           (ShiftTemplate, $$ShiftTemplatesTableReferences),
           ShiftTemplate,
-          PrefetchHooks Function({bool dayOverridesRefs})
+          PrefetchHooks Function({
+            bool dayOverridesRefs,
+            bool shiftAlarmTemplatesRefs,
+          })
         > {
   $$ShiftTemplatesTableTableManager(
     _$AppDatabase db,
@@ -5778,38 +8002,63 @@ class $$ShiftTemplatesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback: ({dayOverridesRefs = false}) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [if (dayOverridesRefs) db.dayOverrides],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (dayOverridesRefs)
-                    await $_getPrefetchedData<
-                      ShiftTemplate,
-                      $ShiftTemplatesTable,
-                      DayOverride
-                    >(
-                      currentTable: table,
-                      referencedTable: $$ShiftTemplatesTableReferences
-                          ._dayOverridesRefsTable(db),
-                      managerFromTypedResult: (p0) =>
-                          $$ShiftTemplatesTableReferences(
-                            db,
-                            table,
-                            p0,
-                          ).dayOverridesRefs,
-                      referencedItemsForCurrentItem: (item, referencedItems) =>
-                          referencedItems.where(
-                            (e) => e.shiftTemplateId == item.id,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+          prefetchHooksCallback:
+              ({dayOverridesRefs = false, shiftAlarmTemplatesRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (dayOverridesRefs) db.dayOverrides,
+                    if (shiftAlarmTemplatesRefs) db.shiftAlarmTemplates,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (dayOverridesRefs)
+                        await $_getPrefetchedData<
+                          ShiftTemplate,
+                          $ShiftTemplatesTable,
+                          DayOverride
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShiftTemplatesTableReferences
+                              ._dayOverridesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShiftTemplatesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).dayOverridesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shiftTemplateId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (shiftAlarmTemplatesRefs)
+                        await $_getPrefetchedData<
+                          ShiftTemplate,
+                          $ShiftTemplatesTable,
+                          ShiftAlarmTemplate
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ShiftTemplatesTableReferences
+                              ._shiftAlarmTemplatesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$ShiftTemplatesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shiftAlarmTemplatesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.shiftTemplateId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -5826,7 +8075,10 @@ typedef $$ShiftTemplatesTableProcessedTableManager =
       $$ShiftTemplatesTableUpdateCompanionBuilder,
       (ShiftTemplate, $$ShiftTemplatesTableReferences),
       ShiftTemplate,
-      PrefetchHooks Function({bool dayOverridesRefs})
+      PrefetchHooks Function({
+        bool dayOverridesRefs,
+        bool shiftAlarmTemplatesRefs,
+      })
     >;
 typedef $$ScheduleRulesTableCreateCompanionBuilder =
     ScheduleRulesCompanion Function({
@@ -7435,6 +9687,1581 @@ typedef $$ChangeLogTableProcessedTableManager =
       ChangeLogData,
       PrefetchHooks Function()
     >;
+typedef $$AlarmTemplatesTableCreateCompanionBuilder =
+    AlarmTemplatesCompanion Function({
+      required String id,
+      required String name,
+      required String mode,
+      Value<int?> fixedMinute,
+      Value<int?> offsetMinutes,
+      Value<String?> soundId,
+      required int vibrate,
+      Value<int> volumeRamp,
+      required int snoozeMinutes,
+      required int maxSnoozeCount,
+      required int enabled,
+      required int createdAt,
+      required int updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$AlarmTemplatesTableUpdateCompanionBuilder =
+    AlarmTemplatesCompanion Function({
+      Value<String> id,
+      Value<String> name,
+      Value<String> mode,
+      Value<int?> fixedMinute,
+      Value<int?> offsetMinutes,
+      Value<String?> soundId,
+      Value<int> vibrate,
+      Value<int> volumeRamp,
+      Value<int> snoozeMinutes,
+      Value<int> maxSnoozeCount,
+      Value<int> enabled,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+
+final class $$AlarmTemplatesTableReferences
+    extends BaseReferences<_$AppDatabase, $AlarmTemplatesTable, AlarmTemplate> {
+  $$AlarmTemplatesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static MultiTypedResultKey<
+    $ShiftAlarmTemplatesTable,
+    List<ShiftAlarmTemplate>
+  >
+  _shiftAlarmTemplatesRefsTable(_$AppDatabase db) =>
+      MultiTypedResultKey.fromTable(
+        db.shiftAlarmTemplates,
+        aliasName:
+            'alarm_templates__id__shift_alarm_templates__alarm_template_id',
+      );
+
+  $$ShiftAlarmTemplatesTableProcessedTableManager get shiftAlarmTemplatesRefs {
+    final manager =
+        $$ShiftAlarmTemplatesTableTableManager(
+          $_db,
+          $_db.shiftAlarmTemplates,
+        ).filter(
+          (f) => f.alarmTemplateId.id.sqlEquals($_itemColumn<String>('id')!),
+        );
+
+    final cache = $_typedResult.readTableOrNull(
+      _shiftAlarmTemplatesRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$AlarmInstancesTable, List<AlarmInstance>>
+  _alarmInstancesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
+    db.alarmInstances,
+    aliasName: 'alarm_templates__id__alarm_instances__template_id',
+  );
+
+  $$AlarmInstancesTableProcessedTableManager get alarmInstancesRefs {
+    final manager = $$AlarmInstancesTableTableManager(
+      $_db,
+      $_db.alarmInstances,
+    ).filter((f) => f.templateId.id.sqlEquals($_itemColumn<String>('id')!));
+
+    final cache = $_typedResult.readTableOrNull(_alarmInstancesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$AlarmTemplatesTableFilterComposer
+    extends Composer<_$AppDatabase, $AlarmTemplatesTable> {
+  $$AlarmTemplatesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fixedMinute => $composableBuilder(
+    column: $table.fixedMinute,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get offsetMinutes => $composableBuilder(
+    column: $table.offsetMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get soundId => $composableBuilder(
+    column: $table.soundId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get vibrate => $composableBuilder(
+    column: $table.vibrate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get volumeRamp => $composableBuilder(
+    column: $table.volumeRamp,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get snoozeMinutes => $composableBuilder(
+    column: $table.snoozeMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get maxSnoozeCount => $composableBuilder(
+    column: $table.maxSnoozeCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> shiftAlarmTemplatesRefs(
+    Expression<bool> Function($$ShiftAlarmTemplatesTableFilterComposer f) f,
+  ) {
+    final $$ShiftAlarmTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.shiftAlarmTemplates,
+      getReferencedColumn: (t) => t.alarmTemplateId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShiftAlarmTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.shiftAlarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> alarmInstancesRefs(
+    Expression<bool> Function($$AlarmInstancesTableFilterComposer f) f,
+  ) {
+    final $$AlarmInstancesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.alarmInstances,
+      getReferencedColumn: (t) => t.templateId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmInstancesTableFilterComposer(
+            $db: $db,
+            $table: $db.alarmInstances,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AlarmTemplatesTableOrderingComposer
+    extends Composer<_$AppDatabase, $AlarmTemplatesTable> {
+  $$AlarmTemplatesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get mode => $composableBuilder(
+    column: $table.mode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fixedMinute => $composableBuilder(
+    column: $table.fixedMinute,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get offsetMinutes => $composableBuilder(
+    column: $table.offsetMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get soundId => $composableBuilder(
+    column: $table.soundId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get vibrate => $composableBuilder(
+    column: $table.vibrate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get volumeRamp => $composableBuilder(
+    column: $table.volumeRamp,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get snoozeMinutes => $composableBuilder(
+    column: $table.snoozeMinutes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get maxSnoozeCount => $composableBuilder(
+    column: $table.maxSnoozeCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get enabled => $composableBuilder(
+    column: $table.enabled,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$AlarmTemplatesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AlarmTemplatesTable> {
+  $$AlarmTemplatesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get mode =>
+      $composableBuilder(column: $table.mode, builder: (column) => column);
+
+  GeneratedColumn<int> get fixedMinute => $composableBuilder(
+    column: $table.fixedMinute,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get offsetMinutes => $composableBuilder(
+    column: $table.offsetMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get soundId =>
+      $composableBuilder(column: $table.soundId, builder: (column) => column);
+
+  GeneratedColumn<int> get vibrate =>
+      $composableBuilder(column: $table.vibrate, builder: (column) => column);
+
+  GeneratedColumn<int> get volumeRamp => $composableBuilder(
+    column: $table.volumeRamp,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get snoozeMinutes => $composableBuilder(
+    column: $table.snoozeMinutes,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get maxSnoozeCount => $composableBuilder(
+    column: $table.maxSnoozeCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get enabled =>
+      $composableBuilder(column: $table.enabled, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  Expression<T> shiftAlarmTemplatesRefs<T extends Object>(
+    Expression<T> Function($$ShiftAlarmTemplatesTableAnnotationComposer a) f,
+  ) {
+    final $$ShiftAlarmTemplatesTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.id,
+          referencedTable: $db.shiftAlarmTemplates,
+          getReferencedColumn: (t) => t.alarmTemplateId,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$ShiftAlarmTemplatesTableAnnotationComposer(
+                $db: $db,
+                $table: $db.shiftAlarmTemplates,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> alarmInstancesRefs<T extends Object>(
+    Expression<T> Function($$AlarmInstancesTableAnnotationComposer a) f,
+  ) {
+    final $$AlarmInstancesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.id,
+      referencedTable: $db.alarmInstances,
+      getReferencedColumn: (t) => t.templateId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmInstancesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.alarmInstances,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AlarmTemplatesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AlarmTemplatesTable,
+          AlarmTemplate,
+          $$AlarmTemplatesTableFilterComposer,
+          $$AlarmTemplatesTableOrderingComposer,
+          $$AlarmTemplatesTableAnnotationComposer,
+          $$AlarmTemplatesTableCreateCompanionBuilder,
+          $$AlarmTemplatesTableUpdateCompanionBuilder,
+          (AlarmTemplate, $$AlarmTemplatesTableReferences),
+          AlarmTemplate,
+          PrefetchHooks Function({
+            bool shiftAlarmTemplatesRefs,
+            bool alarmInstancesRefs,
+          })
+        > {
+  $$AlarmTemplatesTableTableManager(
+    _$AppDatabase db,
+    $AlarmTemplatesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AlarmTemplatesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AlarmTemplatesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AlarmTemplatesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> mode = const Value.absent(),
+                Value<int?> fixedMinute = const Value.absent(),
+                Value<int?> offsetMinutes = const Value.absent(),
+                Value<String?> soundId = const Value.absent(),
+                Value<int> vibrate = const Value.absent(),
+                Value<int> volumeRamp = const Value.absent(),
+                Value<int> snoozeMinutes = const Value.absent(),
+                Value<int> maxSnoozeCount = const Value.absent(),
+                Value<int> enabled = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AlarmTemplatesCompanion(
+                id: id,
+                name: name,
+                mode: mode,
+                fixedMinute: fixedMinute,
+                offsetMinutes: offsetMinutes,
+                soundId: soundId,
+                vibrate: vibrate,
+                volumeRamp: volumeRamp,
+                snoozeMinutes: snoozeMinutes,
+                maxSnoozeCount: maxSnoozeCount,
+                enabled: enabled,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String name,
+                required String mode,
+                Value<int?> fixedMinute = const Value.absent(),
+                Value<int?> offsetMinutes = const Value.absent(),
+                Value<String?> soundId = const Value.absent(),
+                required int vibrate,
+                Value<int> volumeRamp = const Value.absent(),
+                required int snoozeMinutes,
+                required int maxSnoozeCount,
+                required int enabled,
+                required int createdAt,
+                required int updatedAt,
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AlarmTemplatesCompanion.insert(
+                id: id,
+                name: name,
+                mode: mode,
+                fixedMinute: fixedMinute,
+                offsetMinutes: offsetMinutes,
+                soundId: soundId,
+                vibrate: vibrate,
+                volumeRamp: volumeRamp,
+                snoozeMinutes: snoozeMinutes,
+                maxSnoozeCount: maxSnoozeCount,
+                enabled: enabled,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$AlarmTemplatesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({shiftAlarmTemplatesRefs = false, alarmInstancesRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (shiftAlarmTemplatesRefs) db.shiftAlarmTemplates,
+                    if (alarmInstancesRefs) db.alarmInstances,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (shiftAlarmTemplatesRefs)
+                        await $_getPrefetchedData<
+                          AlarmTemplate,
+                          $AlarmTemplatesTable,
+                          ShiftAlarmTemplate
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AlarmTemplatesTableReferences
+                              ._shiftAlarmTemplatesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$AlarmTemplatesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).shiftAlarmTemplatesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.alarmTemplateId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (alarmInstancesRefs)
+                        await $_getPrefetchedData<
+                          AlarmTemplate,
+                          $AlarmTemplatesTable,
+                          AlarmInstance
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AlarmTemplatesTableReferences
+                              ._alarmInstancesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
+                              $$AlarmTemplatesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).alarmInstancesRefs,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.templateId == item.id,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$AlarmTemplatesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AlarmTemplatesTable,
+      AlarmTemplate,
+      $$AlarmTemplatesTableFilterComposer,
+      $$AlarmTemplatesTableOrderingComposer,
+      $$AlarmTemplatesTableAnnotationComposer,
+      $$AlarmTemplatesTableCreateCompanionBuilder,
+      $$AlarmTemplatesTableUpdateCompanionBuilder,
+      (AlarmTemplate, $$AlarmTemplatesTableReferences),
+      AlarmTemplate,
+      PrefetchHooks Function({
+        bool shiftAlarmTemplatesRefs,
+        bool alarmInstancesRefs,
+      })
+    >;
+typedef $$ShiftAlarmTemplatesTableCreateCompanionBuilder =
+    ShiftAlarmTemplatesCompanion Function({
+      required String id,
+      required String shiftTemplateId,
+      required String alarmTemplateId,
+      required int createdAt,
+      required int updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+typedef $$ShiftAlarmTemplatesTableUpdateCompanionBuilder =
+    ShiftAlarmTemplatesCompanion Function({
+      Value<String> id,
+      Value<String> shiftTemplateId,
+      Value<String> alarmTemplateId,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int?> deletedAt,
+      Value<int> rowid,
+    });
+
+final class $$ShiftAlarmTemplatesTableReferences
+    extends
+        BaseReferences<
+          _$AppDatabase,
+          $ShiftAlarmTemplatesTable,
+          ShiftAlarmTemplate
+        > {
+  $$ShiftAlarmTemplatesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $ShiftTemplatesTable _shiftTemplateIdTable(_$AppDatabase db) =>
+      db.shiftTemplates.createAlias(
+        'shift_alarm_templates__shift_template_id__shift_templates__id',
+      );
+
+  $$ShiftTemplatesTableProcessedTableManager get shiftTemplateId {
+    final $_column = $_itemColumn<String>('shift_template_id')!;
+
+    final manager = $$ShiftTemplatesTableTableManager(
+      $_db,
+      $_db.shiftTemplates,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_shiftTemplateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $AlarmTemplatesTable _alarmTemplateIdTable(_$AppDatabase db) =>
+      db.alarmTemplates.createAlias(
+        'shift_alarm_templates__alarm_template_id__alarm_templates__id',
+      );
+
+  $$AlarmTemplatesTableProcessedTableManager get alarmTemplateId {
+    final $_column = $_itemColumn<String>('alarm_template_id')!;
+
+    final manager = $$AlarmTemplatesTableTableManager(
+      $_db,
+      $_db.alarmTemplates,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_alarmTemplateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ShiftAlarmTemplatesTableFilterComposer
+    extends Composer<_$AppDatabase, $ShiftAlarmTemplatesTable> {
+  $$ShiftAlarmTemplatesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ShiftTemplatesTableFilterComposer get shiftTemplateId {
+    final $$ShiftTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shiftTemplateId,
+      referencedTable: $db.shiftTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShiftTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.shiftTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$AlarmTemplatesTableFilterComposer get alarmTemplateId {
+    final $$AlarmTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.alarmTemplateId,
+      referencedTable: $db.alarmTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.alarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShiftAlarmTemplatesTableOrderingComposer
+    extends Composer<_$AppDatabase, $ShiftAlarmTemplatesTable> {
+  $$ShiftAlarmTemplatesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get deletedAt => $composableBuilder(
+    column: $table.deletedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ShiftTemplatesTableOrderingComposer get shiftTemplateId {
+    final $$ShiftTemplatesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shiftTemplateId,
+      referencedTable: $db.shiftTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShiftTemplatesTableOrderingComposer(
+            $db: $db,
+            $table: $db.shiftTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$AlarmTemplatesTableOrderingComposer get alarmTemplateId {
+    final $$AlarmTemplatesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.alarmTemplateId,
+      referencedTable: $db.alarmTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTemplatesTableOrderingComposer(
+            $db: $db,
+            $table: $db.alarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShiftAlarmTemplatesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $ShiftAlarmTemplatesTable> {
+  $$ShiftAlarmTemplatesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  GeneratedColumn<int> get deletedAt =>
+      $composableBuilder(column: $table.deletedAt, builder: (column) => column);
+
+  $$ShiftTemplatesTableAnnotationComposer get shiftTemplateId {
+    final $$ShiftTemplatesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.shiftTemplateId,
+      referencedTable: $db.shiftTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ShiftTemplatesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.shiftTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$AlarmTemplatesTableAnnotationComposer get alarmTemplateId {
+    final $$AlarmTemplatesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.alarmTemplateId,
+      referencedTable: $db.alarmTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTemplatesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.alarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ShiftAlarmTemplatesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $ShiftAlarmTemplatesTable,
+          ShiftAlarmTemplate,
+          $$ShiftAlarmTemplatesTableFilterComposer,
+          $$ShiftAlarmTemplatesTableOrderingComposer,
+          $$ShiftAlarmTemplatesTableAnnotationComposer,
+          $$ShiftAlarmTemplatesTableCreateCompanionBuilder,
+          $$ShiftAlarmTemplatesTableUpdateCompanionBuilder,
+          (ShiftAlarmTemplate, $$ShiftAlarmTemplatesTableReferences),
+          ShiftAlarmTemplate,
+          PrefetchHooks Function({bool shiftTemplateId, bool alarmTemplateId})
+        > {
+  $$ShiftAlarmTemplatesTableTableManager(
+    _$AppDatabase db,
+    $ShiftAlarmTemplatesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$ShiftAlarmTemplatesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ShiftAlarmTemplatesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer: () =>
+              $$ShiftAlarmTemplatesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> shiftTemplateId = const Value.absent(),
+                Value<String> alarmTemplateId = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ShiftAlarmTemplatesCompanion(
+                id: id,
+                shiftTemplateId: shiftTemplateId,
+                alarmTemplateId: alarmTemplateId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String shiftTemplateId,
+                required String alarmTemplateId,
+                required int createdAt,
+                required int updatedAt,
+                Value<int?> deletedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ShiftAlarmTemplatesCompanion.insert(
+                id: id,
+                shiftTemplateId: shiftTemplateId,
+                alarmTemplateId: alarmTemplateId,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                deletedAt: deletedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ShiftAlarmTemplatesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({shiftTemplateId = false, alarmTemplateId = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (shiftTemplateId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.shiftTemplateId,
+                                    referencedTable:
+                                        $$ShiftAlarmTemplatesTableReferences
+                                            ._shiftTemplateIdTable(db),
+                                    referencedColumn:
+                                        $$ShiftAlarmTemplatesTableReferences
+                                            ._shiftTemplateIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+                        if (alarmTemplateId) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.alarmTemplateId,
+                                    referencedTable:
+                                        $$ShiftAlarmTemplatesTableReferences
+                                            ._alarmTemplateIdTable(db),
+                                    referencedColumn:
+                                        $$ShiftAlarmTemplatesTableReferences
+                                            ._alarmTemplateIdTable(db)
+                                            .id,
+                                  )
+                                  as T;
+                        }
+
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [];
+                  },
+                );
+              },
+        ),
+      );
+}
+
+typedef $$ShiftAlarmTemplatesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $ShiftAlarmTemplatesTable,
+      ShiftAlarmTemplate,
+      $$ShiftAlarmTemplatesTableFilterComposer,
+      $$ShiftAlarmTemplatesTableOrderingComposer,
+      $$ShiftAlarmTemplatesTableAnnotationComposer,
+      $$ShiftAlarmTemplatesTableCreateCompanionBuilder,
+      $$ShiftAlarmTemplatesTableUpdateCompanionBuilder,
+      (ShiftAlarmTemplate, $$ShiftAlarmTemplatesTableReferences),
+      ShiftAlarmTemplate,
+      PrefetchHooks Function({bool shiftTemplateId, bool alarmTemplateId})
+    >;
+typedef $$AlarmInstancesTableCreateCompanionBuilder =
+    AlarmInstancesCompanion Function({
+      required String id,
+      required String templateId,
+      required String scheduleDate,
+      required int triggerAt,
+      Value<String?> shiftId,
+      required int locked,
+      required String platformAlarmId,
+      required String status,
+      required String payloadHash,
+      Value<String?> errorCode,
+      Value<int> retryCount,
+      Value<int?> nextRetryAt,
+      Value<int?> lastSyncedAt,
+      required int createdAt,
+      required int updatedAt,
+      Value<int> rowid,
+    });
+typedef $$AlarmInstancesTableUpdateCompanionBuilder =
+    AlarmInstancesCompanion Function({
+      Value<String> id,
+      Value<String> templateId,
+      Value<String> scheduleDate,
+      Value<int> triggerAt,
+      Value<String?> shiftId,
+      Value<int> locked,
+      Value<String> platformAlarmId,
+      Value<String> status,
+      Value<String> payloadHash,
+      Value<String?> errorCode,
+      Value<int> retryCount,
+      Value<int?> nextRetryAt,
+      Value<int?> lastSyncedAt,
+      Value<int> createdAt,
+      Value<int> updatedAt,
+      Value<int> rowid,
+    });
+
+final class $$AlarmInstancesTableReferences
+    extends BaseReferences<_$AppDatabase, $AlarmInstancesTable, AlarmInstance> {
+  $$AlarmInstancesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $AlarmTemplatesTable _templateIdTable(_$AppDatabase db) => db
+      .alarmTemplates
+      .createAlias('alarm_instances__template_id__alarm_templates__id');
+
+  $$AlarmTemplatesTableProcessedTableManager get templateId {
+    final $_column = $_itemColumn<String>('template_id')!;
+
+    final manager = $$AlarmTemplatesTableTableManager(
+      $_db,
+      $_db.alarmTemplates,
+    ).filter((f) => f.id.sqlEquals($_column));
+    final item = $_typedResult.readTableOrNull(_templateIdTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$AlarmInstancesTableFilterComposer
+    extends Composer<_$AppDatabase, $AlarmInstancesTable> {
+  $$AlarmInstancesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get scheduleDate => $composableBuilder(
+    column: $table.scheduleDate,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get triggerAt => $composableBuilder(
+    column: $table.triggerAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get shiftId => $composableBuilder(
+    column: $table.shiftId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get locked => $composableBuilder(
+    column: $table.locked,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get platformAlarmId => $composableBuilder(
+    column: $table.platformAlarmId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get payloadHash => $composableBuilder(
+    column: $table.payloadHash,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get errorCode => $composableBuilder(
+    column: $table.errorCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get retryCount => $composableBuilder(
+    column: $table.retryCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nextRetryAt => $composableBuilder(
+    column: $table.nextRetryAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lastSyncedAt => $composableBuilder(
+    column: $table.lastSyncedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$AlarmTemplatesTableFilterComposer get templateId {
+    final $$AlarmTemplatesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.templateId,
+      referencedTable: $db.alarmTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTemplatesTableFilterComposer(
+            $db: $db,
+            $table: $db.alarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlarmInstancesTableOrderingComposer
+    extends Composer<_$AppDatabase, $AlarmInstancesTable> {
+  $$AlarmInstancesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get scheduleDate => $composableBuilder(
+    column: $table.scheduleDate,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get triggerAt => $composableBuilder(
+    column: $table.triggerAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get shiftId => $composableBuilder(
+    column: $table.shiftId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get locked => $composableBuilder(
+    column: $table.locked,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get platformAlarmId => $composableBuilder(
+    column: $table.platformAlarmId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get payloadHash => $composableBuilder(
+    column: $table.payloadHash,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get errorCode => $composableBuilder(
+    column: $table.errorCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get retryCount => $composableBuilder(
+    column: $table.retryCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nextRetryAt => $composableBuilder(
+    column: $table.nextRetryAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lastSyncedAt => $composableBuilder(
+    column: $table.lastSyncedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AlarmTemplatesTableOrderingComposer get templateId {
+    final $$AlarmTemplatesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.templateId,
+      referencedTable: $db.alarmTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTemplatesTableOrderingComposer(
+            $db: $db,
+            $table: $db.alarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlarmInstancesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AlarmInstancesTable> {
+  $$AlarmInstancesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get scheduleDate => $composableBuilder(
+    column: $table.scheduleDate,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get triggerAt =>
+      $composableBuilder(column: $table.triggerAt, builder: (column) => column);
+
+  GeneratedColumn<String> get shiftId =>
+      $composableBuilder(column: $table.shiftId, builder: (column) => column);
+
+  GeneratedColumn<int> get locked =>
+      $composableBuilder(column: $table.locked, builder: (column) => column);
+
+  GeneratedColumn<String> get platformAlarmId => $composableBuilder(
+    column: $table.platformAlarmId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get payloadHash => $composableBuilder(
+    column: $table.payloadHash,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get errorCode =>
+      $composableBuilder(column: $table.errorCode, builder: (column) => column);
+
+  GeneratedColumn<int> get retryCount => $composableBuilder(
+    column: $table.retryCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get nextRetryAt => $composableBuilder(
+    column: $table.nextRetryAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get lastSyncedAt => $composableBuilder(
+    column: $table.lastSyncedAt,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<int> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+
+  $$AlarmTemplatesTableAnnotationComposer get templateId {
+    final $$AlarmTemplatesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.templateId,
+      referencedTable: $db.alarmTemplates,
+      getReferencedColumn: (t) => t.id,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlarmTemplatesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.alarmTemplates,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlarmInstancesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $AlarmInstancesTable,
+          AlarmInstance,
+          $$AlarmInstancesTableFilterComposer,
+          $$AlarmInstancesTableOrderingComposer,
+          $$AlarmInstancesTableAnnotationComposer,
+          $$AlarmInstancesTableCreateCompanionBuilder,
+          $$AlarmInstancesTableUpdateCompanionBuilder,
+          (AlarmInstance, $$AlarmInstancesTableReferences),
+          AlarmInstance,
+          PrefetchHooks Function({bool templateId})
+        > {
+  $$AlarmInstancesTableTableManager(
+    _$AppDatabase db,
+    $AlarmInstancesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AlarmInstancesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AlarmInstancesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AlarmInstancesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> templateId = const Value.absent(),
+                Value<String> scheduleDate = const Value.absent(),
+                Value<int> triggerAt = const Value.absent(),
+                Value<String?> shiftId = const Value.absent(),
+                Value<int> locked = const Value.absent(),
+                Value<String> platformAlarmId = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String> payloadHash = const Value.absent(),
+                Value<String?> errorCode = const Value.absent(),
+                Value<int> retryCount = const Value.absent(),
+                Value<int?> nextRetryAt = const Value.absent(),
+                Value<int?> lastSyncedAt = const Value.absent(),
+                Value<int> createdAt = const Value.absent(),
+                Value<int> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AlarmInstancesCompanion(
+                id: id,
+                templateId: templateId,
+                scheduleDate: scheduleDate,
+                triggerAt: triggerAt,
+                shiftId: shiftId,
+                locked: locked,
+                platformAlarmId: platformAlarmId,
+                status: status,
+                payloadHash: payloadHash,
+                errorCode: errorCode,
+                retryCount: retryCount,
+                nextRetryAt: nextRetryAt,
+                lastSyncedAt: lastSyncedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String templateId,
+                required String scheduleDate,
+                required int triggerAt,
+                Value<String?> shiftId = const Value.absent(),
+                required int locked,
+                required String platformAlarmId,
+                required String status,
+                required String payloadHash,
+                Value<String?> errorCode = const Value.absent(),
+                Value<int> retryCount = const Value.absent(),
+                Value<int?> nextRetryAt = const Value.absent(),
+                Value<int?> lastSyncedAt = const Value.absent(),
+                required int createdAt,
+                required int updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => AlarmInstancesCompanion.insert(
+                id: id,
+                templateId: templateId,
+                scheduleDate: scheduleDate,
+                triggerAt: triggerAt,
+                shiftId: shiftId,
+                locked: locked,
+                platformAlarmId: platformAlarmId,
+                status: status,
+                payloadHash: payloadHash,
+                errorCode: errorCode,
+                retryCount: retryCount,
+                nextRetryAt: nextRetryAt,
+                lastSyncedAt: lastSyncedAt,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$AlarmInstancesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: ({templateId = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (templateId) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.templateId,
+                                referencedTable: $$AlarmInstancesTableReferences
+                                    ._templateIdTable(db),
+                                referencedColumn:
+                                    $$AlarmInstancesTableReferences
+                                        ._templateIdTable(db)
+                                        .id,
+                              )
+                              as T;
+                    }
+
+                    return state;
+                  },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AlarmInstancesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $AlarmInstancesTable,
+      AlarmInstance,
+      $$AlarmInstancesTableFilterComposer,
+      $$AlarmInstancesTableOrderingComposer,
+      $$AlarmInstancesTableAnnotationComposer,
+      $$AlarmInstancesTableCreateCompanionBuilder,
+      $$AlarmInstancesTableUpdateCompanionBuilder,
+      (AlarmInstance, $$AlarmInstancesTableReferences),
+      AlarmInstance,
+      PrefetchHooks Function({bool templateId})
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -7455,4 +11282,10 @@ class $AppDatabaseManager {
       $$CalendarDayCacheTableTableManager(_db, _db.calendarDayCache);
   $$ChangeLogTableTableManager get changeLog =>
       $$ChangeLogTableTableManager(_db, _db.changeLog);
+  $$AlarmTemplatesTableTableManager get alarmTemplates =>
+      $$AlarmTemplatesTableTableManager(_db, _db.alarmTemplates);
+  $$ShiftAlarmTemplatesTableTableManager get shiftAlarmTemplates =>
+      $$ShiftAlarmTemplatesTableTableManager(_db, _db.shiftAlarmTemplates);
+  $$AlarmInstancesTableTableManager get alarmInstances =>
+      $$AlarmInstancesTableTableManager(_db, _db.alarmInstances);
 }

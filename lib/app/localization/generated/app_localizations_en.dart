@@ -9,6 +9,90 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get alarmSettingsTitle => 'Smart alarms';
+
+  @override
+  String get alarmCapabilityAvailable => 'Reminder capability is available';
+
+  @override
+  String get alarmCapabilityPermissionRequired =>
+      'Notification or exact alarm permission is required';
+
+  @override
+  String get alarmCapabilityUnavailable =>
+      'Reminders are unavailable on this device';
+
+  @override
+  String get alarmPermissionAction => 'Check and authorize';
+
+  @override
+  String get alarmSyncAction => 'Run self-check';
+
+  @override
+  String get alarmSyncSuccess => 'Alarms synchronized';
+
+  @override
+  String get alarmSyncFailure =>
+      'Some alarms failed to synchronize. You can retry later.';
+
+  @override
+  String get alarmAdjustedSoon =>
+      'An alarm within the next 24 hours was adjusted';
+
+  @override
+  String get alarmTemplateNew => 'New alarm template';
+
+  @override
+  String get alarmTemplateEdit => 'Edit alarm template';
+
+  @override
+  String get alarmTemplateName => 'Name';
+
+  @override
+  String get alarmModeFixed => 'Fixed time';
+
+  @override
+  String get alarmModeRelative => 'Before shift starts';
+
+  @override
+  String get alarmTime => 'Reminder time';
+
+  @override
+  String get alarmOffsetMinutes => 'Minutes before';
+
+  @override
+  String get alarmLinkedShifts => 'Linked shifts (up to 5)';
+
+  @override
+  String get alarmVibrate => 'Vibrate';
+
+  @override
+  String get alarmVolumeRamp => 'Gradually increase volume';
+
+  @override
+  String get alarmSnoozeMinutes => 'Snooze minutes';
+
+  @override
+  String get alarmMaxSnooze => 'Maximum snoozes';
+
+  @override
+  String get alarmUpcoming => 'Upcoming alarms';
+
+  @override
+  String get alarmNoTemplates => 'No alarm templates yet';
+
+  @override
+  String get alarmNoUpcoming => 'No schedule alarms in the next 30 days';
+
+  @override
+  String get alarmPlatformDisclaimer =>
+      'Android exact reminders depend on system permission and vendor background policies. iOS uses local notifications, which can be affected by Silent and Focus modes.';
+
+  @override
+  String get alarmSaveDidNotBlock =>
+      'The template was saved, but alarm sync failed. Check permission and retry.';
+
+  @override
   String get appTitle => 'Shift & Pay Calendar';
 
   @override

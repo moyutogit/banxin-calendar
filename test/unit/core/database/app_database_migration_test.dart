@@ -51,6 +51,9 @@ void main() {
           'schedule_rules',
           'shift_templates',
           'user_settings',
+          'alarm_templates',
+          'shift_alarm_templates',
+          'alarm_instances',
         ]),
       );
     });
@@ -160,6 +163,74 @@ void main() {
         ]),
       );
     });
+
+    test(
+      'migrates v3 to alarm schema without losing schedule metadata',
+      () async {
+        final file = File(path.join(tempDirectory.path, 'legacy_v3.sqlite'));
+        final legacy = sqlite.sqlite3.open(file.path);
+        legacy.execute('''
+        CREATE TABLE database_metadata (
+          key TEXT NOT NULL PRIMARY KEY,
+          value TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+        CREATE TABLE shift_templates (
+          id TEXT NOT NULL PRIMARY KEY,
+          name TEXT NOT NULL,
+          short_name TEXT NOT NULL,
+          start_minute INTEGER,
+          end_minute INTEGER,
+          cross_day INTEGER NOT NULL,
+          unpaid_break_minutes INTEGER NOT NULL,
+          planned_paid_minutes INTEGER,
+          color_argb INTEGER NOT NULL,
+          is_workday INTEGER NOT NULL,
+          enabled INTEGER NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL,
+          deleted_at INTEGER
+        );
+        INSERT INTO database_metadata
+          (key, value, created_at, updated_at)
+        VALUES ('schedule_input_version', '17', 1, 1);
+        INSERT INTO shift_templates VALUES (
+          'preserved-shift', 'Day', 'D', 540, 1080, 0, 60, 480,
+          4282090230, 1, 1, 1, 1, NULL
+        );
+        PRAGMA user_version = 3;
+      ''');
+        legacy.close();
+
+        final database = AppDatabase(NativeDatabase(file));
+        addTearDown(database.close);
+        await database.ensureReady();
+
+        final metadata = await database
+            .select(database.databaseMetadata)
+            .getSingle();
+        final shift = await database
+            .select(database.shiftTemplates)
+            .getSingle();
+        final tables = await database
+            .customSelect(
+              "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name",
+            )
+            .get();
+
+        expect(metadata.value, '17');
+        expect(shift.id, 'preserved-shift');
+        expect(
+          tables.map((row) => row.read<String>('name')),
+          containsAll(<String>[
+            'alarm_templates',
+            'shift_alarm_templates',
+            'alarm_instances',
+          ]),
+        );
+      },
+    );
 
     test('allows only one active override per date', () async {
       final database = AppDatabase.inMemory();
