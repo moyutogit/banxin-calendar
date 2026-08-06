@@ -14,6 +14,19 @@ final class ResolveCalendarRange {
     required DateRange range,
     required WeekTemplate defaultWeek,
   }) async {
+    final inputVersion = await _repository.loadInputVersion();
+    final cached = await _repository.loadCachedDays(
+      range: range,
+      inputVersion: inputVersion,
+      resolverVersion: ScheduleResolver.resolverVersion,
+    );
+    if (cached.length == range.start.daysUntil(range.end) + 1 &&
+        range.dates.every(cached.containsKey)) {
+      return List<ResolvedCalendarDay>.unmodifiable(
+        range.dates.map((date) => cached[date]!),
+      );
+    }
+
     final rulesFuture = _repository.loadRules(range);
     final userOverridesFuture = _repository.loadUserOverrides(range);
     final companyOverridesFuture = _repository.loadCompanyOverrides(range);
@@ -26,6 +39,11 @@ final class ResolveCalendarRange {
       companyOverrides: await companyOverridesFuture,
       officialHolidays: await holidaysFuture,
     );
-    return _resolver.resolveRange(range, input);
+    final resolved = _resolver.resolveRange(range, input);
+    await _repository.replaceCachedDays(
+      days: resolved,
+      inputVersion: inputVersion,
+    );
+    return resolved;
   }
 }

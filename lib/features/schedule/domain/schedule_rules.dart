@@ -23,6 +23,13 @@ abstract class ScheduleRule {
   ScheduleDayTemplate evaluate(LocalDate date);
 }
 
+final class StoredScheduleRule {
+  const StoredScheduleRule({required this.rule, required this.enabled});
+
+  final ScheduleRule rule;
+  final bool enabled;
+}
+
 final class WeekTemplate {
   WeekTemplate(Map<int, ScheduleDayTemplate> days)
     : _days = Map<int, ScheduleDayTemplate>.unmodifiable(days) {

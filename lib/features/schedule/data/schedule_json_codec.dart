@@ -8,6 +8,21 @@ import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 final class ScheduleJsonCodec {
   const ScheduleJsonCodec();
 
+  String encodeShiftSnapshot(ShiftSnapshot shift) {
+    return jsonEncode(<String, Object?>{
+      'id': shift.id.value,
+      'name': shift.name,
+      'shortName': shift.shortName,
+      'startMinute': shift.startMinute,
+      'endMinute': shift.endMinute,
+      'crossDay': shift.crossDay,
+      'unpaidBreakMinutes': shift.unpaidBreakMinutes,
+      'plannedPaidMinutes': shift.plannedPaidMinutes,
+      'colorArgb': shift.colorArgb,
+      'isWorkday': shift.isWorkday,
+    });
+  }
+
   ShiftSnapshot decodeShiftSnapshot(String source) {
     final json = _decodeObject(source);
     return ShiftSnapshot(
@@ -79,6 +94,57 @@ final class ScheduleJsonCodec {
           'Unsupported schedule rule type: ${row.ruleType}',
         );
     }
+  }
+
+  EncodedScheduleRule encodeRule(ScheduleRule rule) {
+    if (rule is WeeklyScheduleRule) {
+      return EncodedScheduleRule(
+        ruleType: 'weekly',
+        anchorDate: rule.effectiveRange.start,
+        cycleLengthDays: null,
+        payloadJson: jsonEncode(<String, Object?>{
+          'days': _encodeWeek(rule.week),
+        }),
+      );
+    }
+    if (rule is CycleScheduleRule) {
+      return EncodedScheduleRule(
+        ruleType: 'cycle',
+        anchorDate: rule.anchorDate,
+        cycleLengthDays: rule.cycle.length,
+        payloadJson: jsonEncode(<String, Object?>{
+          'days': rule.cycle.map(_encodeTemplate).toList(growable: false),
+        }),
+      );
+    }
+    if (rule is AlternatingWeekScheduleRule) {
+      return EncodedScheduleRule(
+        ruleType: 'alternating_week',
+        anchorDate: rule.anchorWeekStart,
+        cycleLengthDays: 14,
+        payloadJson: jsonEncode(<String, Object?>{
+          'anchorWeek': _encodeWeek(rule.anchorWeek),
+          'alternateWeek': _encodeWeek(rule.alternateWeek),
+        }),
+      );
+    }
+    throw ArgumentError.value(rule, 'rule', 'Unsupported schedule rule type.');
+  }
+
+  DayStatus decodeDayStatus(String value) => _decodeStatus(value);
+
+  List<Map<String, Object?>> _encodeWeek(WeekTemplate week) {
+    return <Map<String, Object?>>[
+      for (var weekday = DateTime.monday; weekday <= DateTime.sunday; weekday++)
+        _encodeTemplate(week.forWeekday(weekday)),
+    ];
+  }
+
+  Map<String, Object?> _encodeTemplate(ScheduleDayTemplate template) {
+    return <String, Object?>{
+      'status': template.status.name,
+      if (template.shift != null) 'shiftId': template.shift!.id.value,
+    };
   }
 
   WeekTemplate _decodeWeek(
@@ -166,4 +232,18 @@ final class ScheduleJsonCodec {
     }
     return value;
   }
+}
+
+final class EncodedScheduleRule {
+  const EncodedScheduleRule({
+    required this.ruleType,
+    required this.anchorDate,
+    required this.cycleLengthDays,
+    required this.payloadJson,
+  });
+
+  final String ruleType;
+  final LocalDate anchorDate;
+  final int? cycleLengthDays;
+  final String payloadJson;
 }

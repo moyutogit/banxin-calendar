@@ -1,8 +1,14 @@
 import 'package:banxin_calendar/app/shell/app_shell.dart';
 import 'package:banxin_calendar/features/assistant/presentation/assistant_page.dart';
 import 'package:banxin_calendar/features/calendar/presentation/calendar_page.dart';
+import 'package:banxin_calendar/features/calendar/presentation/day_details_page.dart';
+import 'package:banxin_calendar/features/holiday/presentation/holiday_settings_page.dart';
 import 'package:banxin_calendar/features/home/presentation/home_page.dart';
+import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
+import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:banxin_calendar/features/schedule/presentation/schedule_rules_page.dart';
+import 'package:banxin_calendar/features/schedule/presentation/schedule_setup_page.dart';
+import 'package:banxin_calendar/features/schedule/presentation/shift_templates_page.dart';
 import 'package:banxin_calendar/features/settings/presentation/settings_page.dart';
 import 'package:banxin_calendar/features/statistics/presentation/statistics_page.dart';
 import 'package:flutter/widgets.dart';
@@ -63,6 +69,25 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/schedule/rules',
         builder: (_, _) => const ScheduleRulesPage(),
+      ),
+      GoRoute(
+        path: '/schedule/setup',
+        builder: (_, state) =>
+            ScheduleSetupPage(initialDraft: state.extra as ScheduleSetupDraft?),
+      ),
+      GoRoute(
+        path: '/schedule/shifts',
+        builder: (_, _) => const ShiftTemplatesPage(),
+      ),
+      GoRoute(
+        path: '/day/:date',
+        builder: (_, state) => DayDetailsPage(
+          date: LocalDate.parse(state.pathParameters['date']!),
+        ),
+      ),
+      GoRoute(
+        path: '/settings/holiday',
+        builder: (_, _) => const HolidaySettingsPage(),
       ),
     ],
   );

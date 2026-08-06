@@ -72,6 +72,13 @@ final class ShiftSnapshot {
   final bool isWorkday;
 }
 
+final class StoredShiftTemplate {
+  const StoredShiftTemplate({required this.shift, required this.enabled});
+
+  final ShiftSnapshot shift;
+  final bool enabled;
+}
+
 final class ResolvedCalendarDay {
   const ResolvedCalendarDay({
     required this.date,
@@ -148,4 +155,38 @@ final class OfficialHoliday {
   final LocalDate date;
   final DayStatus status;
   final ShiftSnapshot? shift;
+}
+
+final class HolidayImportRecord {
+  HolidayImportRecord({
+    required this.date,
+    required this.name,
+    required this.status,
+    this.publishedAt,
+  }) {
+    if (name.trim().isEmpty) {
+      throw ArgumentError.value(name, 'name', 'Holiday name is required.');
+    }
+    if (status != DayStatus.publicHoliday &&
+        status != DayStatus.adjustedWorkday) {
+      throw ArgumentError('Holiday imports only support holiday day types.');
+    }
+  }
+
+  final LocalDate date;
+  final String name;
+  final DayStatus status;
+  final int? publishedAt;
+}
+
+final class HolidayUpdateSummary {
+  const HolidayUpdateSummary({
+    required this.added,
+    required this.removed,
+    required this.changed,
+  });
+
+  final int added;
+  final int removed;
+  final int changed;
 }

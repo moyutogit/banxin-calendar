@@ -1,5 +1,6 @@
 import 'package:banxin_calendar/core/database/database_providers.dart';
 import 'package:banxin_calendar/features/schedule/application/resolve_calendar_range.dart';
+import 'package:banxin_calendar/features/schedule/application/schedule_application_service.dart';
 import 'package:banxin_calendar/features/schedule/data/drift_schedule_repository.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_repository.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_resolver.dart';
@@ -17,5 +18,12 @@ final resolveCalendarRangeProvider = Provider<ResolveCalendarRange>(
   (ref) => ResolveCalendarRange(
     ref.watch(scheduleRepositoryProvider),
     ref.watch(scheduleResolverProvider),
+  ),
+);
+
+final scheduleApplicationServiceProvider = Provider<ScheduleApplicationService>(
+  (ref) => ScheduleApplicationService(
+    ref.watch(scheduleRepositoryProvider),
+    ref.watch(resolveCalendarRangeProvider),
   ),
 );

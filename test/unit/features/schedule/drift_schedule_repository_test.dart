@@ -1,10 +1,16 @@
 import 'dart:convert';
 
 import 'package:banxin_calendar/core/database/app_database.dart';
+import 'package:banxin_calendar/core/ids/stable_id_generator.dart';
+import 'package:banxin_calendar/core/time/app_clock.dart';
 import 'package:banxin_calendar/features/schedule/data/drift_schedule_repository.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_entities.dart';
+import 'package:banxin_calendar/features/schedule/domain/schedule_resolver.dart';
+import 'package:banxin_calendar/features/schedule/domain/schedule_rules.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import '../../../fixtures/schedule_fixtures.dart';
 
 void main() {
   group('DriftScheduleRepository', () {
@@ -13,7 +19,11 @@ void main() {
 
     setUp(() async {
       database = AppDatabase.inMemory();
-      repository = DriftScheduleRepository(database);
+      repository = DriftScheduleRepository(
+        database,
+        clock: _FixedClock(),
+        idGenerator: _SequenceIdGenerator(),
+      );
       await database.ensureReady();
       await _insertWorkShift(database);
     });
@@ -166,6 +176,213 @@ void main() {
 
       await expectLater(repository.loadRules(range), throwsFormatException);
     });
+
+    test(
+      'saves rules atomically, invalidates cache, and writes audit',
+      () async {
+        final range = DateRange(
+          start: LocalDate.parse('2026-08-01'),
+          end: LocalDate.parse('2026-08-31'),
+        );
+        await repository.replaceCachedDays(
+          days: <ResolvedCalendarDay>[
+            ResolvedCalendarDay(
+              date: LocalDate.parse('2026-08-03'),
+              status: DayStatus.work,
+              shift: dayShift(),
+              source: DaySource.defaultRule,
+              plannedPaidMinutes: 480,
+              tags: const <DayTag>[],
+              resolverVersion: ScheduleResolver.resolverVersion,
+            ),
+          ],
+          inputVersion: '0',
+        );
+        final rule = WeeklyScheduleRule(
+          id: RuleId('saved-week'),
+          name: '双休',
+          effectiveRange: range,
+          priority: 10,
+          week: standardFiveDayWeek(
+            shift: (await repository.loadEnabledShifts()).single,
+          ),
+        );
+
+        await repository.saveRule(rule, enabled: true);
+
+        final stored = await repository.loadStoredRules();
+        final cached = await repository.loadCachedDays(
+          range: range,
+          inputVersion: '0',
+          resolverVersion: ScheduleResolver.resolverVersion,
+        );
+        final audit = await database.select(database.changeLog).get();
+
+        expect(stored.single.rule.id, RuleId('saved-week'));
+        expect(stored.single.enabled, isTrue);
+        expect(cached, isEmpty);
+        expect(await repository.loadInputVersion(), '1');
+        expect(audit.single.entityType, 'schedule_rule');
+        expect(audit.single.changeType, 'create');
+      },
+    );
+
+    test('persists override snapshots and can restore rule results', () async {
+      final shift = (await repository.loadEnabledShifts()).single;
+      final date = LocalDate.parse('2026-08-08');
+      final override = CalendarOverride(
+        id: 'manual-work',
+        date: date,
+        status: DayStatus.work,
+        shift: shift,
+      );
+
+      await repository.saveOverrides(<CalendarOverride>[
+        override,
+      ], source: DaySource.userOverride);
+
+      final persisted = await repository.loadUserOverrides(
+        DateRange(start: date, end: date),
+      );
+      expect(persisted[date]?.shift?.name, '白班');
+
+      await database.customStatement(
+        "UPDATE shift_templates SET name = '已修改模板' WHERE id = 'day-shift'",
+      );
+      final stillSnapshotted = await repository.loadUserOverrides(
+        DateRange(start: date, end: date),
+      );
+      expect(stillSnapshotted[date]?.shift?.name, '白班');
+
+      await repository.restoreOverrides(
+        DateRange(start: date, end: date),
+        source: DaySource.userOverride,
+      );
+
+      expect(
+        await repository.loadUserOverrides(DateRange(start: date, end: date)),
+        isEmpty,
+      );
+      final audit = await database.select(database.changeLog).get();
+      expect(audit.map((row) => row.changeType), <String>[
+        'create',
+        'restore_rule_result',
+      ]);
+    });
+
+    test('replaces holiday datasets and reports the exact diff', () async {
+      final first = <HolidayImportRecord>[
+        HolidayImportRecord(
+          date: LocalDate.parse('2026-10-01'),
+          name: '国庆节',
+          status: DayStatus.publicHoliday,
+        ),
+        HolidayImportRecord(
+          date: LocalDate.parse('2026-10-10'),
+          name: '调休上班',
+          status: DayStatus.adjustedWorkday,
+        ),
+      ];
+      await repository.replaceOfficialHolidays(
+        region: 'CN',
+        dataVersion: 'v1',
+        holidays: first,
+        updatedAt: 1,
+      );
+
+      final summary = await repository.replaceOfficialHolidays(
+        region: 'CN',
+        dataVersion: 'v2',
+        holidays: <HolidayImportRecord>[
+          HolidayImportRecord(
+            date: LocalDate.parse('2026-10-01'),
+            name: '国庆假期',
+            status: DayStatus.publicHoliday,
+          ),
+          HolidayImportRecord(
+            date: LocalDate.parse('2026-10-02'),
+            name: '国庆节',
+            status: DayStatus.publicHoliday,
+          ),
+        ],
+        updatedAt: 2,
+      );
+
+      expect(summary.added, 1);
+      expect(summary.removed, 1);
+      expect(summary.changed, 1);
+      final loaded = await repository.loadOfficialHolidays(
+        DateRange(
+          start: LocalDate.parse('2026-10-01'),
+          end: LocalDate.parse('2026-10-31'),
+        ),
+      );
+      expect(loaded, hasLength(2));
+      expect(
+        loaded[LocalDate.parse('2026-10-02')]?.status,
+        DayStatus.publicHoliday,
+      );
+    });
+
+    test('rolls back the complete setup when its audit write fails', () async {
+      await database.customStatement('''
+        INSERT INTO change_log (
+          id, entity_type, entity_id, change_type,
+          before_snapshot_json, after_snapshot_json, created_at, updated_at
+        ) VALUES ('audit-0', 'fixture', 'fixture', 'fixture', NULL, NULL, 1, 1)
+      ''');
+      final shift = dayShift(id: 'atomic-shift');
+      final rule = WeeklyScheduleRule(
+        id: RuleId('atomic-rule'),
+        name: '原子配置',
+        effectiveRange: DateRange(
+          start: LocalDate.parse('2026-08-01'),
+          end: LocalDate.parse('2026-12-31'),
+        ),
+        priority: 10,
+        week: standardFiveDayWeek(shift: shift),
+      );
+
+      await expectLater(
+        repository.saveScheduleSetup(shift: shift, rule: rule),
+        throwsA(isA<Exception>()),
+      );
+
+      final shiftRows = await (database.select(
+        database.shiftTemplates,
+      )..where((table) => table.id.equals('atomic-shift'))).get();
+      final ruleRows = await (database.select(
+        database.scheduleRules,
+      )..where((table) => table.id.equals('atomic-rule'))).get();
+      expect(shiftRows, isEmpty);
+      expect(ruleRows, isEmpty);
+      expect(await repository.loadInputVersion(), '0');
+    });
+
+    test('prevents disabling a shift referenced by an active rule', () async {
+      final shift = (await repository.loadEnabledShifts()).single;
+      final rule = WeeklyScheduleRule(
+        id: RuleId('protected-rule'),
+        name: '引用班次的规则',
+        effectiveRange: DateRange(
+          start: LocalDate.parse('2026-08-01'),
+          end: LocalDate.parse('2026-12-31'),
+        ),
+        priority: 10,
+        week: standardFiveDayWeek(shift: shift),
+      );
+      await repository.saveRule(rule, enabled: true);
+
+      await expectLater(
+        repository.setShiftEnabled(shift.id, enabled: false),
+        throwsA(isA<StateError>()),
+      );
+      expect((await repository.loadStoredShifts()).single.enabled, isTrue);
+
+      await repository.setRuleEnabled(rule.id, enabled: false);
+      await repository.setShiftEnabled(shift.id, enabled: false);
+      expect((await repository.loadStoredShifts()).single.enabled, isFalse);
+    });
   });
 }
 
@@ -200,4 +417,16 @@ Future<void> _insertRule(
     ''',
     <Object?>[id, id, type, cycleLength, payload, enabled],
   );
+}
+
+final class _FixedClock implements AppClock {
+  @override
+  DateTime nowUtc() => DateTime.utc(2026, 8, 6, 1, 2, 3);
+}
+
+final class _SequenceIdGenerator implements StableIdGenerator {
+  var _next = 0;
+
+  @override
+  String generate() => 'audit-${_next++}';
 }
