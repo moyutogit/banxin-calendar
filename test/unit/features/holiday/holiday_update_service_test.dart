@@ -4,6 +4,7 @@ import 'package:banxin_calendar/core/database/app_database.dart';
 import 'package:banxin_calendar/core/time/app_clock.dart';
 import 'package:banxin_calendar/features/holiday/application/holiday_update_service.dart';
 import 'package:banxin_calendar/features/holiday/data/http_holiday_data_source.dart';
+import 'package:banxin_calendar/features/holiday/domain/holiday_data_source.dart';
 import 'package:banxin_calendar/features/schedule/data/drift_schedule_repository.dart';
 import 'package:banxin_calendar/features/schedule/domain/schedule_entities.dart';
 import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
@@ -28,6 +29,40 @@ void main() {
     expect(dataset.records, hasLength(2));
     expect(dataset.records.first.status, DayStatus.publicHoliday);
     expect(dataset.records.last.status, DayStatus.adjustedWorkday);
+  });
+
+  test('falls back to the next trusted HTTPS source', () async {
+    final requestedUris = <Uri>[];
+    final source = HttpHolidayDataSource(
+      baseUris: <Uri>[
+        Uri.https('primary.example', '/holidays/'),
+        Uri.https('fallback.example', '/holidays/'),
+      ],
+      loader: (uri) async {
+        requestedUris.add(uri);
+        if (uri.host == 'primary.example') {
+          throw const SocketException('primary unavailable');
+        }
+        return _datasetJson;
+      },
+    );
+
+    final dataset = await source.fetchYear(2026);
+
+    expect(dataset.year, 2026);
+    expect(requestedUris.map((uri) => uri.toString()), <String>[
+      'https://primary.example/holidays/2026.json',
+      'https://fallback.example/holidays/2026.json',
+    ]);
+  });
+
+  test('rejects non-HTTPS holiday sources', () {
+    expect(
+      () => HttpHolidayDataSource(
+        baseUri: Uri.parse('http://example.com/holidays/'),
+      ),
+      throwsArgumentError,
+    );
   });
 
   test('keeps the last cached dataset when a refresh is offline', () async {
@@ -58,7 +93,13 @@ void main() {
 
     await expectLater(
       service.updateYear(2026),
-      throwsA(isA<SocketException>()),
+      throwsA(
+        isA<HolidayFetchException>().having(
+          (error) => error.kind,
+          'kind',
+          HolidayFetchFailureKind.network,
+        ),
+      ),
     );
 
     final cached = await repository.loadOfficialHolidays(

@@ -840,6 +840,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'Update failed. The latest local data was retained.';
 
   @override
+  String get holidayNetworkUnavailable =>
+      'Could not reach a holiday data source. Check your network or VPN and try again; local data was not changed.';
+
+  @override
+  String get holidayYearUnavailable =>
+      'The official holiday schedule for this year has not been published; local data was not changed.';
+
+  @override
+  String get holidayDataInvalid =>
+      'The downloaded holiday data failed validation and was rejected; local data was not changed.';
+
+  @override
   String get holidayDataVersion => 'Data version';
 
   @override

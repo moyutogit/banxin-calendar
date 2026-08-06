@@ -822,6 +822,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get holidayOfflineRetained => '更新失败，已保留最近一次本地数据';
 
   @override
+  String get holidayNetworkUnavailable => '无法连接节假日数据源，请检查网络或 VPN 后重试；本地数据未受影响';
+
+  @override
+  String get holidayYearUnavailable => '该年份的官方节假日安排尚未发布；本地数据未受影响';
+
+  @override
+  String get holidayDataInvalid => '下载的节假日数据未通过校验，已拒绝导入；本地数据未受影响';
+
+  @override
   String get holidayDataVersion => '数据版本';
 
   @override

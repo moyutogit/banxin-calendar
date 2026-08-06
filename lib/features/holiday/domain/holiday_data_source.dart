@@ -4,6 +4,21 @@ abstract interface class HolidayDataSource {
   Future<HolidayDataset> fetchYear(int year);
 }
 
+enum HolidayFetchFailureKind { network, notFound, invalidData, unexpected }
+
+final class HolidayFetchException implements Exception {
+  HolidayFetchException({required this.kind, required List<Uri> attemptedUris})
+    : attemptedUris = List<Uri>.unmodifiable(attemptedUris);
+
+  final HolidayFetchFailureKind kind;
+  final List<Uri> attemptedUris;
+
+  @override
+  String toString() {
+    return 'HolidayFetchException($kind, attempts: ${attemptedUris.length})';
+  }
+}
+
 final class HolidayDataset {
   HolidayDataset({
     required this.year,

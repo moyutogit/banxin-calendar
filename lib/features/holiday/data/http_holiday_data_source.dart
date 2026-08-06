@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,31 +9,102 @@ import 'package:banxin_calendar/features/schedule/domain/value_objects.dart';
 typedef HolidayDocumentLoader = Future<String> Function(Uri uri);
 
 final class HttpHolidayDataSource implements HolidayDataSource {
-  HttpHolidayDataSource({HolidayDocumentLoader? loader, Uri? baseUri})
-    : _loader = loader ?? _loadDocument,
-      baseUri =
-          baseUri ??
-          Uri.https(
-            'raw.githubusercontent.com',
-            '/NateScarlet/holiday-cn/master/',
-          );
+  factory HttpHolidayDataSource({
+    HolidayDocumentLoader? loader,
+    Uri? baseUri,
+    List<Uri>? baseUris,
+  }) {
+    if (baseUri != null && baseUris != null) {
+      throw ArgumentError('Specify either baseUri or baseUris, not both.');
+    }
+    final resolvedBaseUris =
+        baseUris ?? (baseUri == null ? _defaultBaseUris : <Uri>[baseUri]);
+    if (resolvedBaseUris.isEmpty) {
+      throw ArgumentError.value(baseUris, 'baseUris', 'Must not be empty.');
+    }
+    for (final uri in resolvedBaseUris) {
+      if (uri.scheme != 'https' || uri.host.isEmpty) {
+        throw ArgumentError.value(
+          uri,
+          'baseUris',
+          'Holiday data sources must use HTTPS.',
+        );
+      }
+    }
+    return HttpHolidayDataSource._(
+      loader ?? _loadDocument,
+      List<Uri>.unmodifiable(resolvedBaseUris),
+    );
+  }
+
+  const HttpHolidayDataSource._(this._loader, this.baseUris);
 
   static const int _maximumDocumentBytes = 1024 * 1024;
+  static final List<Uri> _defaultBaseUris = <Uri>[
+    Uri.https('cdn.jsdelivr.net', '/gh/NateScarlet/holiday-cn@master/'),
+    Uri.https('raw.githubusercontent.com', '/NateScarlet/holiday-cn/master/'),
+  ];
 
   final HolidayDocumentLoader _loader;
-  final Uri baseUri;
+  final List<Uri> baseUris;
 
   @override
   Future<HolidayDataset> fetchYear(int year) async {
     if (year < 2000 || year > 9999) {
       throw RangeError.range(year, 2000, 9999, 'year');
     }
-    final uri = baseUri.resolve('$year.json');
-    final source = await _loader(uri);
-    if (utf8.encode(source).length > _maximumDocumentBytes) {
-      throw const FormatException('Holiday document exceeds the size limit.');
+    final attemptedUris = <Uri>[];
+    final failureKinds = <HolidayFetchFailureKind>[];
+    for (final baseUri in baseUris) {
+      final uri = baseUri.resolve('$year.json');
+      attemptedUris.add(uri);
+      try {
+        final source = await _loader(uri);
+        if (utf8.encode(source).length > _maximumDocumentBytes) {
+          throw const FormatException(
+            'Holiday document exceeds the size limit.',
+          );
+        }
+        return HolidayDatasetParser().parse(source, expectedYear: year);
+      } on Exception catch (error) {
+        failureKinds.add(_failureKind(error));
+      }
     }
-    return HolidayDatasetParser().parse(source, expectedYear: year);
+    throw HolidayFetchException(
+      kind: _combinedFailureKind(failureKinds),
+      attemptedUris: attemptedUris,
+    );
+  }
+
+  HolidayFetchFailureKind _failureKind(Exception error) {
+    if (error is _HolidayHttpException &&
+        error.statusCode == HttpStatus.notFound) {
+      return HolidayFetchFailureKind.notFound;
+    }
+    if (error is TimeoutException || error is IOException) {
+      return HolidayFetchFailureKind.network;
+    }
+    if (error is FormatException) {
+      return HolidayFetchFailureKind.invalidData;
+    }
+    return HolidayFetchFailureKind.unexpected;
+  }
+
+  HolidayFetchFailureKind _combinedFailureKind(
+    List<HolidayFetchFailureKind> failures,
+  ) {
+    if (failures.every(
+      (failure) => failure == HolidayFetchFailureKind.notFound,
+    )) {
+      return HolidayFetchFailureKind.notFound;
+    }
+    if (failures.contains(HolidayFetchFailureKind.network)) {
+      return HolidayFetchFailureKind.network;
+    }
+    if (failures.contains(HolidayFetchFailureKind.invalidData)) {
+      return HolidayFetchFailureKind.invalidData;
+    }
+    return HolidayFetchFailureKind.unexpected;
   }
 
   static Future<String> _loadDocument(Uri uri) async {
@@ -50,16 +122,20 @@ final class HttpHolidayDataSource implements HolidayDataSource {
       );
       if (response.statusCode != HttpStatus.ok) {
         await response.drain<void>();
-        throw HttpException(
-          'Holiday data request returned HTTP ${response.statusCode}.',
-          uri: uri,
-        );
+        throw _HolidayHttpException(response.statusCode, uri: uri);
       }
       return response.transform(utf8.decoder).join();
     } finally {
       client.close(force: true);
     }
   }
+}
+
+final class _HolidayHttpException extends HttpException {
+  _HolidayHttpException(this.statusCode, {required Uri uri})
+    : super('Holiday data request returned HTTP $statusCode.', uri: uri);
+
+  final int statusCode;
 }
 
 final class HolidayDatasetParser {

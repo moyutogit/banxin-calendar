@@ -1700,6 +1700,24 @@ abstract class AppLocalizations {
   /// **'更新失败，已保留最近一次本地数据'**
   String get holidayOfflineRetained;
 
+  /// No description provided for @holidayNetworkUnavailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'无法连接节假日数据源，请检查网络或 VPN 后重试；本地数据未受影响'**
+  String get holidayNetworkUnavailable;
+
+  /// No description provided for @holidayYearUnavailable.
+  ///
+  /// In zh, this message translates to:
+  /// **'该年份的官方节假日安排尚未发布；本地数据未受影响'**
+  String get holidayYearUnavailable;
+
+  /// No description provided for @holidayDataInvalid.
+  ///
+  /// In zh, this message translates to:
+  /// **'下载的节假日数据未通过校验，已拒绝导入；本地数据未受影响'**
+  String get holidayDataInvalid;
+
   /// No description provided for @holidayDataVersion.
   ///
   /// In zh, this message translates to:

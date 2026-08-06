@@ -4,6 +4,7 @@ import 'package:banxin_calendar/app/localization/generated/app_localizations.dar
 import 'package:banxin_calendar/app/theme/app_theme.dart';
 import 'package:banxin_calendar/features/holiday/application/holiday_providers.dart';
 import 'package:banxin_calendar/features/holiday/application/holiday_update_service.dart';
+import 'package:banxin_calendar/features/holiday/domain/holiday_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -149,12 +150,24 @@ class _HolidaySettingsPageState extends ConsumerState<HolidaySettingsPage> {
           _loading = false;
         });
       }
-    } on Object {
+    } on Object catch (error) {
       if (!mounted) return;
       setState(() => _loading = false);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text(strings.holidayOfflineRetained)));
+      ).showSnackBar(SnackBar(content: Text(_errorMessage(strings, error))));
     }
+  }
+
+  String _errorMessage(AppLocalizations strings, Object error) {
+    if (error is HolidayFetchException) {
+      return switch (error.kind) {
+        HolidayFetchFailureKind.network => strings.holidayNetworkUnavailable,
+        HolidayFetchFailureKind.notFound => strings.holidayYearUnavailable,
+        HolidayFetchFailureKind.invalidData => strings.holidayDataInvalid,
+        HolidayFetchFailureKind.unexpected => strings.holidayOfflineRetained,
+      };
+    }
+    return strings.holidayOfflineRetained;
   }
 }
