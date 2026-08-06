@@ -9,6 +9,157 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
+  String get assistantConfigureTitle => 'Configure AI provider';
+
+  @override
+  String get assistantProviderType => 'Provider type';
+
+  @override
+  String get assistantBaseUrl => 'API base URL';
+
+  @override
+  String get assistantEndpointPath => 'Endpoint path';
+
+  @override
+  String get assistantModelName => 'Model name';
+
+  @override
+  String get assistantApiKey => 'API key';
+
+  @override
+  String get assistantCustomHeaders => 'Advanced headers (JSON)';
+
+  @override
+  String get assistantTimeout => 'Timeout seconds';
+
+  @override
+  String get assistantMaxTokens => 'Maximum output tokens';
+
+  @override
+  String get assistantStream => 'Stream responses';
+
+  @override
+  String get assistantTestConnection => 'Test connection';
+
+  @override
+  String get assistantConnectionConnected => 'Connected';
+
+  @override
+  String get assistantConnectionNotTested => 'Not tested';
+
+  @override
+  String get assistantConnectionAuth => 'Authentication failed';
+
+  @override
+  String get assistantConnectionModel => 'Model not found or endpoint is wrong';
+
+  @override
+  String get assistantConnectionRate => 'Rate limited';
+
+  @override
+  String get assistantConnectionBalance => 'Insufficient balance';
+
+  @override
+  String get assistantConnectionNetwork => 'Network failure';
+
+  @override
+  String get assistantConnectionTls => 'TLS connection failed';
+
+  @override
+  String get assistantConnectionTimeout => 'Request timed out';
+
+  @override
+  String get assistantConnectionResponse => 'Incompatible response';
+
+  @override
+  String get assistantSettingsSaved => 'AI settings saved securely';
+
+  @override
+  String get assistantHostChangeWarning =>
+      'The API host changed. The key will be sent to the new host. Continue?';
+
+  @override
+  String get assistantPersonaTitle => 'Persona and data permissions';
+
+  @override
+  String get assistantName => 'Assistant name';
+
+  @override
+  String get assistantPersonaGentle => 'Gentle companion';
+
+  @override
+  String get assistantPersonaProfessional => 'Concise professional';
+
+  @override
+  String get assistantPersonaLively => 'Lively and fun';
+
+  @override
+  String get assistantReplyLength => 'Reply length';
+
+  @override
+  String get assistantScopeSchedule => 'Allow schedule summaries';
+
+  @override
+  String get assistantScopeAttendance => 'Allow attendance summaries';
+
+  @override
+  String get assistantScopeWage => 'Allow wage amounts (off by default)';
+
+  @override
+  String get assistantScopeAlarm => 'Allow alarm status';
+
+  @override
+  String get assistantScopeNotes => 'Allow notes (off by default)';
+
+  @override
+  String get assistantNotConfigured =>
+      'AI is not configured. Schedule, attendance, wage, and alarm features are unaffected.';
+
+  @override
+  String get assistantInputHint =>
+      'Ask about schedules or hours, or propose a setting';
+
+  @override
+  String get assistantSend => 'Send';
+
+  @override
+  String get assistantStop => 'Stop generating';
+
+  @override
+  String get assistantQuickAttendance => 'Summarize this month\'s attendance';
+
+  @override
+  String get assistantQuickSchedule => 'Show the next 7 days';
+
+  @override
+  String get assistantQuickWage => 'Estimate this month\'s wage';
+
+  @override
+  String get assistantQuickAlarm => 'Check alarms';
+
+  @override
+  String get assistantProposalTitle => 'Change awaiting confirmation';
+
+  @override
+  String get assistantProposalConfirm => 'Confirm and apply';
+
+  @override
+  String get assistantProposalCancel => 'Cancel without changes';
+
+  @override
+  String get assistantActionSucceeded => 'The change was actually applied';
+
+  @override
+  String get assistantActionUndo => 'Undo change';
+
+  @override
+  String get assistantActionUndone => 'The change was undone';
+
+  @override
+  String get assistantSafetyRefusal =>
+      'The request was refused by the safety policy';
+
+  @override
   String get homeTodayShift => 'Today\'s shift';
 
   @override

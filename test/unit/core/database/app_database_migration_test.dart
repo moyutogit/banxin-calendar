@@ -58,6 +58,11 @@ void main() {
           'leave_records',
           'wage_rules',
           'payroll_periods',
+          'ai_provider_configs',
+          'assistant_personas',
+          'conversations',
+          'messages',
+          'ai_actions',
         ]),
       );
     });
@@ -275,6 +280,44 @@ void main() {
       );
     });
 
+    test('migrates v5 to assistant schema without exposing secrets', () async {
+      final file = File(path.join(tempDirectory.path, 'legacy_v5.sqlite'));
+      final legacy = sqlite.sqlite3.open(file.path);
+      legacy.execute('''
+        CREATE TABLE database_metadata (
+          key TEXT NOT NULL PRIMARY KEY,
+          value TEXT NOT NULL,
+          created_at INTEGER NOT NULL,
+          updated_at INTEGER NOT NULL
+        );
+        INSERT INTO database_metadata VALUES ('fixture', 'v5', 1, 1);
+        PRAGMA user_version = 5;
+      ''');
+      legacy.close();
+
+      final database = AppDatabase(NativeDatabase(file));
+      addTearDown(database.close);
+      await database.ensureReady();
+      final metadata = await database
+          .select(database.databaseMetadata)
+          .getSingle();
+      final schema = await database
+          .customSelect(
+            "SELECT sql FROM sqlite_master WHERE type = 'table' AND sql IS NOT NULL",
+          )
+          .get();
+      final schemaText = schema
+          .map((row) => row.read<String>('sql'))
+          .join('\n')
+          .toLowerCase();
+
+      expect(metadata.value, 'v5');
+      expect(schemaText, contains('ai_provider_configs'));
+      expect(schemaText, contains('credential_ref'));
+      expect(schemaText, isNot(contains('api_key')));
+      expect(schemaText, isNot(contains('authorization_header')));
+    });
+
     test('allows only one active override per date', () async {
       final database = AppDatabase.inMemory();
       addTearDown(database.close);
@@ -391,7 +434,7 @@ void main() {
 
       expect(schema, isNot(contains('api_key')));
       expect(schema, isNot(contains('authorization')));
-      expect(schema, isNot(contains('custom_headers')));
+      expect(schema, isNot(matches(RegExp(r'custom_headers(?!_ref)'))));
     });
   });
 }

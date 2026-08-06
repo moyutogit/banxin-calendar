@@ -1,0 +1,189 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:banxin_calendar/features/assistant/domain/assistant_entities.dart';
+import 'package:banxin_calendar/features/assistant/domain/llm_provider.dart';
+
+final class LlmProviderException implements Exception {
+  const LlmProviderException(this.status);
+
+  final AiConnectionStatus status;
+
+  @override
+  String toString() => 'LlmProviderException(${status.name})';
+}
+
+final class DartIoLlmProvider implements LlmProvider {
+  const DartIoLlmProvider();
+
+  @override
+  Stream<LlmEvent> chat({
+    required List<LlmMessage> messages,
+    required List<ToolDefinition> tools,
+    required AiProviderConfig config,
+    required String credential,
+    required Map<String, String> customHeaders,
+  }) async* {
+    final client = HttpClient()
+      ..connectionTimeout = Duration(seconds: config.timeoutSeconds);
+    try {
+      final request = await client
+          .postUrl(config.endpoint)
+          .timeout(Duration(seconds: config.timeoutSeconds));
+      _applyHeaders(request, credential, customHeaders);
+      request.write(
+        jsonEncode(<String, Object?>{
+          'model': config.modelName,
+          'messages': <Object?>[
+            for (final message in messages)
+              <String, Object?>{
+                'role': message.role.name,
+                'content': message.content,
+              },
+          ],
+          if (tools.isNotEmpty)
+            'tools': <Object?>[
+              for (final tool in tools)
+                <String, Object?>{
+                  'type': 'function',
+                  'function': <String, Object?>{
+                    'name': tool.name,
+                    'description': tool.description,
+                    'parameters': tool.parametersSchema,
+                  },
+                },
+            ],
+          'max_tokens': config.maxOutputTokens,
+          'stream': config.streamEnabled,
+        }),
+      );
+      final response = await request.close().timeout(
+        Duration(seconds: config.timeoutSeconds),
+      );
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        await response.drain<void>();
+        throw LlmProviderException(_statusForHttp(response.statusCode));
+      }
+      if (config.streamEnabled) {
+        await for (final line
+            in response
+                .transform(utf8.decoder)
+                .transform(const LineSplitter())) {
+          if (!line.startsWith('data:')) continue;
+          final data = line.substring(5).trim();
+          if (data == '[DONE]') {
+            yield const LlmCompleted();
+            continue;
+          }
+          final decoded = jsonDecode(data) as Map<String, Object?>;
+          final choices = decoded['choices'] as List<Object?>?;
+          if (choices == null || choices.isEmpty) continue;
+          final choice = choices.first! as Map<String, Object?>;
+          final delta = choice['delta'] as Map<String, Object?>?;
+          final text = delta?['content'] as String?;
+          if (text != null && text.isNotEmpty) yield LlmTextDelta(text);
+        }
+      } else {
+        final body = await response.transform(utf8.decoder).join();
+        yield* _decodeComplete(body);
+      }
+    } on LlmProviderException {
+      rethrow;
+    } on TimeoutException {
+      throw const LlmProviderException(AiConnectionStatus.timeout);
+    } on HandshakeException {
+      throw const LlmProviderException(AiConnectionStatus.tlsFailure);
+    } on SocketException {
+      throw const LlmProviderException(AiConnectionStatus.networkFailure);
+    } on FormatException {
+      throw const LlmProviderException(AiConnectionStatus.incompatibleResponse);
+    } finally {
+      client.close(force: true);
+    }
+  }
+
+  @override
+  Future<ConnectionTestResult> testConnection({
+    required AiProviderConfig config,
+    required String credential,
+    required Map<String, String> customHeaders,
+  }) async {
+    try {
+      await chat(
+        messages: const <LlmMessage>[
+          LlmMessage(role: LlmRole.user, content: 'Reply OK.'),
+        ],
+        tools: const <ToolDefinition>[],
+        config: AiProviderConfig(
+          id: config.id,
+          providerType: config.providerType,
+          baseUrl: config.baseUrl,
+          endpointPath: config.endpointPath,
+          modelName: config.modelName,
+          credentialRef: config.credentialRef,
+          customHeadersRef: config.customHeadersRef,
+          timeoutSeconds: config.timeoutSeconds,
+          maxOutputTokens: 2,
+          streamEnabled: false,
+          connectionStatus: config.connectionStatus,
+        ),
+        credential: credential,
+        customHeaders: customHeaders,
+      ).drain<void>();
+      return const ConnectionTestResult(AiConnectionStatus.connected);
+    } on LlmProviderException catch (error) {
+      return ConnectionTestResult(error.status);
+    }
+  }
+
+  Stream<LlmEvent> _decodeComplete(String body) async* {
+    final decoded = jsonDecode(body) as Map<String, Object?>;
+    final choices = decoded['choices'] as List<Object?>?;
+    if (choices == null || choices.isEmpty) throw const FormatException();
+    final choice = choices.first! as Map<String, Object?>;
+    final message = choice['message'] as Map<String, Object?>?;
+    if (message == null) throw const FormatException();
+    final content = message['content'] as String?;
+    if (content != null && content.isNotEmpty) yield LlmTextDelta(content);
+    final calls = message['tool_calls'] as List<Object?>? ?? const <Object?>[];
+    for (final raw in calls) {
+      final call = raw! as Map<String, Object?>;
+      final function = call['function']! as Map<String, Object?>;
+      final arguments = jsonDecode(function['arguments']! as String);
+      if (arguments is! Map<String, Object?>) throw const FormatException();
+      yield LlmToolCall(
+        id: call['id']! as String,
+        name: function['name']! as String,
+        arguments: arguments,
+      );
+    }
+    yield const LlmCompleted();
+  }
+
+  void _applyHeaders(
+    HttpClientRequest request,
+    String credential,
+    Map<String, String> customHeaders,
+  ) {
+    request.headers.contentType = ContentType.json;
+    request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $credential');
+    for (final entry in customHeaders.entries) {
+      final normalized = entry.key.toLowerCase();
+      if (normalized == HttpHeaders.hostHeader ||
+          normalized == HttpHeaders.contentLengthHeader ||
+          normalized == HttpHeaders.authorizationHeader) {
+        continue;
+      }
+      request.headers.set(entry.key, entry.value);
+    }
+  }
+
+  AiConnectionStatus _statusForHttp(int status) => switch (status) {
+    401 || 403 => AiConnectionStatus.authenticationFailure,
+    404 => AiConnectionStatus.modelNotFound,
+    402 => AiConnectionStatus.insufficientBalance,
+    429 => AiConnectionStatus.rateLimited,
+    _ => AiConnectionStatus.networkFailure,
+  };
+}

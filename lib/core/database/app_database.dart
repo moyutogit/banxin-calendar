@@ -1,15 +1,20 @@
 import 'dart:io';
 
 import 'package:banxin_calendar/core/database/migrations/schema_versions.dart';
+import 'package:banxin_calendar/core/database/tables/ai_actions.dart';
+import 'package:banxin_calendar/core/database/tables/ai_provider_configs.dart';
 import 'package:banxin_calendar/core/database/tables/alarm_instances.dart';
 import 'package:banxin_calendar/core/database/tables/alarm_templates.dart';
+import 'package:banxin_calendar/core/database/tables/assistant_personas.dart';
 import 'package:banxin_calendar/core/database/tables/attendance_records.dart';
 import 'package:banxin_calendar/core/database/tables/calendar_day_cache.dart';
 import 'package:banxin_calendar/core/database/tables/change_log.dart';
+import 'package:banxin_calendar/core/database/tables/conversations.dart';
 import 'package:banxin_calendar/core/database/tables/database_metadata.dart';
 import 'package:banxin_calendar/core/database/tables/day_overrides.dart';
 import 'package:banxin_calendar/core/database/tables/holiday_records.dart';
 import 'package:banxin_calendar/core/database/tables/leave_records.dart';
+import 'package:banxin_calendar/core/database/tables/messages.dart';
 import 'package:banxin_calendar/core/database/tables/payroll_periods.dart';
 import 'package:banxin_calendar/core/database/tables/schedule_rules.dart';
 import 'package:banxin_calendar/core/database/tables/shift_alarm_templates.dart';
@@ -40,6 +45,11 @@ part 'app_database.g.dart';
     LeaveRecords,
     WageRules,
     PayrollPeriods,
+    AiProviderConfigs,
+    AssistantPersonas,
+    Conversations,
+    Messages,
+    AiActions,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -57,6 +67,7 @@ class AppDatabase extends _$AppDatabase {
       await _createScheduleIndexes();
       await _createAlarmIndexes();
       await _createWorkforceIndexes();
+      await _createAssistantIndexes();
     },
     onUpgrade: _upgrade,
     beforeOpen: (details) async {
@@ -103,6 +114,15 @@ class AppDatabase extends _$AppDatabase {
       await migrator.createTable(wageRules);
       await migrator.createTable(payrollPeriods);
       await _createWorkforceIndexes();
+    }
+
+    if (from < SchemaVersions.assistantFoundation) {
+      await migrator.createTable(aiProviderConfigs);
+      await migrator.createTable(assistantPersonas);
+      await migrator.createTable(conversations);
+      await migrator.createTable(messages);
+      await migrator.createTable(aiActions);
+      await _createAssistantIndexes();
     }
   }
 
@@ -154,6 +174,17 @@ class AppDatabase extends _$AppDatabase {
     await customStatement('''
       CREATE INDEX IF NOT EXISTS idx_wage_rules_effective
       ON wage_rules(effective_start, effective_end)
+    ''');
+  }
+
+  Future<void> _createAssistantIndexes() async {
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_messages_conversation_created
+      ON messages(conversation_id, created_at)
+    ''');
+    await customStatement('''
+      CREATE INDEX IF NOT EXISTS idx_ai_actions_status_created
+      ON ai_actions(status, created_at)
     ''');
   }
 }

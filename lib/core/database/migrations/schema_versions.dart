@@ -4,5 +4,6 @@ abstract final class SchemaVersions {
   static const int scheduleFoundation = 3;
   static const int alarmFoundation = 4;
   static const int workforceFoundation = 5;
-  static const int current = workforceFoundation;
+  static const int assistantFoundation = 6;
+  static const int current = assistantFoundation;
 }

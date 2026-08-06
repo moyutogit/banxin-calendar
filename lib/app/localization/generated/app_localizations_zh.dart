@@ -9,6 +9,153 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
+  String get assistantConfigureTitle => '配置 AI 模型';
+
+  @override
+  String get assistantProviderType => '接口类型';
+
+  @override
+  String get assistantBaseUrl => 'API 地址';
+
+  @override
+  String get assistantEndpointPath => '请求路径';
+
+  @override
+  String get assistantModelName => '模型名称';
+
+  @override
+  String get assistantApiKey => 'API 密钥';
+
+  @override
+  String get assistantCustomHeaders => '高级请求头（JSON）';
+
+  @override
+  String get assistantTimeout => '超时秒数';
+
+  @override
+  String get assistantMaxTokens => '最大输出长度';
+
+  @override
+  String get assistantStream => '流式响应';
+
+  @override
+  String get assistantTestConnection => '测试连接';
+
+  @override
+  String get assistantConnectionConnected => '连接成功';
+
+  @override
+  String get assistantConnectionNotTested => '尚未测试';
+
+  @override
+  String get assistantConnectionAuth => '鉴权失败';
+
+  @override
+  String get assistantConnectionModel => '模型不存在或路径错误';
+
+  @override
+  String get assistantConnectionRate => '请求限流';
+
+  @override
+  String get assistantConnectionBalance => '余额不足';
+
+  @override
+  String get assistantConnectionNetwork => '网络连接失败';
+
+  @override
+  String get assistantConnectionTls => 'TLS 安全连接失败';
+
+  @override
+  String get assistantConnectionTimeout => '请求超时';
+
+  @override
+  String get assistantConnectionResponse => '响应格式不兼容';
+
+  @override
+  String get assistantSettingsSaved => 'AI 设置已安全保存';
+
+  @override
+  String get assistantHostChangeWarning => 'API 域名已变化，密钥将发送到新域名。确认继续吗？';
+
+  @override
+  String get assistantPersonaTitle => '助理性格与权限';
+
+  @override
+  String get assistantName => '助理名称';
+
+  @override
+  String get assistantPersonaGentle => '温柔陪伴';
+
+  @override
+  String get assistantPersonaProfessional => '简洁专业';
+
+  @override
+  String get assistantPersonaLively => '活泼有趣';
+
+  @override
+  String get assistantReplyLength => '回复长度';
+
+  @override
+  String get assistantScopeSchedule => '允许读取排班';
+
+  @override
+  String get assistantScopeAttendance => '允许读取出勤汇总';
+
+  @override
+  String get assistantScopeWage => '允许读取工资金额（默认关闭）';
+
+  @override
+  String get assistantScopeAlarm => '允许读取闹钟状态';
+
+  @override
+  String get assistantScopeNotes => '允许读取备注（默认关闭）';
+
+  @override
+  String get assistantNotConfigured => 'AI 尚未配置；排班、打卡、工资和闹钟不受影响。';
+
+  @override
+  String get assistantInputHint => '询问排班、工时或提出设置方案';
+
+  @override
+  String get assistantSend => '发送';
+
+  @override
+  String get assistantStop => '停止生成';
+
+  @override
+  String get assistantQuickAttendance => '总结本月出勤';
+
+  @override
+  String get assistantQuickSchedule => '查看未来 7 天排班';
+
+  @override
+  String get assistantQuickWage => '预估本月工资';
+
+  @override
+  String get assistantQuickAlarm => '检查闹钟';
+
+  @override
+  String get assistantProposalTitle => '待确认的修改';
+
+  @override
+  String get assistantProposalConfirm => '确认执行';
+
+  @override
+  String get assistantProposalCancel => '取消，不修改';
+
+  @override
+  String get assistantActionSucceeded => '修改已真实执行';
+
+  @override
+  String get assistantActionUndo => '撤销修改';
+
+  @override
+  String get assistantActionUndone => '修改已撤销';
+
+  @override
+  String get assistantSafetyRefusal => '该请求已按安全规则拒绝';
+
+  @override
   String get homeTodayShift => '今日班次';
 
   @override

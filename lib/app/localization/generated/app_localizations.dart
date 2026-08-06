@@ -98,6 +98,300 @@ abstract class AppLocalizations {
     Locale('zh'),
   ];
 
+  /// No description provided for @assistantConfigureTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'配置 AI 模型'**
+  String get assistantConfigureTitle;
+
+  /// No description provided for @assistantProviderType.
+  ///
+  /// In zh, this message translates to:
+  /// **'接口类型'**
+  String get assistantProviderType;
+
+  /// No description provided for @assistantBaseUrl.
+  ///
+  /// In zh, this message translates to:
+  /// **'API 地址'**
+  String get assistantBaseUrl;
+
+  /// No description provided for @assistantEndpointPath.
+  ///
+  /// In zh, this message translates to:
+  /// **'请求路径'**
+  String get assistantEndpointPath;
+
+  /// No description provided for @assistantModelName.
+  ///
+  /// In zh, this message translates to:
+  /// **'模型名称'**
+  String get assistantModelName;
+
+  /// No description provided for @assistantApiKey.
+  ///
+  /// In zh, this message translates to:
+  /// **'API 密钥'**
+  String get assistantApiKey;
+
+  /// No description provided for @assistantCustomHeaders.
+  ///
+  /// In zh, this message translates to:
+  /// **'高级请求头（JSON）'**
+  String get assistantCustomHeaders;
+
+  /// No description provided for @assistantTimeout.
+  ///
+  /// In zh, this message translates to:
+  /// **'超时秒数'**
+  String get assistantTimeout;
+
+  /// No description provided for @assistantMaxTokens.
+  ///
+  /// In zh, this message translates to:
+  /// **'最大输出长度'**
+  String get assistantMaxTokens;
+
+  /// No description provided for @assistantStream.
+  ///
+  /// In zh, this message translates to:
+  /// **'流式响应'**
+  String get assistantStream;
+
+  /// No description provided for @assistantTestConnection.
+  ///
+  /// In zh, this message translates to:
+  /// **'测试连接'**
+  String get assistantTestConnection;
+
+  /// No description provided for @assistantConnectionConnected.
+  ///
+  /// In zh, this message translates to:
+  /// **'连接成功'**
+  String get assistantConnectionConnected;
+
+  /// No description provided for @assistantConnectionNotTested.
+  ///
+  /// In zh, this message translates to:
+  /// **'尚未测试'**
+  String get assistantConnectionNotTested;
+
+  /// No description provided for @assistantConnectionAuth.
+  ///
+  /// In zh, this message translates to:
+  /// **'鉴权失败'**
+  String get assistantConnectionAuth;
+
+  /// No description provided for @assistantConnectionModel.
+  ///
+  /// In zh, this message translates to:
+  /// **'模型不存在或路径错误'**
+  String get assistantConnectionModel;
+
+  /// No description provided for @assistantConnectionRate.
+  ///
+  /// In zh, this message translates to:
+  /// **'请求限流'**
+  String get assistantConnectionRate;
+
+  /// No description provided for @assistantConnectionBalance.
+  ///
+  /// In zh, this message translates to:
+  /// **'余额不足'**
+  String get assistantConnectionBalance;
+
+  /// No description provided for @assistantConnectionNetwork.
+  ///
+  /// In zh, this message translates to:
+  /// **'网络连接失败'**
+  String get assistantConnectionNetwork;
+
+  /// No description provided for @assistantConnectionTls.
+  ///
+  /// In zh, this message translates to:
+  /// **'TLS 安全连接失败'**
+  String get assistantConnectionTls;
+
+  /// No description provided for @assistantConnectionTimeout.
+  ///
+  /// In zh, this message translates to:
+  /// **'请求超时'**
+  String get assistantConnectionTimeout;
+
+  /// No description provided for @assistantConnectionResponse.
+  ///
+  /// In zh, this message translates to:
+  /// **'响应格式不兼容'**
+  String get assistantConnectionResponse;
+
+  /// No description provided for @assistantSettingsSaved.
+  ///
+  /// In zh, this message translates to:
+  /// **'AI 设置已安全保存'**
+  String get assistantSettingsSaved;
+
+  /// No description provided for @assistantHostChangeWarning.
+  ///
+  /// In zh, this message translates to:
+  /// **'API 域名已变化，密钥将发送到新域名。确认继续吗？'**
+  String get assistantHostChangeWarning;
+
+  /// No description provided for @assistantPersonaTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'助理性格与权限'**
+  String get assistantPersonaTitle;
+
+  /// No description provided for @assistantName.
+  ///
+  /// In zh, this message translates to:
+  /// **'助理名称'**
+  String get assistantName;
+
+  /// No description provided for @assistantPersonaGentle.
+  ///
+  /// In zh, this message translates to:
+  /// **'温柔陪伴'**
+  String get assistantPersonaGentle;
+
+  /// No description provided for @assistantPersonaProfessional.
+  ///
+  /// In zh, this message translates to:
+  /// **'简洁专业'**
+  String get assistantPersonaProfessional;
+
+  /// No description provided for @assistantPersonaLively.
+  ///
+  /// In zh, this message translates to:
+  /// **'活泼有趣'**
+  String get assistantPersonaLively;
+
+  /// No description provided for @assistantReplyLength.
+  ///
+  /// In zh, this message translates to:
+  /// **'回复长度'**
+  String get assistantReplyLength;
+
+  /// No description provided for @assistantScopeSchedule.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许读取排班'**
+  String get assistantScopeSchedule;
+
+  /// No description provided for @assistantScopeAttendance.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许读取出勤汇总'**
+  String get assistantScopeAttendance;
+
+  /// No description provided for @assistantScopeWage.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许读取工资金额（默认关闭）'**
+  String get assistantScopeWage;
+
+  /// No description provided for @assistantScopeAlarm.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许读取闹钟状态'**
+  String get assistantScopeAlarm;
+
+  /// No description provided for @assistantScopeNotes.
+  ///
+  /// In zh, this message translates to:
+  /// **'允许读取备注（默认关闭）'**
+  String get assistantScopeNotes;
+
+  /// No description provided for @assistantNotConfigured.
+  ///
+  /// In zh, this message translates to:
+  /// **'AI 尚未配置；排班、打卡、工资和闹钟不受影响。'**
+  String get assistantNotConfigured;
+
+  /// No description provided for @assistantInputHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'询问排班、工时或提出设置方案'**
+  String get assistantInputHint;
+
+  /// No description provided for @assistantSend.
+  ///
+  /// In zh, this message translates to:
+  /// **'发送'**
+  String get assistantSend;
+
+  /// No description provided for @assistantStop.
+  ///
+  /// In zh, this message translates to:
+  /// **'停止生成'**
+  String get assistantStop;
+
+  /// No description provided for @assistantQuickAttendance.
+  ///
+  /// In zh, this message translates to:
+  /// **'总结本月出勤'**
+  String get assistantQuickAttendance;
+
+  /// No description provided for @assistantQuickSchedule.
+  ///
+  /// In zh, this message translates to:
+  /// **'查看未来 7 天排班'**
+  String get assistantQuickSchedule;
+
+  /// No description provided for @assistantQuickWage.
+  ///
+  /// In zh, this message translates to:
+  /// **'预估本月工资'**
+  String get assistantQuickWage;
+
+  /// No description provided for @assistantQuickAlarm.
+  ///
+  /// In zh, this message translates to:
+  /// **'检查闹钟'**
+  String get assistantQuickAlarm;
+
+  /// No description provided for @assistantProposalTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'待确认的修改'**
+  String get assistantProposalTitle;
+
+  /// No description provided for @assistantProposalConfirm.
+  ///
+  /// In zh, this message translates to:
+  /// **'确认执行'**
+  String get assistantProposalConfirm;
+
+  /// No description provided for @assistantProposalCancel.
+  ///
+  /// In zh, this message translates to:
+  /// **'取消，不修改'**
+  String get assistantProposalCancel;
+
+  /// No description provided for @assistantActionSucceeded.
+  ///
+  /// In zh, this message translates to:
+  /// **'修改已真实执行'**
+  String get assistantActionSucceeded;
+
+  /// No description provided for @assistantActionUndo.
+  ///
+  /// In zh, this message translates to:
+  /// **'撤销修改'**
+  String get assistantActionUndo;
+
+  /// No description provided for @assistantActionUndone.
+  ///
+  /// In zh, this message translates to:
+  /// **'修改已撤销'**
+  String get assistantActionUndone;
+
+  /// No description provided for @assistantSafetyRefusal.
+  ///
+  /// In zh, this message translates to:
+  /// **'该请求已按安全规则拒绝'**
+  String get assistantSafetyRefusal;
+
   /// No description provided for @homeTodayShift.
   ///
   /// In zh, this message translates to:

@@ -45,7 +45,7 @@ void main() {
 
     await tester.tap(find.text('AI 助理'));
     await tester.pumpAndSettle();
-    expect(find.textContaining('AI 是可选增强模块'), findsOneWidget);
+    expect(find.textContaining('AI 尚未配置'), findsOneWidget);
   });
 
   testWidgets('supports dark mode and 200 percent text scaling', (
@@ -142,6 +142,30 @@ void main() {
     expect(find.text('尚未配置排班'), findsNothing);
     expect(find.byTooltip('上个月'), findsOneWidget);
     expect(find.byTooltip('下个月'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('assistant settings mask the API key by default', (tester) async {
+    final database = AppDatabase.inMemory();
+    addTearDown(database.close);
+    await database.ensureReady();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: <Override>[appDatabaseProvider.overrideWithValue(database)],
+        child: const BanxinCalendarApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('我的'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('AI 助理设置'));
+    await tester.pumpAndSettle();
+
+    final masked = find.byWidgetPredicate(
+      (widget) => widget is TextField && widget.obscureText,
+    );
+    expect(masked, findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 }

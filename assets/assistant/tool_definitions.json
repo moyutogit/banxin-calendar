@@ -1,4 +1,96 @@
 {
-  "schema_version": 1,
-  "tools": []
+  "schema_version": 2,
+  "tools": [
+    {
+      "name": "get_app_capabilities",
+      "description": "Return the versioned list of capabilities actually implemented by this app build.",
+      "parameters": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "get_schedule",
+      "description": "Read the deterministic resolved schedule for an explicit ISO date range.",
+      "parameters": {
+        "type": "object",
+        "required": ["range"],
+        "properties": {
+          "range": {"$ref": "#/$defs/dateRange"}
+        },
+        "$defs": {
+          "dateRange": {
+            "type": "object",
+            "required": ["start", "end"],
+            "properties": {
+              "start": {"type": "string", "format": "date"},
+              "end": {"type": "string", "format": "date"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_attendance_summary",
+      "description": "Read a deterministic attendance summary without raw notes or unrelated records.",
+      "parameters": {
+        "type": "object",
+        "required": ["range"],
+        "properties": {"range": {"type": "object"}},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_wage_summary",
+      "description": "Read the same deterministic wage summary used by statistics and CSV, only when wage scope is enabled.",
+      "parameters": {
+        "type": "object",
+        "required": ["range"],
+        "properties": {"range": {"type": "object"}},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "get_alarm_summary",
+      "description": "Read a minimal alarm status summary without platform identifiers.",
+      "parameters": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "propose_schedule_change",
+      "description": "Validate and preview a schedule change. Never applies it; explicit user confirmation remains required.",
+      "parameters": {
+        "type": "object",
+        "required": ["range", "new_status", "sync_alarms"],
+        "properties": {
+          "range": {"type": "object"},
+          "new_status": {"type": "string", "enum": ["work", "rest"]},
+          "shift_id": {"type": ["string", "null"]},
+          "sync_alarms": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "apply_schedule_change",
+      "description": "Apply a previously proposed action only with the one-time confirmation token supplied by the local confirmation UI.",
+      "parameters": {
+        "type": "object",
+        "required": ["action_id", "confirmation_token"],
+        "properties": {
+          "action_id": {"type": "string"},
+          "confirmation_token": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "undo_ai_action",
+      "description": "Undo a succeeded AI action only when current data still matches its after snapshot.",
+      "parameters": {
+        "type": "object",
+        "required": ["action_id"],
+        "properties": {"action_id": {"type": "string"}},
+        "additionalProperties": false
+      }
+    }
+  ]
 }
